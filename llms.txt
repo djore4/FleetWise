@@ -1,0 +1,71 @@
+# FleetWise — Consultora Independente de Gestão de Frotas em Portugal
+
+## O que é a FleetWise
+
+A FleetWise é uma consultora independente especializada em gestão de frotas empresariais em Portugal.
+Transformamos a frota de uma empresa — habitualmente um centro de custos opaco — num ativo financeiro gerido com rigor fiscal e operacional.
+
+Não representamos nenhuma locadora, fabricante ou financeira. Atuamos exclusivamente do lado do cliente.
+
+## Proposta de Valor
+
+- Redução do TCO (Total Cost of Ownership) da frota — poupanças médias superiores a 6% comprovadas
+- Otimização fiscal: Tributação Autónoma (art.º 88.º CIRC), benefícios BEV/PHEV, IRC, IVA
+- Plataforma de gestão desenvolvida com Inteligência Artificial
+- Modelo de entrada por success fee — o cliente só paga em função da poupança gerada
+- Procurement independente: colocamos locadoras e concessionários a competir entre si
+
+## Serviços
+
+### Core
+1. **Auditoria & Diagnóstico TCO** — Radiografia completa à frota, identificação de ineficiências fiscais e contratuais, plano de ação com ROI definido. Fee = percentagem da poupança gerada.
+2. **Procurement & Negociação** — Gestão do processo RFP, negociação com locadoras e concessionários, otimização fiscal na seleção de viaturas BEV/PHEV.
+3. **Gestão Operacional** — De self-service a outsourcing integral: IUC, IPO, multas, seguros, sinistros, manutenções, dashboard TCO em tempo real. Fee mensal (retainer).
+4. **Fim de Ciclo** — Pré-peritagem, recondicionamento inteligente, estratégia de renovação e remarketing.
+
+### Complementares
+- Soluções de Carregamento (wallboxes para frotas elétricas)
+- Seguros Auto (intermediação independente)
+- Automotive Care (manutenção e viaturas de coleção)
+- Mobilidade de Luxo (transporte premium para executivos)
+- Simulador BEV/PHEV (ferramenta digital gratuita no site)
+- Comparador xEV (comparação de viaturas elétricas e híbridas)
+
+## Clientes-Alvo
+
+PMEs portuguesas com 3 a 100 viaturas que gerem a frota de forma descentralizada, sem visibilidade real do TCO ou otimização fiscal.
+
+Segmentos:
+- Micro-frotas (3–10 viaturas): entrada por Radiografia TCO, success fee
+- Frotas médias (10–30 viaturas): plataforma + advisory periódico
+- Grandes frotas (30–100+ viaturas): outsourcing operacional, módulos ESG
+
+## Diferenciais face à concorrência
+
+| Fator              | FleetWise | Locadoras (Ayvens, Arval) | Tech Players (Cartrack) |
+|--------------------|-----------|--------------------------|-------------------------|
+| Independência      | Total      | Conflito de interesses   | Agnósticos, sem advisory|
+| Domínio fiscal     | Core       | Ausente                  | Ausente                 |
+| Plataforma IA      | Sim        | Portais standardizados   | Foco operacional        |
+| Personalização     | Boutique   | Industrial               | Self-service            |
+| Custo de entrada   | Success fee| Contrato renting         | Subscrição              |
+
+## Ferramentas gratuitas disponíveis no site
+
+- **Simulador TCO**: https://www.fleetwisesolutions.pt/TCO_simulator.html
+- **Comparador xEV/BEV**: https://www.fleetwisesolutions.pt/vehicle_compare.html
+
+## Contacto
+
+- Website: https://www.fleetwisesolutions.pt
+- Email: geral@fleetwise.pt
+- Telefone: +351 914 038 167
+- País: Portugal
+
+## Equipa fundadora
+
+- Gerson Tavares — Gestão & Account Manager (experiência EMEA em indústria automóvel, Yazaki)
+- João Duarte — Eng. Mecânica & Diretor Comercial (Caetano BMW)
+- Luís Vergueiro — Gestão de Operações Sénior (ex-Diretor Geral Lidl Portugal)
+- Nuno Nápoles — Marketing & Gestão Comercial (Sumol Compal, Glovo, Peugeot Rent)
+- Rui Coelho — Psicologia & Gestão de Pessoas (Sonae, Efacec, Ageas)
