@@ -3,235 +3,1171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>FleetWise</title>
-    
+    <title>FleetWise | Simplifique, Otimize, Rentabilize!</title>
+    <meta name="description" content="A FleetWise é a consultora independente de gestão de frotas em Portugal. Reduzimos o TCO da sua frota, otimizamos a fiscalidade e libertamos a sua equipa para o core business.">
+
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <style>
+        :root {
+            --navy:  #0f172a;
+            --navy2: #1e293b;
+            --green: #10b981;
+            --green2:#059669;
+            --slate: #64748b;
+        }
+
         html { scroll-behavior: smooth; }
-        body { font-family: 'Poppins', sans-serif; padding-top: 80px; overflow-x: hidden; width: 100%; background-color: #ffffff; }
-        
-        .bg-brand-green { background-color: #10b981; }
-        .text-brand-green { color: #10b981; }
-        .bg-brand-navy { background-color: #0f172a; } 
-        .text-brand-navy { color: #0f172a; }
-        
-        .number-accent { color: #10b981; font-size: 4rem; line-height: 1; font-weight: 300; }
+        body { font-family: 'Poppins', sans-serif; background:#fff; overflow-x:hidden; padding-top:72px; }
 
-        .brand-logo { transition: color 0.3s ease; display: inline-block; }
-        .brand-logo:hover, .brand-logo:hover span { color: #10b981 !important; }
-
-        .sticky-header { position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; height: 72px; display: flex; align-items: center; background-color: #0f172a; }
-
-        .nav-item { position: relative; }
-        .dropdown-content {
-            display: none; position: absolute; top: 100%; left: 0; background-color: white;
-            min-width: 280px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); border-radius: 8px; padding: 10px 0; z-index: 1001;
+        /* ── HEADER ── */
+        .sticky-header {
+            position:fixed; top:0; left:0; width:100%; z-index:1000;
+            height:72px; display:flex; align-items:center;
+            background:var(--navy);
+            box-shadow:0 2px 20px rgba(0,0,0,.3);
+            transition: background .3s;
         }
-        .nav-item:hover .dropdown-content { display: block; }
-        .dropdown-link { padding: 10px 20px; font-size: 0.85rem; color: #475569; display: block; transition: 0.2s; text-decoration: none; }
-        .dropdown-link:hover { background: #f8fafc; color: #10b981; padding-left: 25px; }
+        .brand-logo { display:inline-block; font-size:1.5rem; font-weight:800; color:#fff; text-decoration:none; letter-spacing:-.5px; transition:.3s; }
+        .brand-logo:hover { opacity:.85; }
 
+        .nav-link { color:rgba(255,255,255,.8); font-size:.85rem; font-weight:500; text-decoration:none; transition:.2s; position:relative; }
+        .nav-link:hover { color:var(--green); }
+
+        .btn-primary {
+            background:var(--green); color:#fff; font-weight:700; font-size:.85rem;
+            padding:.6rem 1.4rem; border-radius:50px; text-decoration:none; display:inline-flex; align-items:center; gap:.4rem;
+            transition:.25s; border:none; cursor:pointer; white-space:nowrap;
+        }
+        .btn-primary:hover { background:var(--green2); transform:translateY(-1px); box-shadow:0 6px 20px rgba(16,185,129,.35); }
+
+        .btn-outline {
+            background:transparent; color:#fff; font-weight:600; font-size:.85rem;
+            padding:.55rem 1.3rem; border-radius:50px; text-decoration:none; display:inline-flex; align-items:center; gap:.4rem;
+            transition:.25s; border:1.5px solid rgba(255,255,255,.4); cursor:pointer; white-space:nowrap;
+        }
+        .btn-outline:hover { border-color:var(--green); color:var(--green); }
+
+        /* dropdown */
+        .nav-item { position:relative; }
+        .dropdown {
+            display:none; position:absolute; top:calc(100% + 12px); left:-12px;
+            background:#fff; min-width:260px; border-radius:12px; padding:8px 0;
+            box-shadow:0 12px 36px rgba(0,0,0,.12); z-index:1001;
+        }
+        .dropdown::before { content:''; position:absolute; top:-6px; left:20px; width:12px; height:12px; background:#fff; transform:rotate(45deg); box-shadow:-2px -2px 6px rgba(0,0,0,.04); }
+        .nav-item:hover .dropdown { display:block; }
+        .drop-link { display:block; padding:10px 20px; font-size:.83rem; color:#475569; text-decoration:none; transition:.2s; }
+        .drop-link:hover { color:var(--green); padding-left:26px; background:#f8fafc; }
+
+        /* mobile */
         #mobile-menu {
-            position: fixed; top: 0; right: -100%; width: 85%; height: 100%;
-            background: #0f172a; z-index: 2001; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); padding: 2rem;
-            display: flex; flex-direction: column; gap: 1rem; box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+            position:fixed; top:0; right:-100%; width:85%; max-width:360px; height:100%;
+            background:var(--navy); z-index:2001; transition:.4s cubic-bezier(.4,0,.2,1);
+            padding:2rem; display:flex; flex-direction:column; gap:.5rem;
+            box-shadow:-10px 0 40px rgba(0,0,0,.5);
         }
-        #mobile-menu.active { right: 0; }
-        .mobile-link { color: white; font-size: 1.1rem; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.1); display: block; text-decoration: none; }
+        #mobile-menu.open { right:0; }
+        .mob-link { color:#fff; font-size:1rem; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.08); text-decoration:none; display:block; }
+        .ham { display:none; cursor:pointer; color:#fff; }
 
-        @media (max-width: 1024px) {
-            .desktop-nav { display: none !important; }
-            .mobile-toggle { display: block !important; cursor: pointer; color: white; }
-            h1.text-5xl { font-size: 2.3rem !important; text-align: left; }
+        @media(max-width:1023px) { .desktop-nav { display:none !important; } .ham { display:block; } }
+
+        /* ── HERO ── */
+        .hero {
+            background: linear-gradient(135deg, var(--navy) 0%, #0d2137 60%, #0a2a1a 100%);
+            min-height:calc(100vh - 72px);
+            display:flex; align-items:center;
+            position:relative; overflow:hidden;
         }
+        .hero::before {
+            content:''; position:absolute; inset:0;
+            background:url('img/53615141658_44ec4a59e3_o.webp') center/cover no-repeat;
+            opacity:.08;
+        }
+        .hero-grid { position:absolute; inset:0; background-image: linear-gradient(rgba(16,185,129,.06) 1px,transparent 1px), linear-gradient(90deg,rgba(16,185,129,.06) 1px,transparent 1px); background-size:60px 60px; }
+        .hero-badge { display:inline-flex; align-items:center; gap:.5rem; background:rgba(16,185,129,.15); border:1px solid rgba(16,185,129,.3); color:var(--green); font-size:.75rem; font-weight:600; padding:.35rem .9rem; border-radius:50px; margin-bottom:1.5rem; }
+        .hero-badge-dot { width:6px; height:6px; background:var(--green); border-radius:50%; animation:pulse 2s infinite; }
+        @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.4)} }
 
-        .mobile-toggle { display: none; }
-        .section-stats-divider { background-color: #f8fafc; padding: 1.5rem 0; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+        .hero h1 { font-size:clamp(2.4rem,5vw,4rem); font-weight:800; color:#fff; line-height:1.1; letter-spacing:-.5px; }
+        .hero h1 em { font-style:normal; color:var(--green); }
+        .hero-sub { color:rgba(255,255,255,.7); font-size:clamp(.95rem,1.5vw,1.1rem); line-height:1.75; max-width:560px; margin:1.5rem 0 2.5rem; }
+
+        .hero-cards { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:3rem; }
+        .hero-card { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:1.25rem; backdrop-filter:blur(10px); }
+        .hero-card-icon { font-size:1.5rem; margin-bottom:.5rem; }
+        .hero-card h4 { color:#fff; font-weight:700; font-size:.9rem; margin-bottom:.25rem; }
+        .hero-card p { color:rgba(255,255,255,.55); font-size:.78rem; line-height:1.5; }
+
+        /* ── STRIP ── */
+        .strip { background:var(--green); padding:1rem 0; }
+        .strip-inner { display:flex; flex-wrap:wrap; justify-content:center; gap:2rem; }
+        .strip-item { display:flex; align-items:center; gap:.5rem; color:#fff; font-size:.8rem; font-weight:600; white-space:nowrap; }
+        .strip-item svg { opacity:.8; }
+
+        /* ── STATS ── */
+        .stat-val { font-size:2.8rem; font-weight:800; color:var(--green); line-height:1; }
+        .stat-label { font-size:.8rem; color:var(--slate); margin-top:.3rem; line-height:1.4; }
+
+        /* ── SECTION ── */
+        .section-label { font-size:.72rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--green); margin-bottom:.75rem; }
+        .section-title { font-size:clamp(1.8rem,3vw,2.6rem); font-weight:800; color:var(--navy); line-height:1.2; }
+        .section-title em { font-style:normal; color:var(--green); }
+
+        /* ── SERVICE CARDS ── */
+        .svc-card {
+            background:#fff; border:1.5px solid #e2e8f0; border-radius:20px;
+            padding:2rem; transition:.3s; cursor:default;
+            display:flex; flex-direction:column;
+        }
+        .svc-card:hover { border-color:var(--green); box-shadow:0 12px 40px rgba(16,185,129,.12); transform:translateY(-4px); }
+        .svc-num { font-size:3rem; font-weight:800; color:#e2e8f0; line-height:1; margin-bottom:1rem; }
+        .svc-card:hover .svc-num { color:var(--green); opacity:.3; }
+        .svc-icon { width:48px; height:48px; background:rgba(16,185,129,.1); border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
+        .svc-icon svg { color:var(--green); }
+        .svc-tag { display:inline-block; font-size:.7rem; font-weight:700; padding:.2rem .7rem; border-radius:50px; margin-bottom:.75rem; }
+        .tag-core { background:rgba(16,185,129,.12); color:var(--green); }
+        .tag-pipe { background:rgba(148,163,184,.15); color:var(--slate); }
+
+        /* ── DIFFERENTIATORS ── */
+        .diff-table { border-radius:16px; overflow:hidden; border:1.5px solid #e2e8f0; }
+        .diff-table th { background:var(--navy); color:#fff; padding:1rem 1.25rem; font-size:.8rem; font-weight:600; text-align:left; }
+        .diff-table th:first-child { border-radius:0; }
+        .diff-table td { padding:1rem 1.25rem; font-size:.82rem; border-bottom:1px solid #f1f5f9; }
+        .diff-table tr:last-child td { border-bottom:none; }
+        .diff-table tr:nth-child(even) td { background:#fafbfd; }
+        .check { color:var(--green); font-weight:700; }
+        .cross { color:#ef4444; font-weight:700; }
+        .partial { color:#f59e0b; font-weight:700; }
+        .fw-col { background:rgba(16,185,129,.06) !important; font-weight:600; }
+
+        /* ── HOW IT WORKS ── */
+        .step-line { position:relative; }
+        .step-line::before { content:''; position:absolute; left:24px; top:56px; bottom:0; width:2px; background:linear-gradient(to bottom, var(--green), transparent); }
+        .step-num { width:48px; height:48px; border-radius:50%; background:var(--green); color:#fff; font-weight:800; font-size:1.1rem; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+
+        /* ── JOBS ── */
+        .job-card { background:var(--navy); border-radius:20px; padding:2rem; }
+        .job-icon { font-size:2.5rem; margin-bottom:1rem; }
+        .job-card h3 { color:#fff; font-weight:700; font-size:1.05rem; margin-bottom:.75rem; }
+        .job-card p { color:rgba(255,255,255,.6); font-size:.85rem; line-height:1.7; }
+        .job-card .job-label { font-size:.7rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--green); margin-bottom:.5rem; }
+
+        /* ── PRICING MODEL ── */
+        .model-card {
+            border-radius:20px; padding:2rem;
+            border:2px solid transparent; transition:.3s;
+        }
+        .model-card.featured { border-color:var(--green); box-shadow:0 0 0 4px rgba(16,185,129,.08); }
+        .model-badge { background:var(--green); color:#fff; font-size:.7rem; font-weight:700; padding:.2rem .7rem; border-radius:50px; display:inline-block; margin-bottom:.75rem; }
+
+        /* ── DEMO SECTION ── */
+        .demo-section { background:linear-gradient(135deg, var(--navy) 0%, #0d2137 100%); position:relative; overflow:hidden; }
+        .demo-section::before { content:''; position:absolute; right:-200px; top:-200px; width:600px; height:600px; background:rgba(16,185,129,.06); border-radius:50%; }
+        .demo-section::after { content:''; position:absolute; left:-100px; bottom:-150px; width:400px; height:400px; background:rgba(16,185,129,.04); border-radius:50%; }
+
+        /* ── FORM ── */
+        .form-input {
+            width:100%; padding:.75rem 1rem; border:1.5px solid #e2e8f0; border-radius:10px;
+            font-family:inherit; font-size:.88rem; color:var(--navy); background:#fff;
+            transition:.2s; outline:none;
+        }
+        .form-input:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(16,185,129,.1); }
+        .form-label { font-size:.8rem; font-weight:600; color:#374151; margin-bottom:.35rem; display:block; }
+        select.form-input { cursor:pointer; }
+
+        /* ── MODAL ── */
+        #demo-modal { display:none; position:fixed; inset:0; z-index:3000; }
+        #demo-modal.open { display:flex; }
+        .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px); }
+        .modal-box { position:relative; z-index:1; background:#fff; border-radius:24px; padding:2.5rem; width:100%; max-width:560px; margin:auto; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,.25); }
+
+        /* ── TOAST ── */
+        #toast { position:fixed; bottom:2rem; right:2rem; background:var(--green); color:#fff; padding:.9rem 1.5rem; border-radius:12px; font-size:.85rem; font-weight:600; box-shadow:0 8px 24px rgba(16,185,129,.4); z-index:5000; opacity:0; transform:translateY(20px); transition:.4s; pointer-events:none; }
+        #toast.show { opacity:1; transform:translateY(0); }
+
+        /* ── FOOTER ── */
+        .footer { background:var(--navy); color:rgba(255,255,255,.6); }
+        .footer h4 { color:#fff; font-weight:700; font-size:.95rem; margin-bottom:1rem; }
+        .footer a { color:rgba(255,255,255,.6); text-decoration:none; font-size:.83rem; transition:.2s; display:block; margin-bottom:.5rem; }
+        .footer a:hover { color:var(--green); }
+        .footer-divider { border-color:rgba(255,255,255,.08); }
+
+        /* ── MISC ── */
+        .badge-pill { display:inline-flex; align-items:center; gap:.4rem; font-size:.75rem; font-weight:600; padding:.3rem .8rem; border-radius:50px; }
+        .bg-green-pill { background:rgba(16,185,129,.12); color:var(--green); }
+
+        .card-white { background:#fff; border:1.5px solid #e2e8f0; border-radius:16px; padding:1.5rem; }
+
+        .partner-logo { height:40px; filter:grayscale(100%); opacity:.5; transition:.3s; }
+        .partner-logo:hover { filter:grayscale(0%); opacity:1; }
+
+        @media(max-width:768px) {
+            .hero-cards { grid-template-columns:1fr; }
+            .diff-table { font-size:.75rem; }
+            .diff-table th, .diff-table td { padding:.75rem .75rem; }
+        }
     </style>
 </head>
 <body>
 
-    <header class="bg-brand-navy text-white shadow-lg sticky-header">
-        <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
-            <a href="#" class="text-2xl font-bold tracking-tight brand-logo whitespace-nowrap">
-                <span class="text-brand-green">Fleet</span>Wise
-            </a>
-            
-            <nav class="desktop-nav flex items-center gap-8">
-                <div class="nav-item">
-                    <a href="#servicos" class="text-sm font-medium hover:text-brand-green transition flex items-center gap-1">Serviços ▾</a>
-                    <div class="dropdown-content">
-                        <a href="auditoria.html" class="dropdown-link">Auditoria & Diagnóstico</a>
-                        <a href="procurement.html" class="dropdown-link">Procurement & Negociação</a>
-                        <a href="gestao-operacional.html" class="dropdown-link">Gestão Operacional</a>
-                        <a href="automotive-care.html" class="dropdown-link">Automotive Care</a>
-                        <a href="luxo.html" class="dropdown-link">Mobilidade de Luxo</a>
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="sticky-header">
+    <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
+        <a href="#" class="brand-logo"><span style="color:var(--green)">Fleet</span>Wise</a>
+
+        <nav class="desktop-nav flex items-center gap-8">
+            <div class="nav-item">
+                <a href="#servicos" class="nav-link flex items-center gap-1">Serviços <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+                <div class="dropdown">
+                    <a href="#servicos" class="drop-link">Auditoria & Diagnóstico TCO</a>
+                    <a href="#servicos" class="drop-link">Procurement & Negociação</a>
+                    <a href="#servicos" class="drop-link">Gestão Operacional</a>
+                    <a href="#servicos" class="drop-link">Fim de Ciclo</a>
+                    <a href="vehicle_compare.html" class="drop-link">Comparador xEV / Simulador</a>
+                    <a href="#servicos" class="drop-link">Soluções de Carregamento</a>
+                    <a href="#servicos" class="drop-link">Automotive Care</a>
+                    <a href="#servicos" class="drop-link">Mobilidade de Luxo</a>
+                </div>
+            </div>
+
+            <div class="nav-item">
+                <a href="#diferenciais" class="nav-link flex items-center gap-1">Porquê a FleetWise <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
+                <div class="dropdown">
+                    <a href="#diferenciais" class="drop-link">Independência & Transparência</a>
+                    <a href="#diferenciais" class="drop-link">Domínio Fiscal (TCO, IRC, IVA)</a>
+                    <a href="#diferenciais" class="drop-link">Plataforma IA</a>
+                    <a href="#diferenciais" class="drop-link">Modelo Success Fee</a>
+                </div>
+            </div>
+
+            <a href="vehicle_compare.html" class="nav-link">Comparador xEV</a>
+            <a href="quem_somos.html" class="nav-link">Quem Somos</a>
+
+            <button onclick="openModal()" class="btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Agendar Reunião
+            </button>
+        </nav>
+
+        <button class="ham" onclick="toggleMenu()" aria-label="Menu">
+            <svg id="ham-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+    </div>
+</header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+        <span style="font-size:1.4rem;font-weight:800;color:#fff;"><span style="color:var(--green)">Fleet</span>Wise</span>
+        <button onclick="toggleMenu()" style="color:#fff;font-size:2rem;line-height:1;background:none;border:none;cursor:pointer;">&times;</button>
+    </div>
+    <a href="#servicos" class="mob-link" onclick="toggleMenu()">Serviços</a>
+    <a href="#diferenciais" class="mob-link" onclick="toggleMenu()">Porquê a FleetWise</a>
+    <a href="#como-funciona" class="mob-link" onclick="toggleMenu()">Como Funciona</a>
+    <a href="vehicle_compare.html" class="mob-link">Comparador xEV</a>
+    <a href="quem_somos.html" class="mob-link">Quem Somos</a>
+    <a href="loja.html" class="mob-link">Loja</a>
+    <button onclick="toggleMenu(); openModal();" style="margin-top:1.5rem;width:100%;background:var(--green);color:#fff;font-weight:700;padding:1rem;border-radius:12px;border:none;cursor:pointer;font-size:1rem;">Agendar Reunião / Demo</button>
+</div>
+<div id="menu-overlay" onclick="toggleMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;"></div>
+
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero">
+    <div class="hero-grid"></div>
+    <div class="max-w-7xl mx-auto px-4 py-20 relative z-10 w-full">
+        <div class="flex flex-col lg:flex-row gap-16 items-center">
+
+            <div class="lg:w-[55%]" data-aos="fade-right" data-aos-duration="900">
+                <div class="hero-badge">
+                    <span class="hero-badge-dot"></span>
+                    Consultora Independente de Frotas · Portugal
+                </div>
+
+                <h1>
+                    A sua frota é um<br>
+                    <em>ativo financeiro.</em><br>
+                    Tratemo-la como tal.
+                </h1>
+
+                <p class="hero-sub">
+                    Transformamos a gestão de frotas de um centro de custos opaco num motor de eficiência fiscal e operacional. Sem conflito de interesses. Com tecnologia IA. Com resultados mensuráveis.
+                </p>
+
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="openModal('demo')" class="btn-primary" style="font-size:.95rem;padding:.8rem 1.8rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 17l-5-5 5-5M20 17l-5-5 5-5"/></svg>
+                        Pedir Demonstração
+                    </button>
+                    <button onclick="openModal('meeting')" class="btn-outline" style="font-size:.95rem;padding:.8rem 1.8rem;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                        Agendar Reunião
+                    </button>
+                </div>
+
+                <p style="color:rgba(255,255,255,.4);font-size:.75rem;margin-top:1rem;">
+                    ✓ Sem compromisso  &nbsp;·&nbsp;  ✓ Resposta em 24h  &nbsp;·&nbsp;  ✓ 100% Confidencial
+                </p>
+            </div>
+
+            <div class="lg:w-[45%] w-full" data-aos="fade-left" data-aos-duration="900" data-aos-delay="200">
+                <div class="hero-cards">
+                    <div class="hero-card">
+                        <div class="hero-card-icon">📊</div>
+                        <h4>Radiografia TCO</h4>
+                        <p>Identifique onde está a perder dinheiro na sua frota — incluindo ineficiências fiscais invisíveis.</p>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-icon">⚡</div>
+                        <h4>Simulador BEV/PHEV</h4>
+                        <p>Calcule o impacto fiscal real da transição elétrica da sua frota em minutos.</p>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-icon">🛡️</div>
+                        <h4>Independência Total</h4>
+                        <p>Nunca do lado das locadoras. Sempre do lado do Cliente. Sem conflito de interesses.</p>
+                    </div>
+                    <div class="hero-card">
+                        <div class="hero-card-icon">🤝</div>
+                        <h4>Success Fee</h4>
+                        <p>Só pagamos se poupa. O nosso alinhamento de incentivos é a nossa garantia.</p>
                     </div>
                 </div>
 
-                <div class="nav-item">
-                    <a href="#parcerias-section" class="text-sm font-medium hover:text-brand-green transition flex items-center gap-1">Parcerias ▾</a>
-                    <div class="dropdown-content">
-                        <a href="seguros.html" class="dropdown-link">Seguros Automóvel</a>
-                        <a href="carregamento.html" class="dropdown-link">Soluções de Carregamento</a>
-                        <a href="https://www.cartrack.pt/" target="_blank" class="dropdown-link">Cartrack</a>
-                        <a href="*" target="_blank" class="dropdown-link">Lavagem Auto</a>
-                    </div>
+                <div style="margin-top:1.5rem;display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;">
+                    <a href="TCO_simulator.html" style="flex:1;text-align:center;background:rgba(16,185,129,.12);border:1px solid rgba(16,185,129,.3);color:var(--green);padding:.7rem 1rem;border-radius:10px;font-size:.82rem;font-weight:600;text-decoration:none;transition:.2s;" onmouseover="this.style.background='rgba(16,185,129,.22)'" onmouseout="this.style.background='rgba(16,185,129,.12)'">
+                        Simular TCO →
+                    </a>
+                    <a href="vehicle_compare.html" style="flex:1;text-align:center;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.8);padding:.7rem 1rem;border-radius:10px;font-size:.82rem;font-weight:600;text-decoration:none;transition:.2s;" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='rgba(255,255,255,.05)'">
+                        Comparar xEV →
+                    </a>
                 </div>
+            </div>
 
-                <a href="vehicle_compare.html" class="text-sm font-medium hover:text-brand-green transition">Comparador xEV</a>
-                <a href="quem_somos.html" class="text-sm font-medium hover:text-brand-green transition">Quem Somos</a>
-                <a href="loja.html" class="bg-brand-green text-white px-5 py-2 rounded-full text-sm font-bold hover:bg-emerald-600 transition">Loja</a>
-            </nav>
+        </div>
+    </div>
+</section>
 
-            <div class="mobile-toggle md:hidden" onclick="toggleMobileMenu()">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-                </svg>
+
+<!-- ══════════════ STRIP ══════════════ -->
+<div class="strip">
+    <div class="max-w-7xl mx-auto px-4 strip-inner">
+        <div class="strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> 100% Independente</div>
+        <div class="strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg> Poupanças reais no TCO</div>
+        <div class="strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg> Plataforma com IA</div>
+        <div class="strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg> Especialistas em Fiscalidade</div>
+        <div class="strip-item"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg> PMEs 3 a 100 viaturas</div>
+    </div>
+</div>
+
+
+<!-- ══════════════ STATS ══════════════ -->
+<section style="padding:5rem 0; background:#f8fafc;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <div class="section-label">O problema que resolvemos</div>
+            <h2 class="section-title">O mercado está a mudar.<br>A maioria das empresas, ainda não.</h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-6" data-aos="fade-up" data-aos-delay="100">
+            <div class="card-white text-center">
+                <div class="stat-val" data-target="70">0</div>
+                <div style="font-size:1.5rem;font-weight:800;color:var(--green);margin-top:-.5rem;">%</div>
+                <div class="stat-label">das PMEs gerem frotas de forma <strong>ineficiente</strong>, sem visibilidade real do TCO</div>
+            </div>
+            <div class="card-white text-center">
+                <div class="stat-val" data-prefix="+" data-target="16">0</div>
+                <div style="font-size:1.5rem;font-weight:800;color:var(--green);margin-top:-.5rem;">% CAGR</div>
+                <div class="stat-label">crescimento global do mercado de <strong>Fleet Management</strong> até 2028</div>
+            </div>
+            <div class="card-white text-center">
+                <div class="stat-val" data-prefix="↓" data-target="30">0</div>
+                <div style="font-size:1.5rem;font-weight:800;color:var(--green);margin-top:-.5rem;">%</div>
+                <div class="stat-label">redução potencial no TCO com gestão profissional e otimização fiscal</div>
+            </div>
+            <div class="card-white text-center">
+                <div class="stat-val" data-target="0" data-zero="true">€0</div>
+                <div style="font-size:.9rem;font-weight:700;color:var(--green);margin-top:-.2rem;">de risco</div>
+                <div class="stat-label">modelo <strong>success fee</strong> — só pagam se pouparem. Simples assim.</div>
             </div>
         </div>
-    </header>
-
-    <div id="mobile-menu">
-        <div class="flex justify-between items-center mb-8">
-            <span class="text-2xl font-bold text-white whitespace-nowrap">
-                <span class="text-brand-green">Fleet</span>Wise
-            </span>
-            <button onclick="toggleMobileMenu()" class="text-white text-4xl leading-none">&times;</button>
-        </div>
-        <a href="#servicos" class="mobile-link" onclick="toggleMobileMenu()">Serviços</a>
-        <a href="#parcerias-section" class="mobile-link" onclick="toggleMobileMenu()">Parcerias</a>
-        <a href="vehicle_compare.html" class="mobile-link">Comparador xEV</a>
-        <a href="quem_somos.html" class="mobile-link" onclick="toggleMobileMenu()">Quem Somos</a>
-        <a href="loja.html" class="mt-4 bg-brand-green text-center py-4 rounded-xl font-bold text-white shadow-lg text-decoration-none">Loja</a>
     </div>
+</section>
 
-    <section class="max-w-7xl mx-auto px-4 py-12">
-        <div class="hero-container flex flex-col md:flex-row gap-10 items-stretch">
-            <div class="hero-left w-full md:w-[70%] flex flex-col justify-between" data-aos="fade-right">
+
+<!-- ══════════════ SERVIÇOS ══════════════ -->
+<section id="servicos" style="padding:6rem 0;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6 mb-14" data-aos="fade-up">
+            <div>
+                <div class="section-label">O que fazemos</div>
+                <h2 class="section-title">Cobrimos todo o<br><em>ciclo de vida da frota</em></h2>
+            </div>
+            <p style="max-width:400px;color:var(--slate);font-size:.9rem;line-height:1.7;">
+                Do primeiro veículo ao último quilómetro. Adaptamos o nível de envolvimento ao grau de autonomia pretendido — de consultoria pontual a outsourcing integral.
+            </p>
+        </div>
+
+        <!-- Core Services -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+
+            <div class="svc-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="svc-tag tag-core">Core · Ano 1</div>
+                <div class="svc-num">01</div>
+                <div class="svc-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35M11 8v6M8 11h6"/></svg>
+                </div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:.75rem;">Auditoria &amp; Diagnóstico TCO</h3>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;flex-grow:1;">Radiografia completa à sua frota. Identificamos onde está a perder dinheiro — de ineficiências contratuais a penalizações fiscais da Tributação Autónoma. Entregamos um plano de ação com ROI mensurável.</p>
+                <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #f1f5f9;">
+                    <p style="font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:.4rem;">Inclui:</p>
+                    <ul style="font-size:.78rem;color:var(--slate);list-style:none;padding:0;space-y:.2rem;">
+                        <li>✓ Análise TCO por viatura</li>
+                        <li>✓ Mapeamento fiscal (TA, IRC, IVA)</li>
+                        <li>✓ Benchmarking de mercado</li>
+                        <li>✓ Plano de Ação Corretivo</li>
+                    </ul>
+                </div>
+                <a href="TCO_simulator.html" style="margin-top:1.25rem;" class="btn-primary" style="justify-content:center;">Simular agora →</a>
+            </div>
+
+            <div class="svc-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="svc-tag tag-core">Core · Ano 1</div>
+                <div class="svc-num">02</div>
+                <div class="svc-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-1.5 7h13"/></svg>
+                </div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:.75rem;">Procurement &amp; Negociação</h3>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;flex-grow:1;">Conduzimos todo o processo de consulta ao mercado (RFP), colocando locadoras e concessionários a competir entre si. Como consultores independentes, nunca temos preferência por fornecedor — só pelos seus interesses.</p>
+                <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #f1f5f9;">
+                    <p style="font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:.4rem;">Inclui:</p>
+                    <ul style="font-size:.78rem;color:var(--slate);list-style:none;padding:0;">
+                        <li>✓ Definição da política de frota</li>
+                        <li>✓ RFP e comparação de propostas</li>
+                        <li>✓ Negociação independente</li>
+                        <li>✓ Otimização fiscal BEV/PHEV</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="svc-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="svc-tag tag-core">Core · Ano 2-3</div>
+                <div class="svc-num">03</div>
+                <div class="svc-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 9h6M9 12h6M9 15h4"/></svg>
+                </div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:.75rem;">Gestão Operacional</h3>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;flex-grow:1;">O seu departamento de frota externo. De self-service a outsourcing integral — IUC, IPO, multas, seguros, sinistros, manutenções. A sua equipa foca-se no core business. Nós tratamos de tudo o resto.</p>
+                <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #f1f5f9;">
+                    <p style="font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:.4rem;">Inclui:</p>
+                    <ul style="font-size:.78rem;color:var(--slate);list-style:none;padding:0;">
+                        <li>✓ Dashboard TCO em tempo real</li>
+                        <li>✓ Gestão de IUC, IPO e multas</li>
+                        <li>✓ Coordenação de seguros e sinistros</li>
+                        <li>✓ Alertas e relatórios periódicos</li>
+                    </ul>
+                </div>
+                <a href="custom_solutions.html" style="margin-top:1.25rem;" class="btn-primary">Ver soluções →</a>
+            </div>
+
+            <div class="svc-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="svc-tag tag-core">Core · Ciclo completo</div>
+                <div class="svc-num">04</div>
+                <div class="svc-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                </div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:.75rem;">Fim de Ciclo</h3>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;flex-grow:1;">Maximizamos o valor residual das suas viaturas na devolução ou revenda. Pré-peritagens especializadas, recondicionamentos inteligentes e recomendações de renovação — sem surpresas no fim do contrato.</p>
+                <div style="margin-top:1.25rem;padding-top:1rem;border-top:1px solid #f1f5f9;">
+                    <p style="font-size:.72rem;font-weight:700;color:var(--navy);margin-bottom:.4rem;">Inclui:</p>
+                    <ul style="font-size:.78rem;color:var(--slate);list-style:none;padding:0;">
+                        <li>✓ Pré-peritagem antes da devolução</li>
+                        <li>✓ Recondicionamento inteligente</li>
+                        <li>✓ Estratégia de renovação de frota</li>
+                        <li>✓ Remarketing otimizado</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Pipeline Services -->
+        <div style="background:#f8fafc;border-radius:20px;padding:2rem;border:1.5px solid #e2e8f0;" data-aos="fade-up">
+            <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;flex-wrap:wrap;">
+                <span style="font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--slate);">Serviços Complementares</span>
+                <span style="height:1px;flex:1;background:#e2e8f0;"></span>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div style="display:flex;align-items:flex-start;gap:.75rem;">
+                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">⚡</div>
+                    <div>
+                        <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Soluções de Carregamento</p>
+                        <p style="font-size:.75rem;color:var(--slate);">Wallboxes e infraestrutura de carga para frotas elétricas</p>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:.75rem;">
+                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">🛡️</div>
+                    <div>
+                        <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Seguros Auto</p>
+                        <p style="font-size:.75rem;color:var(--slate);">Intermediação independente — melhores condições</p>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:.75rem;">
+                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">✨</div>
+                    <div>
+                        <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Automotive Care</p>
+                        <p style="font-size:.75rem;color:var(--slate);">Manutenção, detailing e gestão de viaturas de coleção</p>
+                    </div>
+                </div>
+                <div style="display:flex;align-items:flex-start;gap:.75rem;">
+                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">🏎️</div>
+                    <div>
+                        <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Mobilidade de Luxo</p>
+                        <p style="font-size:.75rem;color:var(--slate);">Transporte premium para executivos e ocasiões especiais</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ══════════════ DIFFERENTIATORS ══════════════ -->
+<section id="diferenciais" style="padding:6rem 0;background:#f8fafc;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <div class="section-label">Porquê a FleetWise</div>
+            <h2 class="section-title">Independência que<br><em>faz diferença no TCO</em></h2>
+            <p style="color:var(--slate);max-width:580px;margin:1rem auto 0;font-size:.9rem;line-height:1.7;">As locadoras ganham com os seus contratos. As captivas vendem a sua marca. Nós defendemos exclusivamente os seus interesses.</p>
+        </div>
+
+        <div class="overflow-x-auto" data-aos="fade-up" data-aos-delay="100">
+            <table class="diff-table w-full">
+                <thead>
+                    <tr>
+                        <th style="width:22%;">Fator</th>
+                        <th style="background:var(--green);width:26%;">⭐ FleetWise</th>
+                        <th>Grandes Locadoras<br><small style="opacity:.6;font-weight:400;">(Ayvens, Arval)</small></th>
+                        <th>Tech Players<br><small style="opacity:.6;font-weight:400;">(Cartrack, Frotcom)</small></th>
+                        <th>Consultoras<br><small style="opacity:.6;font-weight:400;">(tradicionais)</small></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="font-weight:600;color:var(--navy);">Independência</td>
+                        <td class="fw-col"><span class="check">✓</span> Sem conflito de interesses</td>
+                        <td><span class="cross">✗</span> Lucram com o contrato</td>
+                        <td><span class="partial">~</span> Agnósticos, sem advisory</td>
+                        <td><span class="check">✓</span> Independentes</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600;color:var(--navy);">Domínio Fiscal</td>
+                        <td class="fw-col"><span class="check">✓</span> Core da proposta de valor</td>
+                        <td><span class="cross">✗</span> Não é o foco</td>
+                        <td><span class="cross">✗</span> Ausente</td>
+                        <td><span class="partial">~</span> Limitado</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600;color:var(--navy);">Plataforma Digital</td>
+                        <td class="fw-col"><span class="check">✓</span> Desenvolvida com IA</td>
+                        <td><span class="partial">~</span> Portais standardizados</td>
+                        <td><span class="check">✓</span> Foco operacional</td>
+                        <td><span class="cross">✗</span> Excel / processos manuais</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600;color:var(--navy);">Personalização</td>
+                        <td class="fw-col"><span class="check">✓</span> Solução à medida</td>
+                        <td><span class="cross">✗</span> Modelo industrial</td>
+                        <td><span class="cross">✗</span> Self-service</td>
+                        <td><span class="partial">~</span> Parcial</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600;color:var(--navy);">Custo de Entrada</td>
+                        <td class="fw-col"><span class="check">✓</span> Success fee — sem risco</td>
+                        <td><span class="cross">✗</span> Contrato de renting</td>
+                        <td><span class="partial">~</span> Subscrição mensal</td>
+                        <td><span class="cross">✗</span> Fee fixo por projeto</td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:600;color:var(--navy);">Otimização BEV/PHEV</td>
+                        <td class="fw-col"><span class="check">✓</span> Especialização fiscal</td>
+                        <td><span class="cross">✗</span> Vende a viatura, não poupa</td>
+                        <td><span class="cross">✗</span> Ausente</td>
+                        <td><span class="partial">~</span> Generalista</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Value props grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+            <div class="card-white" data-aos="fade-up" data-aos-delay="100">
+                <div style="font-size:2rem;margin-bottom:.75rem;">🎯</div>
+                <h3 style="font-weight:700;color:var(--navy);margin-bottom:.5rem;">Independência agnóstica</h3>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;">Não representamos nenhuma marca, locadora ou financeira. As nossas recomendações são baseadas exclusivamente em dados e no melhor interesse do Cliente.</p>
+            </div>
+            <div class="card-white" data-aos="fade-up" data-aos-delay="200">
+                <div style="font-size:2rem;margin-bottom:.75rem;">📋</div>
+                <h3 style="font-weight:700;color:var(--navy);margin-bottom:.5rem;">Domínio fiscal diferenciador</h3>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;">Tributação Autónoma, benefícios BEV/PHEV, IRC — o domínio fiscal é o nosso núcleo duro. Onde os outros veem burocracia, nós vemos oportunidades de poupança.</p>
+            </div>
+            <div class="card-white" data-aos="fade-up" data-aos-delay="300">
+                <div style="font-size:2rem;margin-bottom:.75rem;">🤖</div>
+                <h3 style="font-weight:700;color:var(--navy);margin-bottom:.5rem;">Tecnologia IA ao serviço do TCO</h3>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;">A nossa plataforma, desenvolvida com IA, cruza dados em tempo real para gerar propostas ativas de eficiência. Mais do que relatórios — decisões automatizadas.</p>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ══════════════ COMO FUNCIONA ══════════════ -->
+<section id="como-funciona" style="padding:6rem 0;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex flex-col lg:flex-row gap-16 items-start">
+
+            <div class="lg:w-1/2" data-aos="fade-right">
+                <div class="section-label">Como funciona</div>
+                <h2 class="section-title">Da primeira reunião<br>à <em>poupança comprovada</em></h2>
+                <p style="color:var(--slate);font-size:.9rem;line-height:1.7;margin-top:1rem;margin-bottom:2.5rem;">
+                    O nosso processo foi desenhado para minimizar o esforço da sua equipa e maximizar o valor entregue. Funciona em três fases simples.
+                </p>
+
+                <div class="space-y-8">
+                    <div class="flex gap-5 step-line" data-aos="fade-up" data-aos-delay="100">
+                        <div class="step-num flex-shrink-0">1</div>
+                        <div>
+                            <h4 style="font-weight:700;color:var(--navy);margin-bottom:.4rem;">Diagnóstico Gratuito</h4>
+                            <p style="font-size:.85rem;color:var(--slate);line-height:1.7;">Análise inicial à sua frota — sem compromisso, sem custo. Identificamos o potencial de poupança e partilhamos as primeiras conclusões numa reunião de 45 minutos.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5 step-line" data-aos="fade-up" data-aos-delay="200">
+                        <div class="step-num flex-shrink-0">2</div>
+                        <div>
+                            <h4 style="font-weight:700;color:var(--navy);margin-bottom:.4rem;">Radiografia TCO Completa</h4>
+                            <p style="font-size:.85rem;color:var(--slate);line-height:1.7;">Em menos de 5 dias úteis entregamos a análise detalhada com quantificação das ineficiências, benchmarks de mercado e plano de ação com ROI definido.</p>
+                        </div>
+                    </div>
+                    <div class="flex gap-5" data-aos="fade-up" data-aos-delay="300">
+                        <div class="step-num flex-shrink-0">3</div>
+                        <div>
+                            <h4 style="font-weight:700;color:var(--navy);margin-bottom:.4rem;">Implementação &amp; Acompanhamento</h4>
+                            <p style="font-size:.85rem;color:var(--slate);line-height:1.7;">Executamos as recomendações, negociamos com fornecedores e, se pretendido, assumimos a gestão operacional contínua. Só pagam em função dos resultados.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="openModal('demo')" class="btn-primary" style="margin-top:2.5rem;font-size:.95rem;padding:.85rem 2rem;">
+                    Começar agora — sem compromisso →
+                </button>
+            </div>
+
+            <div class="lg:w-1/2" data-aos="fade-left" data-aos-delay="200">
+                <!-- Jobs to be done -->
+                <div class="space-y-4">
+                    <p style="font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--slate);margin-bottom:1rem;">O que os nossos clientes realmente precisam</p>
+
+                    <div class="job-card">
+                        <div class="job-label">Job Funcional</div>
+                        <div class="job-icon">💰</div>
+                        <h3>Pagar menos pelo mesmo resultado</h3>
+                        <p>Sem ter de perceber de fiscalidade, renting ou mercado automóvel. Entregamos poupanças reais e demonstráveis no TCO.</p>
+                    </div>
+
+                    <div class="job-card">
+                        <div class="job-label">Job Social</div>
+                        <div class="job-icon">📊</div>
+                        <h3>Decisões de frota fundamentadas</h3>
+                        <p>O CFO ou CEO precisa de apresentar escolhas de mobilidade com dados, benchmarks e rigor técnico. O nosso relatório TCO é esse artefacto.</p>
+                    </div>
+
+                    <div class="job-card">
+                        <div class="job-label">Job Emocional</div>
+                        <div class="job-icon">😌</div>
+                        <h3>Deixar de se preocupar com isto</h3>
+                        <p>A frota é um custo crescente e opaco. Os nossos clientes querem externalizar a ansiedade — não apenas os processos. Nós tratamos disso.</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════ MODELO COMERCIAL ══════════════ -->
+<section style="padding:6rem 0;background:#f8fafc;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <div class="section-label">Modelo comercial</div>
+            <h2 class="section-title">Alinhamento de incentivos.<br><em>Sem risco para si.</em></h2>
+            <p style="color:var(--slate);max-width:560px;margin:1rem auto 0;font-size:.9rem;line-height:1.7;">A nossa estrutura de honorários garante que só ganhamos quando você poupa. Sem custos fixos de entrada. Sem surpresas.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="model-card card-white" data-aos="fade-up" data-aos-delay="100">
+                <div style="font-size:2rem;margin-bottom:1rem;">🔍</div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:.5rem;">Radiografia TCO</h3>
+                <div style="font-size:1.4rem;font-weight:800;color:var(--green);margin-bottom:.5rem;">Success Fee</div>
+                <p style="font-size:.8rem;color:var(--slate);line-height:1.7;">Pagamento calculado como percentagem da poupança gerada. Se não poupar, não paga. A entrada ideal para validar o valor da FleetWise sem risco.</p>
+                <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #f1f5f9;font-size:.78rem;color:var(--green);font-weight:600;">✓ Diagnóstico inicial gratuito</div>
+            </div>
+
+            <div class="model-card card-white featured" data-aos="fade-up" data-aos-delay="200">
+                <div class="model-badge">Mais popular</div>
+                <div style="font-size:2rem;margin-bottom:1rem;">📋</div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:.5rem;">Gestão Contínua</h3>
+                <div style="font-size:1.4rem;font-weight:800;color:var(--green);margin-bottom:.5rem;">Retainer Mensal</div>
+                <p style="font-size:.8rem;color:var(--slate);line-height:1.7;">Relação de parceria continuada. Gestão operacional, alertas fiscais proativos, dashboard TCO e reuniões periódicas de revisão de eficiência.</p>
+                <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #f1f5f9;font-size:.78rem;color:var(--green);font-weight:600;">✓ Gestor de conta dedicado</div>
+            </div>
+
+            <div class="model-card card-white" data-aos="fade-up" data-aos-delay="300">
+                <div style="font-size:2rem;margin-bottom:1rem;">🏗️</div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.05rem;margin-bottom:.5rem;">Projeto Específico</h3>
+                <div style="font-size:1.4rem;font-weight:800;color:var(--green);margin-bottom:.5rem;">Fee de Projeto</div>
+                <p style="font-size:.8rem;color:var(--slate);line-height:1.7;">Para necessidades pontuais: RFP de renovação de frota, implementação de política de mobilidade, auditoria de sinistros ou consultoria fiscal pontual.</p>
+                <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #f1f5f9;font-size:.78rem;color:var(--green);font-weight:600;">✓ Orçamento fixo e transparente</div>
+            </div>
+        </div>
+
+        <div style="margin-top:3rem;text-align:center;" data-aos="fade-up" data-aos-delay="100">
+            <button onclick="openModal('demo')" class="btn-primary" style="font-size:1rem;padding:.9rem 2.5rem;">
+                Solicitar proposta personalizada
+            </button>
+            <p style="margin-top:.75rem;font-size:.78rem;color:var(--slate);">Adaptamos o modelo ao grau de autonomia pretendido — de consultoria pontual a outsourcing integral.</p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ══════════════ SEGMENTOS ══════════════ -->
+<section style="padding:6rem 0;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <div class="section-label">Quem servimos</div>
+            <h2 class="section-title">Para empresas com<br><em>3 a 100+ viaturas</em></h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="card-white" data-aos="fade-up" data-aos-delay="100">
+                <div style="font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem;">Segmento 1</div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.1rem;margin-bottom:.25rem;">Micro-frotas</h3>
+                <p style="font-size:.78rem;color:var(--slate);margin-bottom:1rem;">3 – 10 viaturas</p>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;">PMEs sem gestão estruturada. Entrada por Radiografia TCO e success fee — sem risco, com poupanças imediatas e demonstráveis.</p>
+                <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #f1f5f9;">
+                    <p style="font-size:.75rem;color:var(--slate);">🎯 <strong>Ano 1</strong> — Validação e referências</p>
+                </div>
+            </div>
+
+            <div class="card-white" style="border-color:var(--green);" data-aos="fade-up" data-aos-delay="200">
+                <div style="font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem;">Segmento 2 · Prioritário</div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.1rem;margin-bottom:.25rem;">Frotas Médias</h3>
+                <p style="font-size:.78rem;color:var(--slate);margin-bottom:1rem;">10 – 30 viaturas</p>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;">PMEs com gestão informal e reativa. Plataforma de gestão + otimização fiscal + relatórios periódicos. Modelo híbrido advisory + self-service.</p>
+                <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #f1f5f9;">
+                    <p style="font-size:.75rem;color:var(--slate);">🚀 <strong>Ano 2</strong> — Crescimento da base recorrente</p>
+                </div>
+            </div>
+
+            <div class="card-white" data-aos="fade-up" data-aos-delay="300">
+                <div style="font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem;">Segmento 3</div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1.1rem;margin-bottom:.25rem;">Grandes Frotas</h3>
+                <p style="font-size:.78rem;color:var(--slate);margin-bottom:1rem;">30 – 100+ viaturas</p>
+                <p style="font-size:.83rem;color:var(--slate);line-height:1.7;">Gestão delegada integral ou híbrida. Módulos ESG, reporting de carbono, gestor de conta dedicado e outsourcing operacional completo.</p>
+                <div style="margin-top:1rem;padding-top:1rem;border-top:1px solid #f1f5f9;">
+                    <p style="font-size:.75rem;color:var(--slate);">📈 <strong>Ano 3</strong> — Expansão e upselling</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════ DEMO / CONTACTO ══════════════ -->
+<section id="contacto" class="demo-section" style="padding:6rem 0;">
+    <div class="max-w-7xl mx-auto px-4 relative z-10">
+        <div class="flex flex-col lg:flex-row gap-16 items-center">
+
+            <div class="lg:w-1/2" data-aos="fade-right">
+                <div class="section-label" style="color:var(--green);">Dê o primeiro passo</div>
+                <h2 style="font-size:clamp(2rem,4vw,3rem);font-weight:800;color:#fff;line-height:1.15;margin-bottom:1.25rem;">
+                    Descubra quanto está a<br><em style="color:var(--green);font-style:normal;">pagar a mais</em> pela sua frota.
+                </h2>
+                <p style="color:rgba(255,255,255,.65);font-size:.95rem;line-height:1.8;margin-bottom:2rem;">
+                    A primeira reunião é gratuita e sem compromisso. Em 45 minutos partilhamos as primeiras conclusões sobre o potencial de poupança da sua frota.
+                </p>
+
+                <div class="space-y-4">
+                    <div style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div style="width:36px;height:36px;background:rgba(16,185,129,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--green);font-weight:700;">1</div>
+                        <div>
+                            <p style="color:#fff;font-weight:600;font-size:.9rem;margin-bottom:.2rem;">Preencha o formulário</p>
+                            <p style="color:rgba(255,255,255,.5);font-size:.82rem;">Partilhe informação básica sobre a sua empresa e frota</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div style="width:36px;height:36px;background:rgba(16,185,129,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--green);font-weight:700;">2</div>
+                        <div>
+                            <p style="color:#fff;font-weight:600;font-size:.9rem;margin-bottom:.2rem;">Recebe resposta em 24h</p>
+                            <p style="color:rgba(255,255,255,.5);font-size:.82rem;">A nossa equipa contacta-o para agendar a primeira sessão</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:flex-start;gap:1rem;">
+                        <div style="width:36px;height:36px;background:rgba(16,185,129,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--green);font-weight:700;">3</div>
+                        <div>
+                            <p style="color:#fff;font-weight:600;font-size:.9rem;margin-bottom:.2rem;">Diagnóstico gratuito</p>
+                            <p style="color:rgba(255,255,255,.5);font-size:.82rem;">45 minutos para identificar as principais oportunidades de poupança</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-top:2.5rem;padding:1.5rem;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;">
+                    <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap;">
+                        <div style="text-align:center;flex:1;">
+                            <div style="color:var(--green);font-size:1.5rem;font-weight:800;">+6%</div>
+                            <div style="color:rgba(255,255,255,.5);font-size:.72rem;">poupança mín. TCO</div>
+                        </div>
+                        <div style="width:1px;height:40px;background:rgba(255,255,255,.1);"></div>
+                        <div style="text-align:center;flex:1;">
+                            <div style="color:var(--green);font-size:1.5rem;font-weight:800;">5 dias</div>
+                            <div style="color:rgba(255,255,255,.5);font-size:.72rem;">entrega da Radiografia</div>
+                        </div>
+                        <div style="width:1px;height:40px;background:rgba(255,255,255,.1);"></div>
+                        <div style="text-align:center;flex:1;">
+                            <div style="color:var(--green);font-size:1.5rem;font-weight:800;">0€</div>
+                            <div style="color:rgba(255,255,255,.5);font-size:.72rem;">risco na entrada</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inline Form -->
+            <div class="lg:w-1/2" data-aos="fade-left" data-aos-delay="200">
+                <div style="background:#fff;border-radius:24px;padding:2.5rem;box-shadow:0 30px 80px rgba(0,0,0,.3);">
+                    <h3 style="font-weight:700;color:var(--navy);font-size:1.2rem;margin-bottom:.4rem;">Solicitar Demonstração / Reunião</h3>
+                    <p style="font-size:.82rem;color:var(--slate);margin-bottom:1.75rem;">Resposta garantida em 24 horas úteis.</p>
+
+                    <form id="contact-form" onsubmit="submitForm(event)" novalidate>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="form-label">Nome *</label>
+                                <input type="text" class="form-input" placeholder="O seu nome" required>
+                            </div>
+                            <div>
+                                <label class="form-label">Empresa *</label>
+                                <input type="text" class="form-input" placeholder="Nome da empresa" required>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label class="form-label">Email *</label>
+                                <input type="email" class="form-input" placeholder="email@empresa.pt" required>
+                            </div>
+                            <div>
+                                <label class="form-label">Telefone</label>
+                                <input type="tel" class="form-input" placeholder="+351 9xx xxx xxx">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">Número de viaturas</label>
+                            <select class="form-input">
+                                <option value="">Selecione...</option>
+                                <option>3 – 10 viaturas</option>
+                                <option>10 – 30 viaturas</option>
+                                <option>30 – 100 viaturas</option>
+                                <option>+ 100 viaturas</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label">O que pretende?</label>
+                            <select class="form-input">
+                                <option value="">Selecione...</option>
+                                <option>Demonstração da plataforma</option>
+                                <option>Reunião de diagnóstico (gratuita)</option>
+                                <option>Radiografia TCO completa</option>
+                                <option>Simulação BEV/PHEV</option>
+                                <option>Gestão operacional / outsourcing</option>
+                                <option>Outro / Informação geral</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-5">
+                            <label class="form-label">Mensagem (opcional)</label>
+                            <textarea class="form-input" rows="3" placeholder="Descreva brevemente a situação atual da sua frota ou o que pretende..."></textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:1rem;font-size:.95rem;">
+                            Enviar pedido →
+                        </button>
+                        <p style="font-size:.72rem;color:var(--slate);text-align:center;margin-top:.75rem;">
+                            Os seus dados são tratados de forma confidencial ao abrigo do RGPD.
+                        </p>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════ EQUIPA TEASER ══════════════ -->
+<section style="padding:6rem 0;background:#f8fafc;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex flex-col lg:flex-row gap-12 items-center">
+            <div class="lg:w-1/2" data-aos="fade-right">
+                <div class="section-label">A equipa</div>
+                <h2 class="section-title">Rigor, <em>independência</em><br>e experiência real.</h2>
+                <p style="color:var(--slate);font-size:.9rem;line-height:1.8;margin:1rem 0 2rem;">
+                    A FleetWise reúne especialistas com percurso comprovado em gestão automóvel, fiscalidade corporativa, operações de larga escala e desenvolvimento de negócio. Uma equipa multidisciplinar com um foco único: defender os seus interesses.
+                </p>
+                <a href="quem_somos.html" class="btn-primary">
+                    Conhecer a equipa →
+                </a>
+            </div>
+
+            <div class="lg:w-1/2" data-aos="fade-left" data-aos-delay="100">
+                <div style="background:var(--navy);border-radius:20px;padding:2rem;">
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;">
+                        <div style="text-align:center;">
+                            <div style="color:#fff;font-weight:700;font-size:.9rem;margin-bottom:.2rem;">Gerson Tavares</div>
+                            <div style="color:var(--green);font-size:.75rem;">Gestão &amp; Account Manager</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="color:#fff;font-weight:700;font-size:.9rem;margin-bottom:.2rem;">João Duarte</div>
+                            <div style="color:var(--green);font-size:.75rem;">Eng. Mecânica &amp; Dir. Comercial</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="color:#fff;font-weight:700;font-size:.9rem;margin-bottom:.2rem;">Luís Vergueiro</div>
+                            <div style="color:var(--green);font-size:.75rem;">Gestão de Operações Sénior</div>
+                        </div>
+                        <div style="text-align:center;">
+                            <div style="color:#fff;font-weight:700;font-size:.9rem;margin-bottom:.2rem;">Nuno Nápoles</div>
+                            <div style="color:var(--green);font-size:.75rem;">Marketing &amp; Gestão Comercial</div>
+                        </div>
+                        <div style="text-align:center;grid-column:1/-1;">
+                            <div style="color:#fff;font-weight:700;font-size:.9rem;margin-bottom:.2rem;">Rui Coelho</div>
+                            <div style="color:var(--green);font-size:.75rem;">Psicologia &amp; Gestão de Pessoas</div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1);text-align:center;">
+                        <p style="color:rgba(255,255,255,.5);font-size:.78rem;font-style:italic;">"A FleetWise não tem de ser a maior. Deve ser a mais confiável, a mais rigorosa e a que demonstra, de forma inequívoca, que nunca está do lado errado do mercado."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="footer" style="padding:4rem 0 2rem;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+
+            <div class="md:col-span-2">
+                <div style="font-size:1.6rem;font-weight:800;margin-bottom:1rem;"><span style="color:var(--green);">Fleet</span><span style="color:#fff;">Wise</span></div>
+                <p style="font-size:.83rem;line-height:1.8;max-width:360px;margin-bottom:1.5rem;">A consultora independente que transforma a gestão de frotas em Portugal num ativo estratégico. Simplifique, Otimize, Rentabilize.</p>
+                <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+                    <a href="mailto:geral@fleetwise.pt" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        geral@fleetwise.pt
+                    </a>
+                    <a href="tel:+351914038167" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.1 1.18 2 2 0 012.07 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.55-.55a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+                        914 038 167
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h4>Serviços</h4>
+                <a href="#servicos">Auditoria &amp; Diagnóstico TCO</a>
+                <a href="#servicos">Procurement &amp; Negociação</a>
+                <a href="#servicos">Gestão Operacional</a>
+                <a href="#servicos">Fim de Ciclo</a>
+                <a href="#servicos">Automotive Care</a>
+                <a href="#servicos">Mobilidade de Luxo</a>
+            </div>
+
+            <div>
+                <h4>Ferramentas</h4>
+                <a href="TCO_simulator.html">Simulador TCO</a>
+                <a href="vehicle_compare.html">Comparador xEV / BEV</a>
+                <a href="loja.html">Loja</a>
+                <a href="quem_somos.html">Quem Somos</a>
+                <a href="#contacto">Contacto</a>
+                <div style="margin-top:1rem;">
+                    <button onclick="openModal()" style="background:var(--green);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:50px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;" onmouseover="this.style.background='var(--green2)'" onmouseout="this.style.background='var(--green)'">
+                        Agendar Reunião →
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="footer-divider" style="border-top:1px solid rgba(255,255,255,.08);padding-top:2rem;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;">
+            <p style="font-size:.75rem;">Copyright © 2026 FleetWise, Unipessoal, Lda. · Portugal</p>
+            <p style="font-size:.75rem;">Simplifique, Otimize, Rentabilize.</p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- ══════════════ MODAL ══════════════ -->
+<div id="demo-modal">
+    <div class="modal-bg" onclick="closeModal()"></div>
+    <div class="modal-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;">
+            <div>
+                <h3 style="font-weight:800;color:var(--navy);font-size:1.3rem;margin-bottom:.3rem;" id="modal-title">Solicitar Demonstração</h3>
+                <p style="font-size:.82rem;color:var(--slate);" id="modal-sub">Resposta garantida em 24 horas úteis.</p>
+            </div>
+            <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;color:var(--slate);font-size:1.5rem;line-height:1;padding:.25rem;">&times;</button>
+        </div>
+
+        <form id="modal-form" onsubmit="submitModalForm(event)" novalidate>
+            <div class="grid grid-cols-2 gap-3 mb-3">
                 <div>
-                    <h1 class="text-5xl hero-title mb-8 text-left font-regular text-brand-navy">Simplifique, Otimize, Rentabilize!</h1>
-                    <div class="space-y-6 text-slate-600 leading-relaxed text-sm text-justify">
-                        <p>Na <span class="font-bold text-brand-navy">FleetWise</span> desenvolvemos as soluções que não existem, reduzimos custos que pareciam insignificantes e fomentamos relações comerciais onde inicialmente não existiam Oportunidades. No fundo, fazemos muito com pouco!</p>
-                        <p>Somos uma consultora com foco no negócio automóvel. Sugerimos soluções de mobilidade adequadas às suas necessidades de forma imparcial, desenvolvemos soluções à medida para mitigar perdas de tempo ou de recursos, sempre com um grande foco na eficiência e produtividade.</p>
-                        <p>Tiramos partido da <span class="font-bold text-brand-navy">IA</span> para nos ajudar no dia-a-dia e pretendemos que faça o mesmo!</p>
-                    </div>
+                    <label class="form-label">Nome *</label>
+                    <input type="text" class="form-input" placeholder="O seu nome" required>
                 </div>
-                <div class="mt-10 overflow-hidden rounded-lg shadow-xl">
-                    <img src="img/Tesla-Model-Y-Portugal.webp" alt="Tesla" class="w-full h-[280px] object-cover rounded-xl">
+                <div>
+                    <label class="form-label">Empresa *</label>
+                    <input type="text" class="form-input" placeholder="Empresa" required>
                 </div>
             </div>
-            <div class="hero-right w-full md:w-[30%] flex flex-col gap-6" data-aos="fade-left">
-                <div class="rounded-lg overflow-hidden shadow-md"><img src="img/Polestar_4-6-1024x577.jpg" alt="Polestar" class="w-full h-[200px] object-cover"></div>
-                <div class="rounded-lg overflow-hidden shadow-lg flex-grow"><img src="img/53615141658_44ec4a59e3_o.webp" alt="BMW" class="w-full h-full min-h-[360px] object-cover"></div>
+            <div class="mb-3">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-input" placeholder="email@empresa.pt" required>
             </div>
-        </div>
-    </section>
-
-    <div class="section-stats-divider">
-        <div class="max-w-7xl mx-auto px-4 flex justify-around text-slate-400 text-xs font-bold uppercase tracking-widest">
-            <div class="flex items-center gap-2"><span class="text-brand-green">●</span> Eficiência Real</div>
-            <div class="flex items-center gap-2"><span class="text-brand-green">●</span> TCO Otimizado</div>
-            <div class="flex items-center gap-2"><span class="text-brand-green">●</span> Independência Total</div>
-        </div>
+            <div class="mb-3">
+                <label class="form-label">Telefone</label>
+                <input type="tel" class="form-input" placeholder="+351 9xx xxx xxx">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Número de viaturas</label>
+                <select class="form-input">
+                    <option>Selecione...</option>
+                    <option>3 – 10 viaturas</option>
+                    <option>10 – 30 viaturas</option>
+                    <option>30 – 100 viaturas</option>
+                    <option>+ 100 viaturas</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Mensagem (opcional)</label>
+                <textarea class="form-input" rows="3" placeholder="Contexto adicional sobre a sua frota..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:.9rem;">
+                Enviar pedido →
+            </button>
+            <p style="font-size:.72rem;color:var(--slate);text-align:center;margin-top:.6rem;">Tratamos os seus dados com total confidencialidade (RGPD).</p>
+        </form>
     </div>
+</div>
 
-    <section id="servicos" class="max-w-7xl mx-auto px-4 py-20 border-b border-slate-100">
-        <h2 class="text-4xl font-semibold mb-16 text-brand-navy" data-aos="fade-up">Os nossos serviços:</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-20">
-            
-            <div data-aos="fade-up" data-aos-delay="100">
-                <span class="number-accent">1</span>
-                <h3 class="text-xl font-bold mt-4 mb-4 text-brand-navy">Auditoria & Diagnóstico</h3>
-                <p class="text-sm text-slate-600 mb-4 text-justify">Realizamos uma radiografia completa à sua frota atual para transformar os custos ocultos em liquidez. Por vezes, o valor da renda mensal esconde ineficiências contratuais e fiscais que passam despercebidas no dia-a-dia. O nosso diagnóstico identifica exatamente onde está a perder dinheiro e entrega-lhe um roteiro claro para corrigir a situação.</p>
-                <div class="text-xs text-slate-500 mb-6">
-                    <p class="font-bold mb-1 text-slate-700">O que incluímos:</p>
-                    <ul class="list-disc ml-4 space-y-1">
-                        <li>Deteção de "fugas" financeiras</li>
-                        <li>Blindagem fiscal</li>
-                        <li>Plano de Ação Corretivo</li>
-                        <li>Acompanhamento flexível</li>
-                    </ul>
-                </div>
-                <a href="TCO_simulator.html" class="inline-block bg-brand-green text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-emerald-600 transition shadow-lg text-center">Simule já!</a>                
-            </div>
-            
-            <div data-aos="fade-up" data-aos-delay="200">
-                <span class="number-accent">2</span>
-                <h3 class="text-xl font-bold mt-4 mb-4 text-brand-navy">Procurement & Negociação</h3>
-                <p class="text-sm text-slate-600 text-justify">Lideramos todo o processo de consulta de mercado (RFP), desafiando locadoras e concessionários para obter as condições mais competititvas. Por vezes, o desconhecimento do mercado ou de determinadas ferramentas facilitam uma tomada de decisão menos estruturada, e portanto, mais dispendiosa. Nem sempre sabemos o que precisamos e dispomos de uma equipa de profissionais que levaram as decisões do seu negócio a Bom Porto.</p>
-            </div>
-            
-            <div data-aos="fade-up" data-aos-delay="300">
-                <span class="number-accent">3</span>
-                <h3 class="text-xl font-bold mt-4 mb-4 text-brand-navy">Gestão Operacional</h3>
-                <p class="text-sm text-slate-600 mb-6 text-justify">Assumimos a gestão integral da sua mobilidade como o seu departamento de frota externo. Atuamos em todo o ciclo de vida do ativo: desde a vertente administrativa e legal (IUC, IPO, Multas) à consultoria e gestão ativa de seguros e sinistros, garantindo a proteção real do seu capital.
+<!-- Toast -->
+<div id="toast">✓ Pedido enviado com sucesso! Contactamos em 24h.</div>
 
-Maximizamos a disponibilidade da sua frota através de uma coordenação rigorosa de manutenções e reparações. No encerramento do ciclo, protegemos a sua rentabilidade com pré-peritagens especializadas e recondicionamentos inteligentes, eliminando custos de devolução imprevistos e potenciando o valor de remarketing. Transformamos a gestão operacional num processo transparente, focado na redução do TCO e na total liberdade da sua equipa.</p>
-                <a href="custom_solutions.html" class="inline-block bg-brand-green text-white px-6 py-2 rounded-full text-sm font-semibold hover:bg-emerald-600 transition text-center">Exemplos de soluções!</a>
-            </div>
-            
-            <div data-aos="fade-up" data-aos-delay="200">
-                <span class="number-accent">4</span>
-                <h3 class="text-xl font-bold mt-4 mb-4 text-brand-navy">Soluções de Carregamento</h3>
-                <p class="text-sm text-slate-600 text-justify">A transição para a mobilidade elétrica exige mais do que viaturas: um ecossistema de carregamento inteligente. Desenhamos e implementamos a infraestrutura ideal para a sua empresa. A nossa abordagem garante que a sua frota está sempre operacional, ao menor custo por kWh, com uma gestão centralizada de consumos e custos.</p>
-            </div>
 
-            <div data-aos="fade-up" data-aos-delay="100">
-                <span class="number-accent">5</span>
-                <h3 class="text-xl font-bold mt-4 mb-4 text-brand-navy">Automotive Care</h3>
-                <p class="text-sm text-slate-600 mb-4 text-justify">Garantimos a total operacionalidade e a preservação do valor de cada vehicle através de uma gestão rigorosa de todas as intervenções necessárias. Eliminamos as preocupações logísticas do dia-a-dia, coordenando desde a manutenção preventiva até ao cuidado estético detalhado, assegurando que a mobilidade está sempre nas melhores condições de utilização, segurança e apresentação.</p>
-                <div class="text-xs text-slate-500 mb-6">
-                    <p class="font-bold mb-1 text-slate-700">O que incluímos:</p>
-                    <ul class="list-disc ml-4 space-y-1">
-                        <li>Agendamento de Revisões</li>
-                        <li>Inspeção Periódica Obrigatória</li>
-                        <li>Reparação de danos</li>
-                        <li>Lavagens Auto</li>
-                        <li>Serviços de Manutenção de Garagem Privada</li>
-                    </ul>
-                </div>
-            </div>
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 800, once: true, offset: 60 });
 
-            <div data-aos="fade-up" data-aos-delay="200">
-                <span class="number-accent">6</span>
-                <h3 class="text-xl font-bold mt-4 mb-4 text-brand-navy">Mobilidade de Luxo</h3>
-                <p class="text-sm text-slate-600 text-justify">Para quem não abdica da máxima exclusividade e distinção, oferecemos uma solução de transporte premium em viaturas de alta gama. Este é um serviço desenhado para satisfazer os padrões mais elevados de comodismo e discrição, onde cada detalhe é pensado para proporcionar uma experiência de viagem superior. Trata-se de uma proposta de alto valor, ideal para executivos ou ocasiões especiais que exijam um padrão de excelência e representação sem compromissos.</p>
-            </div>
+    /* ── Menu ── */
+    function toggleMenu() {
+        const m = document.getElementById('mobile-menu');
+        const o = document.getElementById('menu-overlay');
+        const isOpen = m.classList.toggle('open');
+        o.style.display = isOpen ? 'block' : 'none';
+    }
 
-        </div>
-    </section>
-
-    <footer id="quem-somos" class="bg-brand-navy text-slate-300 pt-20 pb-10">
-        <div class="max-w-7xl mx-auto px-4 text-justify">
-            <div class="flex flex-col md:flex-row justify-between gap-12 mb-20">
-                <div class="md:w-2/3 space-y-6">
-                    <h2 class="text-3xl font-bold text-white"><span class="text-brand-green">Quem</span> somos</h2>
-                    <p class="text-sm leading-relaxed">A FleetWise nasceu com uma missão clara: transformar a gestão de frotas em Portugal, elevando-a de uma tarefa administrativa para um ativo estratégico. Num mercado marcado pela complexidade fiscal, volatilidade energética e burocracia, as empresas precisam de parceiros que defendam os seus interesses. Somos uma consultora independente, focada exclusivamente na otimização do TCO e na eficiência operacional.</p>
-                    <p class="text-sm leading-relaxed">Não vendemos carros. Desenhamos soluções de mobilidade que equilibram as necessidades dos seus Clientes com os objetivos financeiros da sua empresa.</p>
-                </div>
-                <div class="md:w-1/3 space-y-4 text-sm">
-                    <p class="font-bold text-white text-lg"><span class="text-brand-green">Fleet</span>Wise, Unipessoal</p>
-                    <p class="text-slate-400 italic">Portugal</p>
-                    <div class="text-brand-green font-semibold py-2 text-xl italic font-bold">914 038 167</div>
-                    <a href="mailto:geral@fleetwise.pt" class="hover:text-brand-green transition underline block text-white">geral@fleetwise.pt</a>
-                </div>
-            </div>
-            <div class="border-t border-slate-800 pt-8 text-xs text-slate-500 text-center">Copyright © 2026 FleetWise</div>
-        </div>
-    </footer>
-
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 1000, once: true });
-        function toggleMobileMenu() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('active');
+    /* ── Modal ── */
+    function openModal(type) {
+        const modal = document.getElementById('demo-modal');
+        const title = document.getElementById('modal-title');
+        const sub   = document.getElementById('modal-sub');
+        if (type === 'meeting') {
+            title.textContent = 'Agendar Reunião';
+            sub.textContent   = 'Diagnóstico gratuito de 45 min · Resposta em 24h';
+        } else {
+            title.textContent = 'Solicitar Demonstração';
+            sub.textContent   = 'Mostramos a plataforma ao vivo · Resposta em 24h';
         }
-    </script>
+        modal.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('demo-modal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    /* ── Forms ── */
+    function showToast() {
+        const t = document.getElementById('toast');
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    function submitForm(e) {
+        e.preventDefault();
+        showToast();
+        e.target.reset();
+    }
+
+    function submitModalForm(e) {
+        e.preventDefault();
+        showToast();
+        closeModal();
+        e.target.reset();
+    }
+
+    /* ── Counter animation ── */
+    function animateCounters() {
+        document.querySelectorAll('[data-target]').forEach(el => {
+            if (el.dataset.zero) return;
+            const target = parseInt(el.dataset.target);
+            const prefix = el.dataset.prefix || '';
+            let current = 0;
+            const step = target / 40;
+            const timer = setInterval(() => {
+                current = Math.min(current + step, target);
+                el.textContent = prefix + Math.round(current);
+                if (current >= target) clearInterval(timer);
+            }, 30);
+        });
+    }
+
+    /* Trigger counters when stats section is visible */
+    const statsObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                animateCounters();
+                statsObserver.disconnect();
+            }
+        });
+    }, { threshold: 0.3 });
+
+    const statsSection = document.querySelector('[data-target]');
+    if (statsSection) statsObserver.observe(statsSection.closest('section'));
+</script>
 </body>
 </html>
