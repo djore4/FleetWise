@@ -20,7 +20,7 @@ import requests
 
 # ── CREDENTIALS ───────────────────────────────────────────────────────────────
 CLIENT_ID = "ff5d1cbb-89ec-4874-a8df-f30e7dbc0a4b"   # Workspace ID (x-client-id)
-APP_ID    = "PASTE_YOUR_APP_ID_HERE"                   # App ID from dashboard (x-app-id)
+APP_ID    = "6a0ac0f2c4b109828252455e"                 # Application ID (x-app-id)
 # ──────────────────────────────────────────────────────────────────────────────
 
 ENDPOINT = "https://api.chargetrip.io/graphql"
@@ -303,10 +303,6 @@ def transform(v):
 
 
 def main():
-    if APP_ID == "PASTE_YOUR_APP_ID_HERE":
-        print("❌  Edit build_vehicles.py and set APP_ID before running.")
-        sys.exit(1)
-
     print("── Chargetrip → vehicles_pt.json ──────────────────────")
     print("Fetching vehicles…")
 
