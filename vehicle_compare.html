@@ -210,24 +210,129 @@
   </footer>
 
   <script>
-  /* ── DATA (carregado de vehicles_pt.json) ── */
+  /* ── CHARGETRIP API ── */
+  const CT_ENDPOINT  = 'https://api.chargetrip.io/graphql';
+  const CT_CLIENT_ID = 'ff5d1cbb-89ec-4874-a8df-f30e7dbc0a4b';
+  const CT_APP_ID    = '6a0ac0f2c4b109828252455e';
+  const CT_PAGE_SIZE = 100;
+
+  const CT_QUERY = `
+    query GetVehicles($page: Int, $size: Int) {
+      vehicleList(page: $page, size: $size) {
+        id
+        naming { make model version chargetrip_version }
+        drivetrain { type }
+        connectors { standard power max_electric_power }
+        battery { usable_kwh }
+        range { chargetrip_range { best worst } wltp }
+        performance { acceleration top_speed power_kw }
+        body { segment cargo_volume }
+      }
+    }`;
+
+  const DC_TYPES = new Set(['CCS1','CCS2','CHADEMO','TESLA','GB_T_DC','CHAOJI']);
+
+  function ctTransform(v) {
+    const n  = v.naming       || {};
+    const dt = v.drivetrain   || {};
+    const p  = v.performance  || {};
+    const b  = v.battery      || {};
+    const r  = v.range        || {};
+    const bd = v.body         || {};
+    const cs = v.connectors   || [];
+
+    const make  = (n.make  || '').trim();
+    const model = (n.model || '').trim();
+    if (!make || !model) return null;
+
+    const dtType = (dt.type || '').toUpperCase();
+    let type = null;
+    if (dtType.includes('PHEV') || dtType.includes('PLUG')) type = 'PHEV';
+    else if (dtType.includes('BEV') || dtType === 'ELECTRIC' || dtType === 'EV') type = 'BEV';
+    if (!type) return null;
+
+    // charging
+    let acKw = null, dcKw = null;
+    cs.forEach(c => {
+      const std = (c.standard || '').toUpperCase().replace(/[^A-Z0-9]/g,'_');
+      const pw  = c.max_electric_power || c.power || 0;
+      if (!pw) return;
+      if (DC_TYPES.has(std) || std.includes('CCS') || std.includes('DC')) dcKw = Math.max(dcKw||0, pw);
+      else acKw = Math.max(acKw||0, pw);
+    });
+
+    // range
+    const ct  = r.chargetrip_range || {};
+    let rangeKm = null;
+    if (ct.best && ct.worst) rangeKm = Math.round((ct.best + ct.worst) / 2);
+    else if (ct.best)        rangeKm = Math.round(ct.best);
+    else if (r.wltp)         rangeKm = Math.round(r.wltp);
+
+    const powerCv = p.power_kw ? Math.round(p.power_kw * 1.36) : null;
+
+    const SEG = {A:'city',B:'hatchback',C:'hatchback',D:'sedan',E:'sedan',
+                 F:'sedan',S:'coupe',M:'minivan',J:'suv'};
+    const seg = bd.segment ? (SEG[bd.segment] || bd.segment.toLowerCase()) : null;
+
+    const version = (n.chargetrip_version || n.version || `${make} ${model}`).trim();
+
+    return {
+      make, model, version, type,
+      power:      powerCv,
+      torque:     null,
+      battery:    b.usable_kwh ? Math.round(b.usable_kwh * 10) / 10 : null,
+      chargeAC:   acKw  ? Math.round(acKw  * 10) / 10 : null,
+      chargeDC:   dcKw  ? Math.round(dcKw  * 10) / 10 : null,
+      range:      rangeKm,
+      accel:      p.acceleration ? Math.round(p.acceleration * 10) / 10 : null,
+      topSpeed:   p.top_speed    ? Math.round(p.top_speed)            : null,
+      segment:    seg,
+      cargo:      bd.cargo_volume ? Math.round(bd.cargo_volume)       : null,
+      drivetrain: null,
+    };
+  }
+
+  async function ctFetchPage(page) {
+    const res = await fetch(CT_ENDPOINT, {
+      method: 'POST',
+      headers: {
+        'Content-Type':  'application/json',
+        'x-client-id':   CT_CLIENT_ID,
+        'x-app-id':      CT_APP_ID,
+      },
+      body: JSON.stringify({ query: CT_QUERY, variables: { page, size: CT_PAGE_SIZE } }),
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    if (json.errors) throw new Error(json.errors[0].message);
+    return json.data.vehicleList || [];
+  }
+
   let allVehicles = [];
-  let carDB       = {}; // make → model → [versions]
+  let carDB       = {};
   let activeFilter  = 'all';
   let selectedCars  = [];
 
   const SEGMENT_MAP = {
     sedan:'Berlina', hatchback:'Hatchback', suv:'SUV', crossover:'Crossover',
     coupe:'Coupé', minivan:'Monovolume', pickup:'Pickup', van:'Carrinha',
-    passenger_car:'Automóvel', other:'Outro'
+    city:'Citadino', passenger_car:'Automóvel', other:'Outro'
   };
 
   async function loadData() {
     const status = document.getElementById('loadStatus');
     try {
-      const res = await fetch('./vehicles_pt.json');
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      allVehicles = await res.json();
+      if (status) status.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> A carregar base de dados…';
+      const raw = [];
+      let page  = 0;
+      while (true) {
+        const batch = await ctFetchPage(page);
+        if (!batch.length) break;
+        raw.push(...batch);
+        if (batch.length < CT_PAGE_SIZE) break;
+        page++;
+      }
+      allVehicles = raw.map(ctTransform).filter(Boolean);
       buildDB();
       updateCounts();
       init();
@@ -236,7 +341,7 @@
       if (status) {
         status.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1" style="color:#ef4444"></i> Erro ao carregar dados. Recarregue a página.';
       }
-      console.error('vehicles_pt.json load error', e);
+      console.error('Chargetrip load error', e);
     }
   }
 
