@@ -1,0 +1,20 @@
+User-agent: *
+Allow: /
+
+# Bloquear páginas que não devem ser indexadas
+Disallow: /TCO_simulator_blurry.html
+
+# Crawlers de IA (permissão explícita)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
+
+Sitemap: https://www.fleetwisesolutions.pt/sitemap.xml
