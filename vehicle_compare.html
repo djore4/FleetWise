@@ -209,8 +209,9 @@
     <p>© 2026 FleetWise, Unipessoal, Lda. · <a href="index.html">fleetwisesolutions.pt</a> · Dados indicativos, sujeitos a alteração pelos fabricantes.</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/urql@3.1.0/dist/urql.umd.js"></script>
   <script>
-  /* ── CHARGETRIP API ── */
+  /* ── CHARGETRIP API (using urql as per official examples) ── */
   const CT_ENDPOINT  = 'https://api.chargetrip.io/graphql';
   const CT_CLIENT_ID = '6a0ac0f1c4b109828252455c';  // Project ID
   const CT_APP_ID    = '6a0ac0f2c4b109828252455e';  // Application ID
@@ -242,23 +243,24 @@
       }
     }`;
 
-  const ctHeaders = {
-    'Content-Type': 'application/json',
-    'x-client-id':  CT_CLIENT_ID,
-    'x-app-id':     CT_APP_ID,
-  };
+  const ctClient = urql.createClient({
+    url: CT_ENDPOINT,
+    fetchOptions: {
+      method: 'POST',
+      headers: {
+        'x-client-id': CT_CLIENT_ID,
+        'x-app-id':    CT_APP_ID,
+      }
+    },
+    exchanges: [...urql.defaultExchanges],
+  });
 
   function ctGQL(query, variables = {}) {
-    return fetch(CT_ENDPOINT, {
-      method: 'POST',
-      headers: ctHeaders,
-      body: JSON.stringify({ query, variables }),
-    })
-    .then(r => r.json())
-    .then(j => {
-      if (j.errors) throw new Error(j.errors[0].message);
-      return j.data;
-    });
+    return ctClient.query(query, variables).toPromise()
+      .then(r => {
+        if (r.error) throw new Error(r.error.message);
+        return r.data;
+      });
   }
 
   /* vehicleList cache: id → { make, model, version, type } */
