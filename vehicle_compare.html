@@ -212,8 +212,8 @@
   <script>
   /* ── CHARGETRIP API ── */
   const CT_ENDPOINT  = 'https://api.chargetrip.io/graphql';
-  const CT_CLIENT_ID = 'ff5d1cbb-89ec-4874-a8df-f30e7dbc0a4b';
-  const CT_APP_ID    = '6a0ac0f2c4b109828252455e';
+  const CT_CLIENT_ID = '6a0ac0f1c4b109828252455c';  // Project ID
+  const CT_APP_ID    = '6a0ac0f2c4b109828252455e';  // Application ID
   const CT_PAGE_SIZE = 100;
 
   /* Step 1: minimal list query — just id + naming (as per Chargetrip examples) */
@@ -571,22 +571,6 @@
 
   loadData();
 
-  /* ── TEMPORARY: debug credenciais ── */
-  async function debugCreds() {
-    const q = (cid, aid) => fetch(CT_ENDPOINT, {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-client-id':cid,'x-app-id':aid},
-      body: JSON.stringify({query:`{ vehicleList(page:0,size:1){ id naming{make model} } }`})
-    }).then(r=>r.json()).then(j => j.errors ? 'ERRO: '+j.errors[0].message : 'OK: '+JSON.stringify(j.data?.vehicleList?.[0]?.naming));
-
-    // Combinação 1: workspace como client-id (atual)
-    console.log('workspace+app:', await q('ff5d1cbb-89ec-4874-a8df-f30e7dbc0a4b','6a0ac0f2c4b109828252455e'));
-    // Combinação 2: project-id como client-id
-    console.log('project+app:',  await q('6a0ac0f1c4b109828252455c','6a0ac0f2c4b109828252455e'));
-    // Combinação 3: demo credentials
-    console.log('demo:',         await q('5ed1175bad06853b3aa1e492','623998b2c35130073829b2d2'));
-  }
-  debugCreds();
   </script>
 </body>
 </html>
