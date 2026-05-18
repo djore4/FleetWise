@@ -221,6 +221,9 @@
       vehicleList(page: $page, size: $size) {
         id
         naming { make model version chargetrip_version }
+        type
+        drivetrain { type }
+        connectors { standard power max_electric_power }
         battery { usable_kwh }
         range { chargetrip_range { best worst } }
       }
@@ -229,22 +232,42 @@
   const DC_TYPES = new Set(['CCS1','CCS2','CHADEMO','TESLA','GB_T_DC','CHAOJI']);
 
   function ctTransform(v) {
-    const n  = v.naming   || {};
-    const b  = v.battery  || {};
-    const r  = v.range    || {};
+    const n  = v.naming    || {};
+    const b  = v.battery   || {};
+    const r  = v.range     || {};
+    const dt = v.drivetrain|| {};
+    const cs = v.connectors|| [];
 
     const make  = (n.make  || '').trim();
     const model = (n.model || '').trim();
     if (!make || !model) return null;
 
-    // battery type drives BEV/PHEV detection when drivetrain not available
-    const batType = (b.type || '').toUpperCase();
+    // type field = VehicleType enum: BEV, PHEV, MHEV, ICE, etc.
+    const vt = (v.type || '').toUpperCase();
     let type = null;
-    if (batType.includes('PHEV') || batType.includes('PLUG')) type = 'PHEV';
-    else if (batType.includes('BEV') || batType === 'ELECTRIC') type = 'BEV';
-    // fallback: usable battery > 15 kWh → assume BEV/PHEV (skip micro-hybrids)
-    if (!type && b.usable_kwh >= 5) type = b.usable_kwh >= 30 ? 'BEV' : 'PHEV';
+    if (vt === 'BEV') type = 'BEV';
+    else if (vt === 'PHEV') type = 'PHEV';
     if (!type) return null;
+
+    // drivetrain
+    const driveMap = { FRONT_WHEEL_DRIVE:'FWD', REAR_WHEEL_DRIVE:'RWD', ALL_WHEEL_DRIVE:'AWD' };
+    const drivetrain = driveMap[(dt.type || '').toUpperCase()] || null;
+
+    // charging — connector.power is AC max, max_electric_power is DC max
+    let acKw = null, dcKw = null;
+    cs.forEach(c => {
+      const std = (c.standard || '').toUpperCase();
+      const pw  = c.max_electric_power || 0;
+      const pwAC= c.power || 0;
+      if (std === 'IEC_62196_T2' || std === 'IEC_62196_T2_COMBO') {
+        if (std.includes('COMBO')) dcKw = Math.max(dcKw||0, pw||pwAC);
+        else acKw = Math.max(acKw||0, pwAC||pw);
+      } else if (std === 'CHADEMO' || std.includes('CCS') || std.includes('TESLA')) {
+        dcKw = Math.max(dcKw||0, pw||pwAC);
+      } else if (pwAC) {
+        acKw = Math.max(acKw||0, pwAC);
+      }
+    });
 
     const ct = r.chargetrip_range || {};
     let rangeKm = null;
@@ -254,10 +277,13 @@
     const version = (n.chargetrip_version || n.version || `${make} ${model}`).trim();
 
     return {
-      make, model, version, type,
-      power: null, torque: null, battery: b.usable_kwh ? Math.round(b.usable_kwh * 10) / 10 : null,
-      chargeAC: null, chargeDC: null, range: rangeKm,
-      accel: null, topSpeed: null, segment: null, cargo: null, drivetrain: null,
+      make, model, version, type, drivetrain,
+      power: null, torque: null,
+      battery:  b.usable_kwh ? Math.round(b.usable_kwh * 10) / 10 : null,
+      chargeAC: acKw ? Math.round(acKw * 10) / 10 : null,
+      chargeDC: dcKw ? Math.round(dcKw * 10) / 10 : null,
+      range: rangeKm,
+      accel: null, topSpeed: null, segment: null, cargo: null,
     };
   }
 
@@ -484,18 +510,27 @@
 
   loadData();
 
-  /* ── TEMPORARY: schema introspection (remove after confirming fields) ── */
+  /* ── TEMPORARY: debug (remove after confirming data loads) ── */
   async function debugSchema() {
-    const types = ['VehicleList','Vehicle','VehicleRange','VehiclePerformance','VehicleConnector','VehicleBody','VehicleDrivetrain'];
-    for (const t of types) {
+    // Test minimal vehicleList query
+    const test = await fetch(CT_ENDPOINT, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID},
+      body: JSON.stringify({query:`{ vehicleList(page:0,size:2){ id type naming{make model} battery{usable_kwh} } }`})
+    });
+    const tj = await test.json();
+    console.log('%cTest query result','font-weight:bold;color:#10b981', tj);
+
+    // Enum values
+    for (const e of ['VehicleType','VehicleDrivetrainType','ConnectorType']) {
       const r = await fetch(CT_ENDPOINT, {
         method:'POST',
         headers:{'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID},
-        body: JSON.stringify({query:`{ __type(name:"${t}") { fields { name type { name kind ofType { name } } } } }`})
+        body: JSON.stringify({query:`{ __type(name:"${e}") { enumValues { name } } }`})
       });
       const j = await r.json();
-      const fields = (j.data?.__type?.fields || []).map(f => `${f.name}:${f.type?.ofType?.name||f.type?.name}`);
-      console.log(`%c${t}`, 'font-weight:bold;color:#10b981', fields.length ? fields.join(' | ') : '(empty/not found)');
+      const vals = (j.data?.__type?.enumValues||[]).map(e=>e.name);
+      console.log(`%c${e}`,'font-weight:bold;color:#f59e0b', vals.join(', '));
     }
   }
   debugSchema();
