@@ -209,11 +209,15 @@
         /* dropdown */
         .nav-item { position:relative; }
         .dropdown {
-            display:none; position:absolute; top:calc(100% + 12px); left:-12px;
-            background:#fff; min-width:260px; border-radius:12px; padding:8px 0;
-            box-shadow:0 12px 36px rgba(0,0,0,.12); z-index:1001;
+            display:none; position:absolute; top:100%; left:-12px;
+            padding-top:12px;
+            min-width:260px; z-index:1001;
         }
-        .dropdown::before { content:''; position:absolute; top:-6px; left:20px; width:12px; height:12px; background:#fff; transform:rotate(45deg); box-shadow:-2px -2px 6px rgba(0,0,0,.04); }
+        .dropdown-inner {
+            background:#fff; border-radius:12px; padding:8px 0;
+            box-shadow:0 12px 36px rgba(0,0,0,.12); position:relative;
+        }
+        .dropdown-inner::before { content:''; position:absolute; top:-6px; left:20px; width:12px; height:12px; background:#fff; transform:rotate(45deg); box-shadow:-2px -2px 6px rgba(0,0,0,.04); }
         .nav-item:hover .dropdown { display:block; }
         .drop-link { display:block; padding:10px 20px; font-size:.83rem; color:#475569; text-decoration:none; transition:.2s; }
         .drop-link:hover { color:var(--green); padding-left:26px; background:#f8fafc; }
@@ -379,6 +383,7 @@
             <div class="nav-item">
                 <a href="#servicos" class="nav-link flex items-center gap-1">Serviços <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
                 <div class="dropdown">
+                  <div class="dropdown-inner">
                     <a href="#servicos" class="drop-link">Auditoria & Diagnóstico TCO</a>
                     <a href="#servicos" class="drop-link">Procurement & Negociação</a>
                     <a href="#servicos" class="drop-link">Gestão Operacional</a>
@@ -387,16 +392,19 @@
                     <a href="#servicos" class="drop-link">Soluções de Carregamento</a>
                     <a href="#servicos" class="drop-link">Automotive Care</a>
                     <a href="#servicos" class="drop-link">Mobilidade de Luxo</a>
+                  </div>
                 </div>
             </div>
 
             <div class="nav-item">
                 <a href="#diferenciais" class="nav-link flex items-center gap-1">Porquê a FleetWise <svg width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></a>
                 <div class="dropdown">
+                  <div class="dropdown-inner">
                     <a href="#diferenciais" class="drop-link">Independência & Transparência</a>
                     <a href="#diferenciais" class="drop-link">Domínio Fiscal (TCO, IRC, IVA)</a>
                     <a href="#diferenciais" class="drop-link">Plataforma IA</a>
                     <a href="#diferenciais" class="drop-link">Modelo Success Fee</a>
+                  </div>
                 </div>
             </div>
 
