@@ -222,11 +222,11 @@
         id
         naming { make model version chargetrip_version }
         drivetrain { type }
-        connectors { standard power max_electric_power }
+        connectors { standard power }
         battery { usable_kwh }
-        range { chargetrip_range { best worst } wltp }
-        performance { acceleration top_speed power_kw }
-        body { segment cargo_volume }
+        range { chargetrip_range { best worst } }
+        performance { acceleration top_speed }
+        body { segment }
       }
     }`;
 
@@ -268,8 +268,6 @@
     else if (ct.best)        rangeKm = Math.round(ct.best);
     else if (r.wltp)         rangeKm = Math.round(r.wltp);
 
-    const powerCv = p.power_kw ? Math.round(p.power_kw * 1.36) : null;
-
     const SEG = {A:'city',B:'hatchback',C:'hatchback',D:'sedan',E:'sedan',
                  F:'sedan',S:'coupe',M:'minivan',J:'suv'};
     const seg = bd.segment ? (SEG[bd.segment] || bd.segment.toLowerCase()) : null;
@@ -278,7 +276,7 @@
 
     return {
       make, model, version, type,
-      power:      powerCv,
+      power:      null,
       torque:     null,
       battery:    b.usable_kwh ? Math.round(b.usable_kwh * 10) / 10 : null,
       chargeAC:   acKw  ? Math.round(acKw  * 10) / 10 : null,
@@ -287,7 +285,7 @@
       accel:      p.acceleration ? Math.round(p.acceleration * 10) / 10 : null,
       topSpeed:   p.top_speed    ? Math.round(p.top_speed)            : null,
       segment:    seg,
-      cargo:      bd.cargo_volume ? Math.round(bd.cargo_volume)       : null,
+      cargo:      null,
       drivetrain: null,
     };
   }
