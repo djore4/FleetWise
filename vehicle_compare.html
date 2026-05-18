@@ -487,16 +487,27 @@
 
   loadData();
 
-  /* ── TEMPORARY: debug (remove after confirming data loads) ── */
+  /* ── TEMPORARY: debug ── */
   async function debugData() {
-    const r = await fetch(CT_ENDPOINT, {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID},
-      body: JSON.stringify({query:`{ vehicleList(page:0,size:3){ id naming{make model chargetrip_version} drivetrain{type} battery{usable_kwh} range{chargetrip_range{best worst}} } }`})
-    });
-    const j = await r.json();
-    if (j.errors) console.error('%cAPI error','color:#ef4444', j.errors);
-    if (j.data?.vehicleList) console.log('%cSample vehicles','font-weight:bold;color:#10b981', j.data.vehicleList);
+    const H = {'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID};
+    const q = (query) => fetch(CT_ENDPOINT,{method:'POST',headers:H,body:JSON.stringify({query})}).then(r=>r.json());
+
+    // 1. All available root queries
+    const schema = await q(`{ __schema { queryType { fields { name args { name type { name kind } } } } } }`);
+    const queries = (schema.data?.__schema?.queryType?.fields||[]).map(f=>f.name);
+    console.log('%cAvailable queries','font-weight:bold;color:#10b981', queries.join(', '));
+
+    // 2. Try carList (older API name used in Chargetrip examples)
+    const carList = await q(`{ carList(page:0,size:2){ id naming{make model} } }`);
+    console.log('%ccarList','font-weight:bold;color:#f59e0b', JSON.stringify(carList));
+
+    // 3. vehicleList with country filter
+    const withCountry = await q(`{ vehicleList(page:0,size:1,country:"PT"){ id naming{make model} } }`);
+    console.log('%cvehicleList+country','font-weight:bold;color:#f59e0b', JSON.stringify(withCountry));
+
+    // 4. vehicleList with filter object
+    const withFilter = await q(`{ vehicleList(page:0,size:1,filter:{drivetrains:[BEV]}){ id naming{make model} } }`);
+    console.log('%cvehicleList+filter','font-weight:bold;color:#f59e0b', JSON.stringify(withFilter));
   }
   debugData();
   </script>
