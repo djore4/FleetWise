@@ -487,25 +487,27 @@
 
   loadData();
 
-  /* ── TEMPORARY: debug (remove after confirming data loads) ── */
+  /* ── TEMPORARY: debug ── */
   async function debugData() {
-    // Test 1: minimal query with user credentials
-    const r1 = await fetch(CT_ENDPOINT, {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID},
-      body: JSON.stringify({query:`{ vehicleList(page:0,size:1){ id } }`})
-    });
-    const j1 = await r1.json();
-    console.log('%cUser creds (minimal)','font-weight:bold;color:#f59e0b', JSON.stringify(j1));
+    const H = {'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID};
+    const q = (query) => fetch(CT_ENDPOINT,{method:'POST',headers:H,body:JSON.stringify({query})}).then(r=>r.json());
 
-    // Test 2: same query with Chargetrip public demo credentials
-    const r2 = await fetch(CT_ENDPOINT, {
-      method:'POST',
-      headers:{'Content-Type':'application/json','x-client-id':'5ed1175bad06853b3aa1e492','x-app-id':'623998b2c35130073829b2d2'},
-      body: JSON.stringify({query:`{ vehicleList(page:0,size:2){ id naming{make model} drivetrain{type} } }`})
-    });
-    const j2 = await r2.json();
-    console.log('%cDemo creds result','font-weight:bold;color:#10b981', JSON.stringify(j2));
+    // 1. All available root queries
+    const schema = await q(`{ __schema { queryType { fields { name args { name type { name kind } } } } } }`);
+    const queries = (schema.data?.__schema?.queryType?.fields||[]).map(f=>f.name);
+    console.log('%cAvailable queries','font-weight:bold;color:#10b981', queries.join(', '));
+
+    // 2. Try carList (older API name used in Chargetrip examples)
+    const carList = await q(`{ carList(page:0,size:2){ id naming{make model} } }`);
+    console.log('%ccarList','font-weight:bold;color:#f59e0b', JSON.stringify(carList));
+
+    // 3. vehicleList with country filter
+    const withCountry = await q(`{ vehicleList(page:0,size:1,country:"PT"){ id naming{make model} } }`);
+    console.log('%cvehicleList+country','font-weight:bold;color:#f59e0b', JSON.stringify(withCountry));
+
+    // 4. vehicleList with filter object
+    const withFilter = await q(`{ vehicleList(page:0,size:1,filter:{drivetrains:[BEV]}){ id naming{make model} } }`);
+    console.log('%cvehicleList+filter','font-weight:bold;color:#f59e0b', JSON.stringify(withFilter));
   }
   debugData();
   </script>
