@@ -512,6 +512,24 @@
   }
 
   loadData();
+
+  /* ── TEMPORARY: schema introspection (remove after confirming fields) ── */
+  async function debugSchema() {
+    const types = ['VehicleListRange','VehicleListPerformance','VehicleListBody','VehicleListConnector','VehicleListBattery','VehicleListDrivetrain'];
+    const results = {};
+    for (const t of types) {
+      const r = await fetch(CT_ENDPOINT, {
+        method:'POST',
+        headers:{'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID},
+        body: JSON.stringify({query:`{ __type(name:"${t}") { fields { name type { name kind } } } }`})
+      });
+      const j = await r.json();
+      const fields = (j.data?.__type?.fields || []).map(f => f.name);
+      results[t] = fields;
+      console.log(`%c${t}`, 'font-weight:bold;color:#10b981', fields.join(', '));
+    }
+  }
+  debugSchema();
   </script>
 </body>
 </html>
