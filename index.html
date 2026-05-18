@@ -188,8 +188,7 @@
         }
         .brand-logo { display:inline-block; font-size:1.5rem; font-weight:800; color:#fff; text-decoration:none; letter-spacing:-.5px; transition:.3s; }
         .brand-logo:hover { opacity:.85; }
-        .brand-logo .green-dot { position:relative; color:#fff; }
-        .brand-logo .green-dot::after { content:'.'; color:var(--green); position:absolute; right:-0.35em; top:-0.05em; font-size:1.3em; font-weight:900; }
+        .logo-svg { display:inline-block; width:auto; height:1.5rem; vertical-align:middle; }
 
         .nav-link { color:rgba(255,255,255,.8); font-size:.85rem; font-weight:500; text-decoration:none; transition:.2s; position:relative; }
         .nav-link:hover { color:var(--green); }
@@ -379,7 +378,13 @@
 <!-- ══════════════ HEADER ══════════════ -->
 <header class="sticky-header">
     <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
-        <a href="#" class="brand-logo"><span style="color:var(--green)">Fleet</span>W<span class="green-dot">i</span>se</a>
+        <a href="#" class="brand-logo">
+            <svg class="logo-svg" viewBox="0 0 150 30" xmlns="http://www.w3.org/2000/svg">
+                <text x="0" y="24" font-family="Poppins, sans-serif" font-size="24" font-weight="800" fill="#10b981">Fleet</text>
+                <text x="98" y="24" font-family="Poppins, sans-serif" font-size="24" font-weight="800" fill="#ffffff">Wise</text>
+                <circle cx="134" cy="7" r="2.5" fill="#10b981"/>
+            </svg>
+        </a>
 
         <nav class="desktop-nav flex items-center gap-8">
             <div class="nav-item">
@@ -411,7 +416,11 @@
 <!-- Mobile Menu -->
 <div id="mobile-menu">
     <div class="flex justify-between items-center mb-8">
-        <span style="font-size:1.4rem;font-weight:800;color:#fff;"><span style="color:var(--green)">Fleet</span>W<span class="green-dot">i</span>se</span>
+        <svg style="width:140px;height:auto;display:inline-block;" viewBox="0 0 150 30" xmlns="http://www.w3.org/2000/svg">
+            <text x="0" y="24" font-family="Poppins, sans-serif" font-size="24" font-weight="800" fill="#10b981">Fleet</text>
+            <text x="98" y="24" font-family="Poppins, sans-serif" font-size="24" font-weight="800" fill="#ffffff">Wise</text>
+            <circle cx="134" cy="7" r="2.5" fill="#10b981"/>
+        </svg>
         <button onclick="toggleMenu()" style="color:#fff;font-size:2rem;line-height:1;background:none;border:none;cursor:pointer;">&times;</button>
     </div>
     <a href="#servicos" class="mob-link" onclick="toggleMenu()">Serviços</a>
@@ -1083,7 +1092,11 @@
         <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
 
             <div class="md:col-span-2">
-                <div style="font-size:1.6rem;font-weight:800;margin-bottom:1rem;"><span style="color:var(--green);">Fleet</span>W<span class="green-dot">i</span>se</div>
+                <svg style="width:160px;height:auto;display:block;margin-bottom:1rem;" viewBox="0 0 150 30" xmlns="http://www.w3.org/2000/svg">
+                    <text x="0" y="24" font-family="Poppins, sans-serif" font-size="24" font-weight="800" fill="#10b981">Fleet</text>
+                    <text x="98" y="24" font-family="Poppins, sans-serif" font-size="24" font-weight="800" fill="#ffffff">Wise</text>
+                    <circle cx="134" cy="7" r="2.5" fill="#10b981"/>
+                </svg>
                 <p style="font-size:.83rem;line-height:1.8;max-width:360px;margin-bottom:1.5rem;">A consultora independente que transforma a gestão de frotas em Portugal num ativo estratégico. Simplifique, Otimize, Rentabilize.</p>
                 <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
                     <a href="mailto:geral@fleetwise.pt" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
