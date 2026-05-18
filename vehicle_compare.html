@@ -1,377 +1,812 @@
 <!DOCTYPE html>
 <html lang="pt-PT">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Comparador xEV — Elétrico vs Híbrido vs Combustão | FleetWise</title>
-    <meta name="description" content="Compare gratuitamente viaturas elétricas (BEV), híbridas plug-in (PHEV) e a combustão para a sua frota. Calcule o impacto fiscal real, benefícios de Tributação Autónoma e TCO total.">
-    <link rel="canonical" href="https://www.fleetwisesolutions.pt/vehicle_compare.html">
-    <meta name="robots" content="index, follow">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://www.fleetwisesolutions.pt/vehicle_compare.html">
-    <meta property="og:title" content="Comparador xEV | FleetWise — BEV vs PHEV vs Combustão">
-    <meta property="og:description" content="Ferramenta gratuita para comparar viaturas elétricas e híbridas para frotas empresariais. Benefícios fiscais BEV/PHEV em Portugal.">
-    <meta property="og:image" content="https://www.fleetwisesolutions.pt/img/og-fleetwise.jpg">
-    <meta property="og:locale" content="pt_PT">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Comparador xEV | FleetWise">
-    <meta name="twitter:description" content="Compare BEV, PHEV e combustão para a sua frota. Impacto fiscal real em Portugal.">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebApplication",
-      "name": "Comparador xEV FleetWise",
-      "url": "https://www.fleetwisesolutions.pt/vehicle_compare.html",
-      "description": "Ferramenta gratuita para comparar viaturas elétricas (BEV), híbridas plug-in (PHEV) e a combustão para frotas empresariais, com cálculo de Tributação Autónoma e benefícios fiscais.",
-      "applicationCategory": "FinanceApplication",
-      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
-      "provider": {
-        "@type": "Organization",
-        "name": "FleetWise",
-        "url": "https://www.fleetwisesolutions.pt"
-      }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Comparador xEV — Elétrico vs Híbrido vs Combustão | FleetWise Portugal</title>
+  <meta name="description" content="Compare gratuitamente 40+ viaturas elétricas (BEV), híbridas plug-in (PHEV) e a combustão. Autonomia WLTP, carregamento, CO₂, Tributação Autónoma, IVA dedutível e limite IRC para frotas em Portugal.">
+  <link rel="canonical" href="https://www.fleetwisesolutions.pt/vehicle_compare.html">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://www.fleetwisesolutions.pt/vehicle_compare.html">
+  <meta property="og:title" content="Comparador xEV | FleetWise — BEV vs PHEV vs Combustão">
+  <meta property="og:description" content="Compare 40+ viaturas elétricas e híbridas para frotas empresariais. Autonomia, carregamento e impacto fiscal em Portugal.">
+  <meta property="og:image" content="https://www.fleetwisesolutions.pt/img/og-fleetwise.jpg">
+  <meta property="og:locale" content="pt_PT">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Comparador xEV | FleetWise">
+  <meta name="twitter:description" content="Compare BEV, PHEV e combustão. Impacto fiscal real em Portugal.">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Comparador xEV FleetWise",
+    "url": "https://www.fleetwisesolutions.pt/vehicle_compare.html",
+    "description": "Ferramenta gratuita para comparar 40+ viaturas elétricas (BEV), híbridas plug-in (PHEV) e a combustão, com cálculo de Tributação Autónoma, IVA dedutível e limite de amortização IRC para frotas em Portugal.",
+    "applicationCategory": "FinanceApplication",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+    "provider": { "@type": "Organization", "name": "FleetWise", "url": "https://www.fleetwisesolutions.pt" }
+  }
+  </script>
+
+  <link rel="icon" type="image/png" href="favicon.png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+
+  <style>
+    :root { --navy:#0f172a; --navy2:#1e293b; --green:#10b981; --green2:#059669; --slate:#64748b; }
+    html { scroll-behavior:smooth; }
+    body { font-family:'Poppins',sans-serif; background:#f8fafc; padding-top:72px; overflow-x:hidden; }
+
+    /* ── HEADER ── */
+    .sticky-header { position:fixed; top:0; left:0; width:100%; z-index:1000; height:72px; display:flex; align-items:center; background:var(--navy); box-shadow:0 2px 20px rgba(0,0,0,.3); }
+    .brand-logo { font-size:1.5rem; font-weight:800; color:#fff; text-decoration:none; }
+    .back-btn { color:rgba(255,255,255,.8); text-decoration:none; font-size:.85rem; font-weight:500; padding:.5rem 1.2rem; border:1.5px solid rgba(255,255,255,.25); border-radius:50px; transition:.2s; }
+    .back-btn:hover { border-color:var(--green); color:var(--green); }
+
+    /* ── HERO ── */
+    .hero { background:linear-gradient(135deg,var(--navy) 0%,#0d2137 60%,#0a2a1a 100%); padding:4rem 1.5rem 3rem; text-align:center; }
+    .hero-pill { display:inline-flex; align-items:center; gap:.5rem; background:rgba(16,185,129,.15); border:1px solid rgba(16,185,129,.3); color:var(--green); font-size:.75rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; padding:.45rem 1.2rem; border-radius:50px; margin-bottom:1.5rem; }
+    .hero h1 { font-size:clamp(1.8rem,4vw,3rem); font-weight:800; color:#fff; line-height:1.2; margin-bottom:1rem; }
+    .hero h1 em { font-style:normal; color:var(--green); }
+    .hero p { color:rgba(255,255,255,.6); font-size:.95rem; max-width:640px; margin:0 auto 2rem; line-height:1.7; }
+    .hero-pills { display:flex; flex-wrap:wrap; gap:.6rem; justify-content:center; }
+    .hero-pill-sm { background:rgba(255,255,255,.07); color:rgba(255,255,255,.75); font-size:.75rem; font-weight:500; padding:.35rem .9rem; border-radius:50px; border:1px solid rgba(255,255,255,.1); }
+
+    /* ── MAIN CONTAINER ── */
+    .container { max-width:1400px; margin:0 auto; padding:2rem 1.25rem 4rem; }
+
+    /* ── FILTER TABS ── */
+    .filter-bar { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1.25rem; }
+    .filter-tab { padding:.45rem 1.25rem; border-radius:50px; border:1.5px solid #e2e8f0; background:#fff; font-size:.82rem; font-weight:600; color:var(--slate); cursor:pointer; transition:.2s; }
+    .filter-tab:hover { border-color:var(--green); color:var(--green); }
+    .filter-tab.active { background:var(--green); border-color:var(--green); color:#fff; }
+    .filter-tab .count { background:rgba(0,0,0,.12); border-radius:50px; padding:.1rem .5rem; font-size:.7rem; margin-left:.3rem; }
+    .filter-tab.active .count { background:rgba(255,255,255,.25); }
+
+    /* ── SELECTOR CARD ── */
+    .selector-card { background:#fff; padding:1.5rem; border-radius:16px; box-shadow:0 4px 20px rgba(0,0,0,.05); margin-bottom:1.5rem; border:1px solid #e2e8f0; }
+    .cascade-row { display:flex; gap:12px; align-items:flex-end; flex-wrap:wrap; }
+    .select-group { flex:1; min-width:160px; }
+    .select-group label { display:block; font-size:.68rem; font-weight:700; color:var(--navy); margin-bottom:.4rem; text-transform:uppercase; letter-spacing:.5px; }
+    select { width:100%; padding:.6rem .75rem; border:1.5px solid #e2e8f0; border-radius:8px; font-size:.875rem; font-family:'Poppins',sans-serif; background:#fff; outline:none; height:42px; transition:.2s; color:var(--navy); }
+    select:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(16,185,129,.1); }
+    .btn-add { background:var(--green); color:#fff; border:none; padding:0 1.75rem; height:42px; border-radius:8px; font-weight:700; cursor:pointer; transition:.2s; font-size:.85rem; font-family:'Poppins',sans-serif; white-space:nowrap; }
+    .btn-add:hover:not(:disabled) { background:var(--green2); transform:translateY(-1px); }
+    .btn-add:disabled { background:#e2e8f0; color:#94a3b8; cursor:not-allowed; }
+
+    /* ── COMPARISON TABLE ── */
+    .comparison-wrapper { overflow-x:auto; border-radius:16px; background:#fff; border:1px solid #e2e8f0; box-shadow:0 4px 20px rgba(0,0,0,.05); }
+    table { width:100%; border-collapse:collapse; min-width:700px; }
+    th, td { padding:13px 16px; border-bottom:1px solid #f1f5f9; text-align:center; font-size:.85rem; }
+
+    /* Sticky label column */
+    .col-label { width:200px; min-width:160px; text-align:left; background:#fff; font-weight:600; color:var(--navy); position:sticky; left:0; z-index:10; border-right:2px solid #f1f5f9; font-size:.8rem; }
+    .col-label small { display:block; color:var(--slate); font-weight:400; font-size:.7rem; }
+
+    /* Section header rows */
+    .row-section td { background:var(--navy); color:#fff; font-weight:700; font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; padding:10px 16px; text-align:left; position:sticky; left:0; }
+    .row-section td.sec-spacer { background:var(--navy); position:static; }
+
+    /* Car header */
+    .col-car { min-width:200px; max-width:240px; position:relative; vertical-align:top; }
+    .car-img-wrap { height:110px; display:flex; align-items:center; justify-content:center; margin-bottom:.75rem; overflow:hidden; background:#f8fafc; border-radius:8px; }
+    .car-img-wrap img { max-height:100px; max-width:100%; object-fit:contain; opacity:0; transition:opacity .3s; }
+    .car-fallback { width:100%; height:100%; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:.25rem; color:#cbd5e1; font-size:2rem; }
+    .car-fallback small { font-size:.65rem; font-weight:600; letter-spacing:.05em; }
+    .car-brand { font-size:.68rem; font-weight:700; text-transform:uppercase; color:var(--green); letter-spacing:.08em; }
+    .car-model { font-weight:700; color:var(--navy); font-size:1rem; display:block; margin:.2rem 0; line-height:1.2; }
+    .car-version { font-size:.68rem; color:var(--slate); background:#f1f5f9; padding:.2rem .6rem; border-radius:4px; display:inline-block; }
+    .type-badge { display:inline-block; margin-top:.5rem; font-size:.65rem; font-weight:700; padding:.2rem .6rem; border-radius:50px; letter-spacing:.05em; }
+    .badge-bev { background:#dcfce7; color:#15803d; }
+    .badge-phev { background:#fef9c3; color:#854d0e; }
+    .badge-ice { background:#f1f5f9; color:#475569; }
+    .btn-remove { position:absolute; top:8px; right:8px; color:#cbd5e1; border:none; background:none; cursor:pointer; font-size:1.1rem; transition:.2s; padding:0; }
+    .btn-remove:hover { color:#ef4444; }
+
+    /* Fiscal rows */
+    .row-ta td { font-weight:700; }
+    .ta-0 { color:#15803d; }
+    .ta-5 { color:#16a34a; }
+    .ta-10 { color:#ca8a04; }
+    .ta-125 { color:#d97706; }
+    .ta-275 { color:#ea580c; }
+    .ta-35 { color:#dc2626; }
+    .iva-yes { color:#15803d; font-weight:600; }
+    .iva-no { color:#94a3b8; }
+    .irc-ok { color:#15803d; }
+    .irc-partial { color:#ea580c; }
+
+    /* Row hover */
+    tbody tr:not(.row-section):hover td { background:#fafffe; }
+
+    /* Empty state */
+    .empty-state { text-align:center; padding:4rem 1.5rem; color:#94a3b8; border:2px dashed #e2e8f0; border-radius:16px; background:#fff; }
+
+    /* Fiscal callout */
+    .callout { background:var(--navy); border-radius:16px; padding:2rem; margin-top:2rem; display:flex; flex-wrap:wrap; gap:1.5rem; align-items:center; }
+    .callout-text { flex:1; min-width:240px; color:rgba(255,255,255,.85); font-size:.875rem; line-height:1.7; }
+    .callout-text strong { color:#fff; }
+    .callout-cta { background:var(--green); color:#fff; text-decoration:none; font-weight:700; font-size:.85rem; padding:.75rem 1.75rem; border-radius:50px; white-space:nowrap; transition:.2s; }
+    .callout-cta:hover { background:var(--green2); }
+
+    /* Footer */
+    footer { background:var(--navy); color:rgba(255,255,255,.4); text-align:center; padding:2rem 1rem; font-size:.75rem; margin-top:0; }
+    footer a { color:rgba(255,255,255,.4); text-decoration:none; }
+    footer a:hover { color:var(--green); }
+
+    @media(max-width:768px) {
+      .cascade-row { flex-direction:column; align-items:stretch; }
+      .btn-add { width:100%; }
+      .hero { padding:3rem 1rem 2rem; }
     }
-    </script>
-
-    <link rel="icon" type="image/png" href="favicon.png">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-
-    <style>
-        :root {
-            --brand-navy: #0f172a;
-            --brand-green: #10b981;
-            --brand-green-hover: #059669;
-            --bg-light: #f8fafc;
-            --text-main: #334155;
-            --border: #e2e8f0;
-        }
-
-        html { scroll-behavior: smooth; }
-        body { 
-            font-family: 'Poppins', sans-serif; 
-            background-color: var(--bg-light); 
-            color: var(--text-main); 
-            padding-top: 80px; 
-            overflow-x: hidden; 
-        }
-
-        /* --- HEADER SIMPLIFICADO --- */
-        .sticky-header { 
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; 
-            background: var(--brand-navy); height: 72px; display: flex; 
-            align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
-        }
-        
-        .brand-logo { color: white; font-weight: 700; font-size: 1.5rem; text-decoration: none; }
-        .text-brand-green { color: #10b981; }
-
-        .back-btn { 
-            color: white; text-decoration: none; font-size: 0.85rem; font-weight: 500;
-            padding: 8px 20px; border: 1px solid rgba(255,255,255,0.2); 
-            border-radius: 50px; transition: 0.3s;
-        }
-        .back-btn:hover { background: rgba(255,255,255,0.1); border-color: var(--brand-green); }
-
-        .container { max-width: 1400px; margin: 40px auto; padding: 0 20px; }
-
-        /* --- SELETOR ALINHADO --- */
-        .selector-card { 
-            background: white; padding: 25px; border-radius: 16px; 
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05); margin-bottom: 30px;
-            border: 1px solid var(--border);
-        }
-        
-        .cascade-row { 
-            display: flex; 
-            gap: 15px; 
-            align-items: flex-end; /* Garante alinhamento pela base */
-            flex-wrap: wrap; 
-        }
-        
-        .select-group { flex: 1; min-width: 180px; }
-        .select-group label { 
-            display: block; font-size: 0.7rem; font-weight: 700; color: var(--brand-navy); 
-            margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; 
-        }
-        
-        select { 
-            width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; 
-            font-size: 0.9rem; background: #fff; outline: none; height: 45px; transition: 0.3s;
-        }
-        select:focus { border-color: var(--brand-green); box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1); }
-
-        .btn-add { 
-            background: var(--brand-green); color: white; border: none; padding: 0 35px; height: 45px; border-radius: 8px; 
-            font-weight: 700; cursor: pointer; transition: 0.3s; text-transform: uppercase; font-size: 0.85rem;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .btn-add:hover { background: var(--brand-green-hover); transform: translateY(-1px); }
-        .btn-add:disabled { background: #e2e8f0; color: #94a3b8; cursor: not-allowed; transform: none; }
-
-        /* --- TABELA E IMAGENS --- */
-        .comparison-wrapper { overflow-x: auto; border-radius: 16px; background: white; border: 1px solid var(--border); }
-        table { width: 100%; border-collapse: collapse; min-width: 900px; }
-        th, td { padding: 20px; border-bottom: 1px solid var(--border); text-align: center; }
-        
-        .col-label { 
-            width: 180px; text-align: left; background: #f8fafc; font-weight: 700; 
-            color: var(--brand-navy); position: sticky; left: 0; z-index: 10; border-right: 2px solid var(--border);
-        }
-        
-        .col-car { min-width: 220px; position: relative; }
-        .car-header img { 
-            width: 100%; height: 120px; object-fit: contain; margin-bottom: 15px; 
-            transition: opacity 0.3s ease; /* Evita o "piscar" visual */
-        }
-        .car-brand { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; color: var(--brand-green); letter-spacing: 1px; }
-        .car-model { font-weight: 700; color: var(--brand-navy); font-size: 1.1rem; display: block; margin-bottom: 4px; }
-        .car-version { font-size: 0.7rem; color: #64748b; background: #f1f5f9; padding: 3px 8px; border-radius: 4px; }
-
-        .btn-remove { position: absolute; top: 10px; right: 10px; color: #cbd5e1; border:none; background:none; cursor:pointer; font-size: 1.2rem;}
-        .btn-remove:hover { color: #ef4444; }
-
-        .empty-state { text-align: center; padding: 60px 20px; color: #94a3b8; border: 2px dashed var(--border); border-radius: 16px; background: white; }
-
-        @media (max-width: 768px) {
-            .cascade-row { flex-direction: column; align-items: stretch; }
-            .btn-add { width: 100%; }
-        }
-    </style>
+  </style>
 </head>
 <body>
 
-    <header class="sticky-header">
-        <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
-            <a href="index.html" class="brand-logo">
-                <span class="text-brand-green">Fleet</span>Wise
-            </a>
-            <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left mr-2"></i> Voltar</a>
-        </div>
-    </header>
+  <header class="sticky-header">
+    <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
+      <a href="index.html" class="brand-logo"><span style="color:var(--green)">Fleet</span>Wise</a>
+      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left mr-2"></i> Voltar</a>
+    </div>
+  </header>
 
-    <div class="container">
-        <div class="mb-10 text-center md:text-left">
-            <h1 class="text-4xl font-bold text-slate-800 mb-2">Comparador de Veículos</h1>
-            <p class="text-slate-500">Compare as especificações técnicas das principais viaturas do mercado.</p>
-        </div>
+  <section class="hero">
+    <div class="hero-pill"><span style="width:7px;height:7px;border-radius:50%;background:var(--green);display:inline-block;animation:pulse 2s infinite"></span> Ferramenta Gratuita</div>
+    <h1>Comparador <em>xEV</em> de Frotas</h1>
+    <p>Compare até 4 viaturas lado a lado — autonomia, carregamento e o <strong style="color:#fff">impacto fiscal real</strong> em Portugal: Tributação Autónoma, IVA dedutível e limite de amortização IRC.</p>
+    <div class="hero-pills">
+      <span class="hero-pill-sm"><i class="fa-solid fa-bolt mr-1" style="color:var(--green)"></i> 40+ modelos BEV/PHEV</span>
+      <span class="hero-pill-sm"><i class="fa-solid fa-scale-balanced mr-1" style="color:var(--green)"></i> Tributação Autónoma calculada</span>
+      <span class="hero-pill-sm"><i class="fa-solid fa-file-invoice-dollar mr-1" style="color:var(--green)"></i> IVA e IRC automáticos</span>
+    </div>
+    <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}</style>
+  </section>
 
-        <div class="selector-card">
-            <div class="cascade-row">
-                <div class="select-group"><label>Marca</label><select id="sel_make" onchange="loadModels()"><option value="">-- Selecione --</option></select></div>
-                <div class="select-group"><label>Modelo</label><select id="sel_model" onchange="loadVersions()" disabled><option value="">-- --</option></select></div>
-                <div class="select-group"><label>Versão</label><select id="sel_version" onchange="checkButton()" disabled><option value="">-- --</option></select></div>
-                <button class="btn-add" onclick="addCar()" id="btnAdd" disabled>Adicionar</button>
-            </div>
-        </div>
+  <div class="container">
 
-        <div id="emptyState" class="empty-state">
-            <i class="fa-solid fa-car-side text-5xl mb-4 opacity-10"></i><br>
-            Selecione as viaturas acima para iniciar a comparação.
-        </div>
-
-        <div class="comparison-wrapper" id="compWrapper" style="display:none;">
-            <table id="compTable">
-                <thead><tr id="row-header"><th class="col-label">Especificações</th></tr></thead>
-                <tbody id="compBody"></tbody>
-            </table>
-        </div>
+    <div class="filter-bar" id="filterBar">
+      <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">Todos <span class="count" id="cnt-all"></span></button>
+      <button class="filter-tab" data-filter="BEV" onclick="setFilter('BEV')">⚡ Elétrico (BEV) <span class="count" id="cnt-BEV"></span></button>
+      <button class="filter-tab" data-filter="PHEV" onclick="setFilter('PHEV')">🔌 Híbrido Plug-in <span class="count" id="cnt-PHEV"></span></button>
+      <button class="filter-tab" data-filter="ICE" onclick="setFilter('ICE')">⛽ Combustão <span class="count" id="cnt-ICE"></span></button>
     </div>
 
-    <script>
-        const carDatabase = {
-            "Audi": {
-                "A3 Sportback": [
-                    { version: "30 TFSI", fuel: "Gasolina", power: "110 cv", range: "-", price: "34.500 €", img: "https://mediaservice.audi.com/media/live/50900/fly1400x601n1/8yar/2021.png" },
-                    { version: "35 TDI S tronic", fuel: "Diesel", power: "150 cv", range: "-", price: "42.000 €", img: "https://mediaservice.audi.com/media/live/50900/fly1400x601n1/8yar/2021.png" },
-                    { version: "40 TFSIe (PHEV)", fuel: "Híbrido Plug-in", power: "204 cv", range: "65 km", price: "44.000 €", img: "https://mediaservice.audi.com/media/live/50900/fly1400x601n1/8yar/2021.png" }
-                ],
-                "A4 Avant": [
-                    { version: "35 TDI S tronic", fuel: "Diesel", power: "163 cv", range: "-", price: "53.000 €", img: "https://mediaservice.audi.com/media/live/50900/fly1400x601n1/8wd/2020.png" }
-                ],
-                "Q4 e-tron": [
-                    { version: "45 e-tron", fuel: "Elétrico", power: "286 cv", range: "545 km", price: "59.500 €", img: "https://mediaservice.audi.com/media/live/50900/fly1400x601n1/f4b/2022.png" },
-                    { version: "55 e-tron Quattro", fuel: "Elétrico", power: "340 cv", range: "520 km", price: "68.000 €", img: "https://mediaservice.audi.com/media/live/50900/fly1400x601n1/f4b/2022.png" }
-                ],
-                "Q8 e-tron": [
-                    { version: "50 quattro", fuel: "Elétrico", power: "340 cv", range: "491 km", price: "79.000 €", img: "https://mediaservice.audi.com/media/live/50900/fly1400x601n1/geg/2023.png" }
-                ]
-            },
-            "BMW": {
-                "Série 1": [
-                    { version: "116d", fuel: "Diesel", power: "116 cv", range: "-", price: "34.000 €", img: "https://pngimg.com/d/bmw_PNG1702.png" }
-                ],
-                "Série 3 (G20)": [
-                    { version: "320d", fuel: "Diesel", power: "190 cv", range: "-", price: "54.000 €", img: "https://pngimg.com/d/bmw_PNG99539.png" },
-                    { version: "330e (PHEV)", fuel: "Híbrido Plug-in", power: "292 cv", range: "60 km", price: "56.500 €", img: "https://pngimg.com/d/bmw_PNG99539.png" }
-                ],
-                "i4": [
-                    { version: "eDrive35", fuel: "Elétrico", power: "286 cv", range: "483 km", price: "57.000 €", img: "https://di-uploads-pod10.dealerinspire.com/bmwofmurray/uploads/2021/11/2022-BMW-i4-M50-frozen-portimao-blue-metallic-side-view.png" }
-                ],
-                "iX1": [
-                    { version: "eDrive20", fuel: "Elétrico", power: "204 cv", range: "475 km", price: "49.000 €", img: "https://www.pngmart.com/files/22/BMW-X1-PNG-Image.png" }
-                ]
-            },
-            "BYD": {
-                "Dolphin": [
-                    { version: "Comfort", fuel: "Elétrico", power: "204 cv", range: "427 km", price: "34.990 €", img: "https://www.byd.com/content/dam/byd-site-us/products/passenger-vehicles/dolphin/dolphin-blue.png" }
-                ],
-                "Seal": [
-                    { version: "Design RWD", fuel: "Elétrico", power: "313 cv", range: "570 km", price: "46.990 €", img: "https://www.byd.com/content/dam/byd-site-us/products/passenger-vehicles/seal/seal-blue.png" }
-                ]
-            },
-            "Cupra": {
-                "Born": [{ version: "58kWh", fuel: "Elétrico", power: "204 cv", range: "424 km", price: "42.000 €", img: "https://www.cupraofficial.pt/content/dam/public/cupra-website/cars/born/highlight/cupra-born-highlight-01.png" }],
-                "Formentor": [{ version: "1.4 e-Hybrid", fuel: "Híbrido Plug-in", power: "204 cv", range: "59 km", price: "44.000 €", img: "https://www.cupraofficial.pt/content/dam/public/cupra-website/cars/formentor/highlight/cupra-formentor-highlight-01.png" }]
-            },
-            "Dacia": {
-                "Spring": [{ version: "Extreme", fuel: "Elétrico", power: "65 cv", range: "220 km", price: "22.000 €", img: "https://www.dacia.pt/content/dam/Dacia/PT/veiculos/spring/spring-2024/dacia-spring-2024-concept.png" }]
-            },
-            "Ford": {
-                "Mustang Mach-E": [{ version: "RWD Standard", fuel: "Elétrico", power: "269 cv", range: "440 km", price: "55.000 €", img: "https://www.ford.pt/content/dam/guxeu/rhd/central/cars/2021-mustang-mach-e/launch/gallery/exterior/ford-mustang-mach-e-eu-red-side-view-16x9.jpg" }]
-            },
-            "Hyundai": {
-                "Ioniq 5": [{ version: "RWD 77kWh", fuel: "Elétrico", power: "229 cv", range: "507 km", price: "55.000 €", img: "https://www.pngmart.com/files/22/Hyundai-Ioniq-5-PNG-Transparent-Image.png" }],
-                "Kona": [{ version: "EV Long Range", fuel: "Elétrico", power: "218 cv", range: "514 km", price: "46.500 €", img: "https://www.pngmart.com/files/22/Hyundai-Kona-PNG-Photo.png" }]
-            },
-            "Kia": {
-                "EV6": [{ version: "Air", fuel: "Elétrico", power: "229 cv", range: "528 km", price: "54.000 €", img: "https://www.kia.com/content/dam/kia/us/en/vehicles/ev6/2023/gallery/exterior/2023-kia-ev6-yacht-blue-exterior-three-quarter-front-view.png" }]
-            },
-            "Mercedes-Benz": {
-                "Classe A": [{ version: "A 250e", fuel: "Híbrido Plug-in", power: "218 cv", range: "75 km", price: "42.000 €", img: "https://upload.wikimedia.org/wikipedia/commons/f/f7/2018_Mercedes-Benz_A200_AMG_Line_Premium_Automatic_1.3_Front.jpg" }],
-                "EQE": [{ version: "350+", fuel: "Elétrico", power: "292 cv", range: "639 km", price: "74.000 €", img: "https://www.mercedes-benz.pt/passengercars/models/saloon/eqe/overview/_jcr_content/root/responsivegrid/simple_teaser_copy/simple_teaser_item_2/image.component.damq6.3385732924190.jpg/mercedes-eq-eqe-v295-exterior-pad-16-9.jpg" }]
-            },
-            "MG": {
-                "MG4": [{ version: "Luxury", fuel: "Elétrico", power: "204 cv", range: "435 km", price: "37.000 €", img: "https://www.mgmotor.eu/images/models/mg4/mg4-electric-orange.png" }]
-            },
-            "Mini": {
-                "Cooper SE": [{ version: "Elétrico", fuel: "Elétrico", power: "184 cv", range: "305 km", price: "38.000 €", img: "https://www.mini.pt/content/dam/MINI/common/common-range/mini-cooper-se-3-door-hatch/mini-cooper-se-3-door-hatch-range-tile.jpg" }]
-            },
-            "Nissan": {
-                "Ariya": [{ version: "63kWh", fuel: "Elétrico", power: "218 cv", range: "403 km", price: "46.000 €", img: "https://www-europe.nissan-cdn.net/content/dam/Nissan/nissan_europe/vehicles/ariya/b6/lhd/2023/configurator/B6_Ariya_Akatsuki_Copper_Pearl_Black.png" }]
-            },
-            "Opel": {
-                "Astra": [{ version: "PHEV", fuel: "Híbrido Plug-in", power: "180 cv", range: "60 km", price: "39.000 €", img: "https://www.opel.pt/content/dam/opel/master/vehicles/astra/hatchback/my22/showcase/exterior/opel-astra-exterior-front-side-view.png" }]
-            },
-            "Peugeot": {
-                "e-208": [{ version: "GT", fuel: "Elétrico", power: "156 cv", range: "400 km", price: "34.000 €", img: "https://purepng.com/public/uploads/large/purepng.com-peugeot-208-red-carcarpeugeotvehicletransport-96152466632616y7w.png" }]
-            },
-            "Polestar": {
-                "Polestar 2": [{ version: "Long Range", fuel: "Elétrico", power: "299 cv", range: "635 km", price: "57.000 €", img: "https://www.polestar.com/content/dam/polestar/global/vehicles/polestar-2/2024/navigation/polestar-2-navigation-snow.png" }]
-            },
-            "Renault": {
-                "Megane E-Tech": [{ version: "EV60", fuel: "Elétrico", power: "220 cv", range: "450 km", price: "44.000 €", img: "https://www.pngmart.com/files/22/Renault-Megane-PNG-Isolated-Pic.png" }]
-            },
-            "Skoda": {
-                "Enyaq": [{ version: "85", fuel: "Elétrico", power: "286 cv", range: "560 km", price: "53.000 €", img: "https://cdn.skoda-auto.com/skoda-auto/images/models/enyaq-iv/enyaq-iv/color/enyaq-iv-blue-race.png" }]
-            },
-            "Smart": {
-                "#1": [{ version: "Pro+", fuel: "Elétrico", power: "272 cv", range: "420 km", price: "41.000 €", img: "https://media.smart.com/eu/models/smart-1/smart-1-pro-plus-digital-white-metallic.png" }]
-            },
-            "Tesla": {
-                "Model 3 (Highland)": [{ version: "RWD", fuel: "Elétrico", power: "283 cv", range: "513 km", price: "40.990 €", img: "https://pngimg.com/d/tesla_car_PNG42.png" }],
-                "Model Y": [{ version: "RWD", fuel: "Elétrico", power: "299 cv", range: "455 km", price: "44.990 €", img: "https://pngimg.com/d/tesla_car_PNG42.png" }]
-            },
-            "Toyota": {
-                "bZ4X": [{ version: "Exclusive", fuel: "Elétrico", power: "204 cv", range: "500 km", price: "49.000 €", img: "https://scene7.toyota.eu/is/image/toyotaeurope/bZ4X-2022-exterior-3-4-front-1:Medium-Landscape?ts=0&resMode=sharp2&op_usm=1.75,0.3,2,0" }]
-            },
-            "Volkswagen": {
-                "ID.4": [{ version: "Pro", fuel: "Elétrico", power: "286 cv", range: "550 km", price: "48.000 €", img: "https://pngimg.com/d/volkswagen_PNG107775.png" }]
-            },
-            "Volvo": {
-                "EX30": [{ version: "Single Motor Ext.", fuel: "Elétrico", power: "272 cv", range: "480 km", price: "43.500 €", img: "https://www.volvocars.com/images/v/-/media/project/contentplatform/data/media/my24/ex30/ex30-electric-suv.png" }]
-            }
-        };
+    <div class="selector-card">
+      <div class="cascade-row">
+        <div class="select-group"><label>Marca</label><select id="sel_make" onchange="loadModels()"><option value="">-- Selecione --</option></select></div>
+        <div class="select-group"><label>Modelo</label><select id="sel_model" onchange="loadVersions()" disabled><option value="">-- --</option></select></div>
+        <div class="select-group"><label>Versão</label><select id="sel_version" onchange="checkButton()" disabled><option value="">-- --</option></select></div>
+        <button class="btn-add" onclick="addCar()" id="btnAdd" disabled><i class="fa-solid fa-plus mr-1"></i> Adicionar</button>
+      </div>
+    </div>
 
-        let selectedCars = []; 
-        const specLabels = { 'Combustível': 'fuel', 'Potência': 'power', 'Autonomia': 'range', 'Preço (Est.)': 'price' };
+    <div id="emptyState" class="empty-state">
+      <i class="fa-solid fa-car-side text-5xl mb-4" style="opacity:.12;font-size:3rem"></i>
+      <p style="margin:.75rem 0 .25rem;font-weight:600;color:#475569">Selecione as viaturas acima para iniciar a comparação.</p>
+      <p style="font-size:.8rem">Pode adicionar até 4 viaturas em simultâneo.</p>
+    </div>
 
-        function init() {
-            const selMake = document.getElementById('sel_make');
-            Object.keys(carDatabase).sort().forEach(make => selMake.add(new Option(make, make)));
-        }
+    <div class="comparison-wrapper" id="compWrapper" style="display:none">
+      <table id="compTable">
+        <thead><tr id="row-header"><th class="col-label">Especificação</th></tr></thead>
+        <tbody id="compBody"></tbody>
+      </table>
+    </div>
 
-        function loadModels() {
-            const make = document.getElementById('sel_make').value;
-            const selModel = document.getElementById('sel_model');
-            selModel.innerHTML = '<option value="">-- Selecione --</option>';
-            document.getElementById('sel_version').innerHTML = '<option value="">-- --</option>';
-            document.getElementById('sel_version').disabled = true;
-            if (make) {
-                Object.keys(carDatabase[make]).sort().forEach(m => selModel.add(new Option(m, m)));
-                selModel.disabled = false;
-            }
-        }
+    <div class="callout">
+      <div class="callout-text">
+        <strong>Quer saber o TCO real da sua frota?</strong><br>
+        Este comparador mostra os dados de cada viatura isoladamente. A FleetWise calcula o TCO completo — incluindo financiamento, manutenção, seguros, sinistros e impacto fiscal agregado da sua frota. <strong>Radiografia gratuita até à decisão.</strong>
+      </div>
+      <a href="index.html#contacto" class="callout-cta">Pedir Análise TCO →</a>
+    </div>
 
-        function loadVersions() {
-            const make = document.getElementById('sel_make').value;
-            const model = document.getElementById('sel_model').value;
-            const selVer = document.getElementById('sel_version');
-            selVer.innerHTML = '<option value="">-- Selecione --</option>';
-            if (make && model) {
-                carDatabase[make][model].forEach((v, i) => selVer.add(new Option(v.version, i)));
-                selVer.disabled = false;
-            }
-        }
+  </div>
 
-        function checkButton() {
-            document.getElementById('btnAdd').disabled = (document.getElementById('sel_version').value === "");
-        }
+  <footer>
+    <p>© 2026 FleetWise, Unipessoal, Lda. · <a href="index.html">fleetwisesolutions.pt</a> · Dados indicativos, sujeitos a alteração pelos fabricantes.</p>
+  </footer>
 
-        function addCar() {
-            if (selectedCars.length >= 4) return alert("Máximo 4 viaturas.");
-            const make = document.getElementById('sel_make').value;
-            const model = document.getElementById('sel_model').value;
-            const idx = document.getElementById('sel_version').value;
-            const data = carDatabase[make][model][idx];
-            selectedCars.push({ uniqueId: Date.now(), make, model, version: data.version, specs: data, img: data.img });
-            renderTable();
-        }
+  <script>
+  /* ─────────────────────────────────────────────
+     BASE DE DADOS DE VIATURAS
+     type: "BEV" | "PHEV" | "GAS" | "DSL"
+     range: km WLTP (BEV = total; PHEV = elétrica)
+     battery: kWh brutos (0 para ICE)
+     chargeAC / chargeDC: kW (0 = n/a)
+     co2: g/km WLTP (0 para BEV)
+     price: € com IVA
+  ─────────────────────────────────────────────── */
+  const carDB = {
+    "Audi": {
+      "A3 Sportback 40 TFSIe PHEV": [{
+        version:"S tronic 204 cv", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:204, torque:350, accel:7.6, topSpeed:225,
+        range:65, battery:13, chargeAC:3.7, chargeDC:0,
+        consumption:"1.2 L/100km", co2:27, cargo:280, segment:"Berlina Compacta", price:44990, img:""
+      }],
+      "Q4 e-tron 45": [{
+        version:"286 cv RWD", type:"BEV", fuel:"Elétrico",
+        power:286, torque:545, accel:6.2, topSpeed:180,
+        range:545, battery:82, chargeAC:11, chargeDC:135,
+        consumption:"18.4 kWh/100km", co2:0, cargo:520, segment:"SUV Compacto", price:59990, img:""
+      }],
+      "Q8 e-tron 50 quattro": [{
+        version:"340 cv AWD", type:"BEV", fuel:"Elétrico",
+        power:340, torque:664, accel:6.4, topSpeed:200,
+        range:491, battery:114, chargeAC:22, chargeDC:170,
+        consumption:"26.4 kWh/100km", co2:0, cargo:569, segment:"SUV Premium", price:79990, img:""
+      }]
+    },
+    "BMW": {
+      "iX1 eDrive20": [{
+        version:"204 cv RWD", type:"BEV", fuel:"Elétrico",
+        power:204, torque:250, accel:8.6, topSpeed:160,
+        range:475, battery:64.7, chargeAC:11, chargeDC:130,
+        consumption:"15.5 kWh/100km", co2:0, cargo:490, segment:"SUV Compacto", price:49900, img:""
+      }],
+      "i4 eDrive35": [{
+        version:"286 cv RWD", type:"BEV", fuel:"Elétrico",
+        power:286, torque:400, accel:5.7, topSpeed:215,
+        range:483, battery:83.9, chargeAC:11, chargeDC:205,
+        consumption:"18.0 kWh/100km", co2:0, cargo:470, segment:"Gran Coupé", price:57900, img:""
+      }],
+      "330e": [{
+        version:"292 cv PHEV", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:292, torque:420, accel:5.9, topSpeed:230,
+        range:60, battery:12.2, chargeAC:3.7, chargeDC:0,
+        consumption:"1.7 L/100km", co2:20, cargo:375, segment:"Berlina", price:57900, img:""
+      }],
+      "320d": [{
+        version:"190 cv Diesel", type:"DSL", fuel:"Gasóleo",
+        power:190, torque:400, accel:7.0, topSpeed:235,
+        range:0, battery:0, chargeAC:0, chargeDC:0,
+        consumption:"5.7 L/100km", co2:128, cargo:480, segment:"Berlina", price:54900, img:""
+      }]
+    },
+    "BYD": {
+      "Dolphin Comfort": [{
+        version:"204 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:204, torque:310, accel:7.0, topSpeed:160,
+        range:427, battery:60.5, chargeAC:7, chargeDC:88,
+        consumption:"15.8 kWh/100km", co2:0, cargo:345, segment:"Compacto", price:32990, img:""
+      }],
+      "Seal Design RWD": [{
+        version:"313 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:313, torque:360, accel:5.9, topSpeed:180,
+        range:570, battery:82.5, chargeAC:11, chargeDC:150,
+        consumption:"16.4 kWh/100km", co2:0, cargo:400, segment:"Berlina", price:46990, img:""
+      }],
+      "Atto 3 Design": [{
+        version:"204 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:204, torque:310, accel:7.3, topSpeed:160,
+        range:420, battery:60.5, chargeAC:7, chargeDC:88,
+        consumption:"15.4 kWh/100km", co2:0, cargo:440, segment:"SUV Compacto", price:39990, img:""
+      }]
+    },
+    "Citroën": {
+      "ë-C3 You": [{
+        version:"113 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:113, torque:120, accel:11.2, topSpeed:135,
+        range:320, battery:44, chargeAC:7.4, chargeDC:100,
+        consumption:"13.9 kWh/100km", co2:0, cargo:310, segment:"Citadino", price:23990, img:""
+      }]
+    },
+    "Cupra": {
+      "Born 58 kWh": [{
+        version:"204 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:204, torque:310, accel:6.6, topSpeed:160,
+        range:424, battery:58, chargeAC:11, chargeDC:170,
+        consumption:"15.8 kWh/100km", co2:0, cargo:385, segment:"Compacto", price:42000, img:""
+      }],
+      "Formentor e-Hybrid 245": [{
+        version:"245 cv PHEV", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:245, torque:400, accel:6.5, topSpeed:230,
+        range:59, battery:12.8, chargeAC:3.7, chargeDC:0,
+        consumption:"1.4 L/100km", co2:26, cargo:345, segment:"SUV Compacto", price:47990, img:""
+      }]
+    },
+    "Dacia": {
+      "Spring Extreme": [{
+        version:"65 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:65, torque:113, accel:19.1, topSpeed:125,
+        range:220, battery:26.8, chargeAC:7.4, chargeDC:30,
+        consumption:"14.0 kWh/100km", co2:0, cargo:298, segment:"Citadino", price:22490, img:""
+      }]
+    },
+    "Fiat": {
+      "500e 42 kWh": [{
+        version:"118 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:118, torque:220, accel:9.0, topSpeed:150,
+        range:320, battery:42, chargeAC:11, chargeDC:85,
+        consumption:"14.1 kWh/100km", co2:0, cargo:185, segment:"Citadino", price:28990, img:""
+      }]
+    },
+    "Ford": {
+      "Kuga PHEV": [{
+        version:"225 cv PHEV", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:225, torque:200, accel:9.2, topSpeed:200,
+        range:56, battery:14.4, chargeAC:3.7, chargeDC:0,
+        consumption:"1.3 L/100km", co2:26, cargo:575, segment:"SUV Compacto", price:45990, img:""
+      }]
+    },
+    "Hyundai": {
+      "Kona EV 65 kWh": [{
+        version:"218 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:218, torque:255, accel:7.8, topSpeed:185,
+        range:514, battery:65.4, chargeAC:11, chargeDC:100,
+        consumption:"14.2 kWh/100km", co2:0, cargo:466, segment:"SUV Compacto", price:46990, img:""
+      }],
+      "Ioniq 5 RWD 77 kWh": [{
+        version:"229 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:229, torque:350, accel:8.5, topSpeed:185,
+        range:507, battery:77.4, chargeAC:11, chargeDC:220,
+        consumption:"17.5 kWh/100km", co2:0, cargo:527, segment:"SUV Compacto", price:55990, img:""
+      }],
+      "Tucson PHEV": [{
+        version:"265 cv PHEV", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:265, torque:265, accel:8.5, topSpeed:193,
+        range:62, battery:13.8, chargeAC:7.4, chargeDC:0,
+        consumption:"1.1 L/100km", co2:18, cargo:616, segment:"SUV Compacto", price:47990, img:""
+      }]
+    },
+    "Kia": {
+      "EV3 Standard Range": [{
+        version:"150 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:150, torque:283, accel:7.7, topSpeed:170,
+        range:352, battery:58.3, chargeAC:11, chargeDC:135,
+        consumption:"16.5 kWh/100km", co2:0, cargo:460, segment:"SUV Compacto", price:35990, img:""
+      }],
+      "EV6 Air": [{
+        version:"229 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:229, torque:350, accel:7.3, topSpeed:185,
+        range:528, battery:77.4, chargeAC:11, chargeDC:233,
+        consumption:"17.4 kWh/100km", co2:0, cargo:490, segment:"Fastback", price:53990, img:""
+      }],
+      "Sorento PHEV": [{
+        version:"291 cv PHEV", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:291, torque:270, accel:8.7, topSpeed:193,
+        range:67, battery:13.8, chargeAC:7.4, chargeDC:0,
+        consumption:"1.3 L/100km", co2:30, cargo:616, segment:"SUV Familiar", price:59990, img:""
+      }]
+    },
+    "Mazda": {
+      "CX-60 PHEV": [{
+        version:"327 cv PHEV", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:327, torque:500, accel:5.8, topSpeed:200,
+        range:61, battery:17.8, chargeAC:7.4, chargeDC:50,
+        consumption:"1.5 L/100km", co2:24, cargo:570, segment:"SUV Compacto", price:57990, img:""
+      }]
+    },
+    "Mercedes-Benz": {
+      "EQA 250+": [{
+        version:"190 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:190, torque:385, accel:8.6, topSpeed:160,
+        range:560, battery:70.5, chargeAC:11, chargeDC:100,
+        consumption:"14.8 kWh/100km", co2:0, cargo:340, segment:"SUV Compacto", price:52990, img:""
+      }],
+      "EQE 350+": [{
+        version:"292 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:292, torque:565, accel:6.4, topSpeed:210,
+        range:639, battery:96.1, chargeAC:22, chargeDC:170,
+        consumption:"17.4 kWh/100km", co2:0, cargo:430, segment:"Berlina Premium", price:74990, img:""
+      }],
+      "C 300e": [{
+        version:"313 cv PHEV", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:313, torque:550, accel:5.9, topSpeed:250,
+        range:102, battery:25.4, chargeAC:11, chargeDC:0,
+        consumption:"0.8 L/100km", co2:19, cargo:360, segment:"Berlina", price:63990, img:""
+      }],
+      "C 220 d": [{
+        version:"200 cv Diesel", type:"DSL", fuel:"Gasóleo",
+        power:200, torque:440, accel:7.0, topSpeed:240,
+        range:0, battery:0, chargeAC:0, chargeDC:0,
+        consumption:"5.8 L/100km", co2:131, cargo:455, segment:"Berlina", price:57990, img:""
+      }]
+    },
+    "MG": {
+      "MG4 Standard": [{
+        version:"170 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:170, torque:250, accel:7.7, topSpeed:160,
+        range:350, battery:51, chargeAC:6.6, chargeDC:117,
+        consumption:"16.8 kWh/100km", co2:0, cargo:363, segment:"Compacto", price:31990, img:""
+      }],
+      "MG4 Luxury 64 kWh": [{
+        version:"204 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:204, torque:250, accel:7.9, topSpeed:160,
+        range:435, battery:64, chargeAC:11, chargeDC:135,
+        consumption:"16.2 kWh/100km", co2:0, cargo:363, segment:"Compacto", price:37990, img:""
+      }]
+    },
+    "Mini": {
+      "Cooper SE": [{
+        version:"184 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:184, torque:270, accel:7.3, topSpeed:160,
+        range:305, battery:32.6, chargeAC:11, chargeDC:50,
+        consumption:"12.4 kWh/100km", co2:0, cargo:210, segment:"Compacto", price:38500, img:""
+      }]
+    },
+    "Mitsubishi": {
+      "Outlander PHEV": [{
+        version:"302 cv PHEV AWD", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:302, torque:350, accel:5.5, topSpeed:200,
+        range:87, battery:20, chargeAC:3.7, chargeDC:0,
+        consumption:"0.9 L/100km", co2:21, cargo:687, segment:"SUV Familiar", price:53990, img:""
+      }]
+    },
+    "Peugeot": {
+      "e-208 Active": [{
+        version:"136 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:136, torque:260, accel:8.1, topSpeed:150,
+        range:400, battery:51, chargeAC:11, chargeDC:100,
+        consumption:"14.4 kWh/100km", co2:0, cargo:265, segment:"Citadino", price:32990, img:""
+      }],
+      "308 PHEV 180": [{
+        version:"180 cv PHEV", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:180, torque:360, accel:7.5, topSpeed:225,
+        range:60, battery:12.5, chargeAC:3.7, chargeDC:0,
+        consumption:"1.2 L/100km", co2:27, cargo:360, segment:"Compacto", price:44990, img:""
+      }],
+      "208 PureTech 75": [{
+        version:"75 cv Gasolina", type:"GAS", fuel:"Gasolina",
+        power:75, torque:110, accel:14.5, topSpeed:172,
+        range:0, battery:0, chargeAC:0, chargeDC:0,
+        consumption:"5.0 L/100km", co2:113, cargo:265, segment:"Citadino", price:21490, img:""
+      }]
+    },
+    "Polestar": {
+      "Polestar 2 LR Single Motor": [{
+        version:"299 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:299, torque:490, accel:6.4, topSpeed:205,
+        range:655, battery:100, chargeAC:22, chargeDC:205,
+        consumption:"17.4 kWh/100km", co2:0, cargo:405, segment:"Fastback", price:57990, img:""
+      }]
+    },
+    "Porsche": {
+      "Macan EV": [{
+        version:"408 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:408, torque:610, accel:5.7, topSpeed:220,
+        range:613, battery:100, chargeAC:11, chargeDC:270,
+        consumption:"21.4 kWh/100km", co2:0, cargo:540, segment:"SUV Premium", price:84990, img:""
+      }]
+    },
+    "Renault": {
+      "5 E-Tech Autonomie+": [{
+        version:"150 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:150, torque:245, accel:8.0, topSpeed:150,
+        range:400, battery:52, chargeAC:11, chargeDC:100,
+        consumption:"14.8 kWh/100km", co2:0, cargo:326, segment:"Citadino", price:33990, img:""
+      }],
+      "Megane E-Tech EV60": [{
+        version:"220 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:220, torque:300, accel:7.4, topSpeed:160,
+        range:450, battery:60, chargeAC:22, chargeDC:130,
+        consumption:"15.7 kWh/100km", co2:0, cargo:440, segment:"Compacto", price:44990, img:""
+      }],
+      "Austral E-Tech 200": [{
+        version:"200 cv PHEV", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:200, torque:230, accel:7.6, topSpeed:180,
+        range:65, battery:20, chargeAC:7.4, chargeDC:0,
+        consumption:"0.9 L/100km", co2:24, cargo:575, segment:"SUV Compacto", price:45990, img:""
+      }],
+      "Clio TCe 90": [{
+        version:"90 cv Gasolina", type:"GAS", fuel:"Gasolina",
+        power:90, torque:160, accel:12.5, topSpeed:175,
+        range:0, battery:0, chargeAC:0, chargeDC:0,
+        consumption:"5.2 L/100km", co2:109, cargo:391, segment:"Citadino", price:19990, img:""
+      }]
+    },
+    "Skoda": {
+      "Enyaq 85": [{
+        version:"286 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:286, torque:545, accel:8.4, topSpeed:180,
+        range:560, battery:82, chargeAC:11, chargeDC:135,
+        consumption:"17.0 kWh/100km", co2:0, cargo:585, segment:"SUV Compacto", price:53990, img:""
+      }],
+      "Octavia 2.0 TDI 150": [{
+        version:"150 cv Diesel", type:"DSL", fuel:"Gasóleo",
+        power:150, torque:360, accel:8.8, topSpeed:222,
+        range:0, battery:0, chargeAC:0, chargeDC:0,
+        consumption:"5.8 L/100km", co2:108, cargo:600, segment:"Familiar", price:32990, img:""
+      }]
+    },
+    "Smart": {
+      "#1 Pro+": [{
+        version:"272 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:272, torque:343, accel:6.7, topSpeed:180,
+        range:420, battery:66, chargeAC:22, chargeDC:150,
+        consumption:"17.2 kWh/100km", co2:0, cargo:413, segment:"SUV Compacto", price:41990, img:""
+      }]
+    },
+    "Tesla": {
+      "Model 3 RWD": [{
+        version:"283 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:283, torque:375, accel:6.1, topSpeed:201,
+        range:513, battery:75, chargeAC:11, chargeDC:170,
+        consumption:"13.5 kWh/100km", co2:0, cargo:594, segment:"Berlina/Familiar", price:40990,
+        img:"https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Mega-Menu-Vehicles-Model-3.png"
+      }],
+      "Model Y RWD": [{
+        version:"299 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:299, torque:420, accel:6.9, topSpeed:217,
+        range:455, battery:75, chargeAC:11, chargeDC:170,
+        consumption:"14.6 kWh/100km", co2:0, cargo:854, segment:"SUV Compacto", price:44990,
+        img:"https://digitalassets.tesla.com/tesla-contents/image/upload/f_auto,q_auto/Mega-Menu-Vehicles-Model-Y.png"
+      }]
+    },
+    "Toyota": {
+      "RAV4 PHEV": [{
+        version:"306 cv PHEV AWD", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:306, torque:270, accel:5.8, topSpeed:180,
+        range:75, battery:18.1, chargeAC:3.3, chargeDC:0,
+        consumption:"1.0 L/100km", co2:21, cargo:580, segment:"SUV Familiar", price:50990, img:""
+      }]
+    },
+    "Volkswagen": {
+      "ID.3 Pro": [{
+        version:"204 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:204, torque:310, accel:7.3, topSpeed:170,
+        range:426, battery:77, chargeAC:11, chargeDC:170,
+        consumption:"15.4 kWh/100km", co2:0, cargo:385, segment:"Compacto", price:43990, img:""
+      }],
+      "ID.4 Pro": [{
+        version:"286 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:286, torque:545, accel:8.5, topSpeed:180,
+        range:550, battery:82, chargeAC:11, chargeDC:135,
+        consumption:"17.3 kWh/100km", co2:0, cargo:543, segment:"SUV Compacto", price:48990, img:""
+      }],
+      "Passat 2.0 TDI 150": [{
+        version:"150 cv Diesel", type:"DSL", fuel:"Gasóleo",
+        power:150, torque:360, accel:8.9, topSpeed:215,
+        range:0, battery:0, chargeAC:0, chargeDC:0,
+        consumption:"6.2 L/100km", co2:131, cargo:650, segment:"Familiar", price:44990, img:""
+      }]
+    },
+    "Volvo": {
+      "EX30 Single Motor Extended": [{
+        version:"272 cv BEV", type:"BEV", fuel:"Elétrico",
+        power:272, torque:343, accel:5.3, topSpeed:180,
+        range:480, battery:69, chargeAC:11, chargeDC:153,
+        consumption:"15.7 kWh/100km", co2:0, cargo:318, segment:"SUV Compacto", price:44490, img:""
+      }],
+      "XC60 T8 Recharge PHEV": [{
+        version:"455 cv PHEV AWD", type:"PHEV", fuel:"Híbrido Plug-in",
+        power:455, torque:709, accel:4.9, topSpeed:230,
+        range:81, battery:25.5, chargeAC:11, chargeDC:0,
+        consumption:"0.8 L/100km", co2:12, cargo:484, segment:"SUV Premium", price:74990, img:""
+      }]
+    }
+  };
 
-        function removeCar(id) {
-            selectedCars = selectedCars.filter(c => c.uniqueId !== id);
-            renderTable();
-        }
+  /* ── FISCAL (Portugal 2025 — art.º 88.º CIRC) ── */
+  function taRate(type, price) {
+    if (type === 'BEV')  return price <= 62500 ? 0 : 10;
+    if (type === 'PHEV') return price <= 50000 ? 5 : 27.5;
+    if (type === 'GAS')  return price <= 27500 ? 10  : price <= 35000 ? 27.5 : 35;
+    if (type === 'DSL')  return price <= 27500 ? 12.5 : price <= 35000 ? 27.5 : 35;
+    return 35;
+  }
+  function ivaPct(type, price) {
+    if (type === 'BEV'  && price <= 62500) return 100;
+    if (type === 'PHEV' && price <= 50000) return 50;
+    return 0;
+  }
+  function ircLimitVal(type) {
+    if (type === 'BEV')  return 62500;
+    if (type === 'PHEV') return 50000;
+    return 25000;
+  }
+  function fmtPrice(v) {
+    return v.toLocaleString('pt-PT', { style:'currency', currency:'EUR', maximumFractionDigits:0 });
+  }
 
-        function renderTable() {
-            const wrapper = document.getElementById('compWrapper');
-            const empty = document.getElementById('emptyState');
-            if (selectedCars.length === 0) {
-                wrapper.style.display = 'none'; empty.style.display = 'block'; return;
-            }
-            wrapper.style.display = 'block'; empty.style.display = 'none';
+  /* ── STATE ── */
+  let selectedCars = [];
+  let activeFilter = 'all';
 
-            const headerRow = document.getElementById('row-header');
-            const tbody = document.getElementById('compBody');
-            while (headerRow.children.length > 1) { headerRow.removeChild(headerRow.lastChild); }
-            tbody.innerHTML = '';
+  /* ── COUNTS ── */
+  function updateCounts() {
+    let totals = { all:0, BEV:0, PHEV:0, ICE:0 };
+    Object.values(carDB).forEach(models =>
+      Object.values(models).forEach(versions =>
+        versions.forEach(v => {
+          totals.all++;
+          if (v.type === 'BEV') totals.BEV++;
+          else if (v.type === 'PHEV') totals.PHEV++;
+          else totals.ICE++;
+        })
+      )
+    );
+    Object.keys(totals).forEach(k => {
+      const el = document.getElementById('cnt-' + k);
+      if (el) el.textContent = totals[k];
+    });
+  }
 
-            selectedCars.forEach(car => {
-                const th = document.createElement('th');
-                th.className = 'col-car';
-                th.innerHTML = `
-                    <button class="btn-remove" onclick="removeCar(${car.uniqueId})"><i class="fa-solid fa-circle-xmark"></i></button>
-                    <div class="car-header">
-                        <img src="${car.img}" style="opacity: 0;" onload="this.style.opacity=1" onerror="this.src='https://via.placeholder.com/200x100?text=xEV'">
-                        <div class="car-brand">${car.make}</div>
-                        <span class="car-model">${car.model}</span>
-                        <span class="car-version">${car.version}</span>
-                    </div>`;
-                headerRow.appendChild(th);
-            });
+  function setFilter(f) {
+    activeFilter = f;
+    document.querySelectorAll('.filter-tab').forEach(t => t.classList.toggle('active', t.dataset.filter === f));
+    init();
+    ['sel_model','sel_version'].forEach(id => {
+      const el = document.getElementById(id);
+      el.innerHTML = '<option value="">-- --</option>';
+      el.disabled = true;
+    });
+    checkButton();
+  }
 
-            Object.keys(specLabels).forEach(label => {
-                const prop = specLabels[label];
-                const tr = document.createElement('tr');
-                tr.innerHTML = `<td class="col-label">${label}</td>`;
-                selectedCars.forEach(car => {
-                    tr.innerHTML += `<td>${car.specs[prop] || '-'}</td>`;
-                });
-                tbody.appendChild(tr);
-            });
-        }
-        init();
-    </script>
+  function init() {
+    const sel = document.getElementById('sel_make');
+    sel.innerHTML = '<option value="">-- Selecione --</option>';
+    Object.keys(carDB).sort().forEach(make => {
+      const has = Object.values(carDB[make]).some(vs => vs.some(v => matchFilter(v.type)));
+      if (has) sel.add(new Option(make, make));
+    });
+  }
+
+  function matchFilter(type) {
+    if (activeFilter === 'all') return true;
+    if (activeFilter === 'ICE') return type === 'GAS' || type === 'DSL';
+    return type === activeFilter;
+  }
+
+  function loadModels() {
+    const make = document.getElementById('sel_make').value;
+    const sm = document.getElementById('sel_model');
+    sm.innerHTML = '<option value="">-- Selecione --</option>';
+    document.getElementById('sel_version').innerHTML = '<option value="">-- --</option>';
+    document.getElementById('sel_version').disabled = true;
+    checkButton();
+    if (!make) { sm.disabled = true; return; }
+    Object.keys(carDB[make]).sort().forEach(model => {
+      if (carDB[make][model].some(v => matchFilter(v.type))) sm.add(new Option(model, model));
+    });
+    sm.disabled = false;
+  }
+
+  function loadVersions() {
+    const make = document.getElementById('sel_make').value;
+    const model = document.getElementById('sel_model').value;
+    const sv = document.getElementById('sel_version');
+    sv.innerHTML = '<option value="">-- Selecione --</option>';
+    checkButton();
+    if (!make || !model) { sv.disabled = true; return; }
+    carDB[make][model].forEach((v, i) => {
+      if (matchFilter(v.type)) sv.add(new Option(v.version, i));
+    });
+    sv.disabled = false;
+  }
+
+  function checkButton() {
+    document.getElementById('btnAdd').disabled = !document.getElementById('sel_version').value;
+  }
+
+  function addCar() {
+    if (selectedCars.length >= 4) { alert('Máximo 4 viaturas em simultâneo.'); return; }
+    const make = document.getElementById('sel_make').value;
+    const model = document.getElementById('sel_model').value;
+    const idx = parseInt(document.getElementById('sel_version').value);
+    const d = carDB[make][model][idx];
+    selectedCars.push({ id: Date.now(), make, model, ...d });
+    renderTable();
+  }
+
+  function removeCar(id) {
+    selectedCars = selectedCars.filter(c => c.id !== id);
+    renderTable();
+  }
+
+  /* ── SPEC ROWS DEFINITION ── */
+  const ROWS = [
+    { section: 'Motorização & Desempenho' },
+    { label:'Tipo de Propulsão',   key:'typeBadge' },
+    { label:'Potência',            key:'power',      unit:'cv' },
+    { label:'Binário',             key:'torque',     unit:'Nm' },
+    { label:'Aceleração 0-100',    key:'accel',      unit:'s' },
+    { label:'Vel. Máxima',         key:'topSpeed',   unit:'km/h' },
+    { section: 'Autonomia & Carregamento' },
+    { label:'Autonomia WLTP',      key:'range',      unit:'km', note:'Elétrica para PHEV' },
+    { label:'Bateria',             key:'battery',    unit:'kWh' },
+    { label:'Carga AC (máx.)',     key:'chargeAC',   unit:'kW' },
+    { label:'Carga DC (máx.)',     key:'chargeDC',   unit:'kW' },
+    { label:'Consumo',             key:'consumption' },
+    { section: 'Ambiental' },
+    { label:'CO₂ WLTP',           key:'co2',        unit:'g/km' },
+    { section: 'Espaço' },
+    { label:'Segmento',            key:'segment' },
+    { label:'Bagageira',           key:'cargo',      unit:'L' },
+    { section: 'Preço & Impacto Fiscal 🇵🇹' },
+    { label:'Preço (c/IVA)',       key:'priceF',     fiscal:true },
+    { label:'Tributação Autónoma', key:'taF',        fiscal:true, note:'art.º 88.º CIRC' },
+    { label:'IVA Dedutível',       key:'ivaF',       fiscal:true },
+    { label:'Limite Amort. IRC',   key:'ircF',       fiscal:true },
+  ];
+
+  function cellValue(car, row) {
+    const ta  = taRate(car.type, car.price);
+    const iva = ivaPct(car.type, car.price);
+    const irc = ircLimitVal(car.type);
+
+    if (row.key === 'typeBadge') {
+      const cls = car.type === 'BEV' ? 'badge-bev' : car.type === 'PHEV' ? 'badge-phev' : 'badge-ice';
+      const lbl = car.type === 'BEV' ? '⚡ Elétrico' : car.type === 'PHEV' ? '🔌 Híbrido Plug-in' : (car.fuel || 'Combustão');
+      return `<span class="type-badge ${cls}">${lbl}</span>`;
+    }
+    if (row.key === 'priceF') return `<strong>${fmtPrice(car.price)}</strong>`;
+    if (row.key === 'taF') {
+      const cls = ta === 0 ? 'ta-0' : ta === 5 ? 'ta-5' : ta <= 10 ? 'ta-10' : ta <= 12.5 ? 'ta-125' : ta <= 27.5 ? 'ta-275' : 'ta-35';
+      return `<span class="${cls} font-bold">${ta.toString().replace('.',',')}%</span>`;
+    }
+    if (row.key === 'ivaF') {
+      if (iva === 0) return `<span class="iva-no">0%</span>`;
+      const amt = Math.round(car.price * 0.23 / 1.23 * iva / 100);
+      return `<span class="iva-yes">${iva}% <small>(≈${fmtPrice(amt)})</small></span>`;
+    }
+    if (row.key === 'ircF') {
+      const ok = car.price <= irc;
+      const cls = ok ? 'irc-ok' : 'irc-partial';
+      const note = ok ? '' : ` <small style="color:#94a3b8">(excede ${fmtPrice(car.price - irc)})</small>`;
+      return `<span class="${cls}">${fmtPrice(irc)}${note}</span>`;
+    }
+
+    const v = car[row.key];
+    if (v === undefined || v === null || v === 0 || v === '') return '<span style="color:#cbd5e1">—</span>';
+    if (row.unit) return `${typeof v === 'number' ? v.toLocaleString('pt-PT') : v} <small style="color:#94a3b8">${row.unit}</small>`;
+    return v;
+  }
+
+  function renderTable() {
+    const wrapper = document.getElementById('compWrapper');
+    const empty   = document.getElementById('emptyState');
+    if (selectedCars.length === 0) { wrapper.style.display='none'; empty.style.display='block'; return; }
+    wrapper.style.display = 'block';
+    empty.style.display = 'none';
+
+    /* header row */
+    const hdr = document.getElementById('row-header');
+    while (hdr.children.length > 1) hdr.removeChild(hdr.lastChild);
+    selectedCars.forEach(car => {
+      const th = document.createElement('th');
+      th.className = 'col-car';
+      const hasImg = !!car.img;
+      th.innerHTML = `
+        <button class="btn-remove" onclick="removeCar(${car.id})" title="Remover"><i class="fa-solid fa-circle-xmark"></i></button>
+        <div class="car-img-wrap">
+          ${hasImg
+            ? `<img src="${car.img}" onload="this.style.opacity=1" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" style="opacity:0;transition:opacity .3s">
+               <div class="car-fallback" style="display:none"><i class="fas fa-car-side"></i></div>`
+            : `<div class="car-fallback"><i class="fas fa-car-side"></i></div>`
+          }
+        </div>
+        <div class="car-brand">${car.make}</div>
+        <span class="car-model">${car.model}</span>
+        <span class="car-version">${car.version}</span>`;
+      hdr.appendChild(th);
+    });
+
+    /* body rows */
+    const tbody = document.getElementById('compBody');
+    tbody.innerHTML = '';
+    ROWS.forEach(row => {
+      const tr = document.createElement('tr');
+      if (row.section) {
+        tr.className = 'row-section';
+        tr.innerHTML = `<td colspan="${selectedCars.length + 1}">${row.section}</td>`;
+      } else {
+        if (row.fiscal) tr.classList.add('row-ta');
+        tr.innerHTML = `<td class="col-label">${row.label}${row.note ? `<small>${row.note}</small>` : ''}</td>`;
+        selectedCars.forEach(car => {
+          tr.innerHTML += `<td>${cellValue(car, row)}</td>`;
+        });
+      }
+      tbody.appendChild(tr);
+    });
+  }
+
+  updateCounts();
+  init();
+  </script>
 </body>
 </html>
