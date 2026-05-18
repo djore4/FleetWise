@@ -489,14 +489,23 @@
 
   /* ── TEMPORARY: debug (remove after confirming data loads) ── */
   async function debugData() {
-    const r = await fetch(CT_ENDPOINT, {
+    // Test 1: minimal query with user credentials
+    const r1 = await fetch(CT_ENDPOINT, {
       method:'POST',
       headers:{'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID},
-      body: JSON.stringify({query:`{ vehicleList(page:0,size:3){ id naming{make model chargetrip_version} drivetrain{type} battery{usable_kwh} range{chargetrip_range{best worst}} } }`})
+      body: JSON.stringify({query:`{ vehicleList(page:0,size:1){ id } }`})
     });
-    const j = await r.json();
-    if (j.errors) console.error('%cAPI error','color:#ef4444', j.errors);
-    if (j.data?.vehicleList) console.log('%cSample vehicles','font-weight:bold;color:#10b981', j.data.vehicleList);
+    const j1 = await r1.json();
+    console.log('%cUser creds (minimal)','font-weight:bold;color:#f59e0b', JSON.stringify(j1));
+
+    // Test 2: same query with Chargetrip public demo credentials
+    const r2 = await fetch(CT_ENDPOINT, {
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-client-id':'5ed1175bad06853b3aa1e492','x-app-id':'623998b2c35130073829b2d2'},
+      body: JSON.stringify({query:`{ vehicleList(page:0,size:2){ id naming{make model} drivetrain{type} } }`})
+    });
+    const j2 = await r2.json();
+    console.log('%cDemo creds result','font-weight:bold;color:#10b981', JSON.stringify(j2));
   }
   debugData();
   </script>
