@@ -216,31 +216,76 @@
   const CT_APP_ID    = '6a0ac0f2c4b109828252455e';
   const CT_PAGE_SIZE = 100;
 
-  const CT_QUERY = `
-    query GetVehicles($page: Int, $size: Int) {
-      vehicleList(page: $page, size: $size) {
+  /* Step 1: minimal list query — just id + naming (as per Chargetrip examples) */
+  const CT_LIST_QUERY = `
+    query vehicleList($page: Int, $size: Int, $search: String) {
+      vehicleList(page: $page, size: $size, search: $search) {
         id
-        naming { make model version chargetrip_version }
-        drivetrain { type }
-        battery { usable_kwh }
-        range { chargetrip_range { best worst } }
+        naming { make model chargetrip_version }
       }
     }`;
 
-  const DC_TYPES = new Set(['CCS1','CCS2','CHADEMO','TESLA','GB_T_DC','CHAOJI']);
+  /* Step 2: detail query — called per-vehicle when user adds to comparison */
+  const CT_DETAIL_QUERY = `
+    query vehicle($vehicleId: ID!) {
+      vehicle(id: $vehicleId) {
+        naming { make model chargetrip_version }
+        drivetrain { type }
+        battery { usable_kwh }
+        range {
+          best { combined }
+          worst { combined }
+          chargetrip_range { best worst }
+        }
+        connectors { standard }
+        performance { acceleration top_speed }
+      }
+    }`;
 
-  function ctTransform(v) {
-    const n  = v.naming    || {};
-    const b  = v.battery   || {};
-    const r  = v.range     || {};
-    const dt = v.drivetrain|| {};
-    const cs = v.connectors|| [];
+  const ctHeaders = {
+    'Content-Type': 'application/json',
+    'x-client-id':  CT_CLIENT_ID,
+    'x-app-id':     CT_APP_ID,
+  };
 
-    const make  = (n.make  || '').trim();
-    const model = (n.model || '').trim();
+  function ctGQL(query, variables = {}) {
+    return fetch(CT_ENDPOINT, {
+      method: 'POST',
+      headers: ctHeaders,
+      body: JSON.stringify({ query, variables }),
+    })
+    .then(r => r.json())
+    .then(j => {
+      if (j.errors) throw new Error(j.errors[0].message);
+      return j.data;
+    });
+  }
+
+  /* vehicleList cache: id → { make, model, version, type } */
+  const vehicleCache = {};
+
+  function ctListTransform(v) {
+    const n = v.naming || {};
+    const make    = (n.make  || '').trim();
+    const model   = (n.model || '').trim();
+    const version = (n.chargetrip_version || `${make} ${model}`).trim();
     if (!make || !model) return null;
+    return { id: v.id, make, model, version };
+  }
 
-    // drivetrain.type = VehicleDrivetrainType: BEV, EREV, HEV, PHEV
+  const DC_CONNECTORS = new Set([
+    'IEC_62196_T2_COMBO','IEC_62196_T1_COMBO','CHADEMO',
+    'TESLA_S','GB_T','CHAOJI','GBT_DC'
+  ]);
+
+  function ctDetailTransform(v, listEntry) {
+    const n  = v.naming      || {};
+    const dt = v.drivetrain  || {};
+    const b  = v.battery     || {};
+    const r  = v.range       || {};
+    const p  = v.performance || {};
+    const cs = v.connectors  || [];
+
     const dtType = (dt.type || '').toUpperCase();
     let type = null;
     if (dtType === 'BEV' || dtType === 'EREV') type = 'BEV';
@@ -251,33 +296,42 @@
     let rangeKm = null;
     if (ct.best && ct.worst) rangeKm = Math.round((ct.best + ct.worst) / 2);
     else if (ct.best)        rangeKm = Math.round(ct.best);
+    else if (r.best?.combined) rangeKm = Math.round(r.best.combined);
 
-    const version = (n.chargetrip_version || n.version || `${make} ${model}`).trim();
+    const dcConn = cs.some(c => DC_CONNECTORS.has(c.standard));
+    const acConn = cs.some(c => !DC_CONNECTORS.has(c.standard) && c.standard);
 
     return {
-      make, model, version, type,
-      power: null, torque: null,
-      battery:  b.usable_kwh ? Math.round(b.usable_kwh * 10) / 10 : null,
-      chargeAC: null, chargeDC: null,
-      range: rangeKm,
-      accel: null, topSpeed: null, segment: null, cargo: null, drivetrain: null,
+      id:        listEntry.id,
+      make:      listEntry.make,
+      model:     listEntry.model,
+      version:   listEntry.version,
+      type,
+      power:     null,
+      torque:    null,
+      battery:   b.usable_kwh ? Math.round(b.usable_kwh * 10) / 10 : null,
+      chargeAC:  acConn ? true : null,
+      chargeDC:  dcConn ? true : null,
+      range:     rangeKm,
+      accel:     p.acceleration ? Math.round(p.acceleration * 10) / 10 : null,
+      topSpeed:  p.top_speed    ? Math.round(p.top_speed)             : null,
+      segment:   null,
+      cargo:     null,
+      drivetrain: null,
     };
   }
 
   async function ctFetchPage(page) {
-    const res = await fetch(CT_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'x-client-id':   CT_CLIENT_ID,
-        'x-app-id':      CT_APP_ID,
-      },
-      body: JSON.stringify({ query: CT_QUERY, variables: { page, size: CT_PAGE_SIZE } }),
-    });
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const json = await res.json();
-    if (json.errors) throw new Error(json.errors[0].message);
-    return json.data.vehicleList || [];
+    const data = await ctGQL(CT_LIST_QUERY, { page, size: CT_PAGE_SIZE });
+    return data.vehicleList || [];
+  }
+
+  async function ctFetchDetail(id, listEntry) {
+    if (vehicleCache[id]) return vehicleCache[id];
+    const data = await ctGQL(CT_DETAIL_QUERY, { vehicleId: id });
+    const result = ctDetailTransform(data.vehicle, listEntry);
+    if (result) vehicleCache[id] = result;
+    return result;
   }
 
   let allVehicles = [];
@@ -294,7 +348,7 @@
   async function loadData() {
     const status = document.getElementById('loadStatus');
     try {
-      if (status) status.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> A carregar base de dados…';
+      if (status) status.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> A carregar lista de viaturas…';
       const raw = [];
       let page  = 0;
       while (true) {
@@ -304,7 +358,8 @@
         if (batch.length < CT_PAGE_SIZE) break;
         page++;
       }
-      allVehicles = raw.map(ctTransform).filter(Boolean);
+      /* vehicleList only gives id + naming — store as stubs for the dropdowns */
+      allVehicles = raw.map(ctListTransform).filter(Boolean);
       buildDB();
       updateCounts();
       init();
@@ -329,11 +384,8 @@
   /* placeholder — replaced below */
   /* ── COUNTS ── */
   function updateCounts() {
-    const totals = { all: allVehicles.length, BEV: 0, PHEV: 0 };
-    allVehicles.forEach(v => {
-      if (v.type === 'BEV') totals.BEV++;
-      else if (v.type === 'PHEV') totals.PHEV++;
-    });
+    /* vehicleList stubs don't include type — only show total count */
+    const totals = { all: allVehicles.length, BEV: '?', PHEV: '?' };
     Object.keys(totals).forEach(k => {
       const el = document.getElementById('cnt-' + k);
       if (el) el.textContent = totals[k];
@@ -397,14 +449,37 @@
     document.getElementById('btnAdd').disabled = !document.getElementById('sel_version').value;
   }
 
-  function addCar() {
+  async function addCar() {
     if (selectedCars.length >= 4) { alert('Máximo 4 viaturas em simultâneo.'); return; }
-    const make = document.getElementById('sel_make').value;
+    const make  = document.getElementById('sel_make').value;
     const model = document.getElementById('sel_model').value;
-    const idx = parseInt(document.getElementById('sel_version').value);
-    const d = carDB[make][model][idx];
-    selectedCars.push({ id: Date.now(), ...d });
+    const idx   = parseInt(document.getElementById('sel_version').value);
+    const stub  = carDB[make][model][idx];
+    const uid   = Date.now();
+
+    /* show loading placeholder immediately */
+    selectedCars.push({ id: uid, _loading: true, make: stub.make, model: stub.model, version: stub.version });
     renderTable();
+
+    /* fetch full details */
+    try {
+      const details = await ctFetchDetail(stub.id, stub);
+      const pos = selectedCars.findIndex(c => c.id === uid);
+      if (pos >= 0) {
+        if (details) {
+          selectedCars[pos] = { id: uid, ...details };
+        } else {
+          selectedCars.splice(pos, 1);
+          alert('Viatura não disponível (ICE/HEV).');
+        }
+        renderTable();
+      }
+    } catch(e) {
+      const pos = selectedCars.findIndex(c => c.id === uid);
+      if (pos >= 0) selectedCars.splice(pos, 1);
+      renderTable();
+      console.error('Detail fetch error', e);
+    }
   }
 
   function removeCar(id) {
@@ -459,12 +534,21 @@
     selectedCars.forEach(car => {
       const th = document.createElement('th');
       th.className = 'col-car';
-      th.innerHTML =
-        '<button class="btn-remove" onclick="removeCar(' + car.id + ')" title="Remover"><i class="fa-solid fa-circle-xmark"></i></button>' +
-        '<div class="car-img-wrap"><div class="car-fallback"><i class="fas fa-car-side"></i><br><small>' + car.make + '</small></div></div>' +
-        '<div class="car-brand">' + car.make + '</div>' +
-        '<span class="car-model">' + car.model + '</span>' +
-        '<span class="car-version">' + car.version + '</span>';
+      if (car._loading) {
+        th.innerHTML =
+          '<button class="btn-remove" onclick="removeCar(' + car.id + ')" title="Remover"><i class="fa-solid fa-circle-xmark"></i></button>' +
+          '<div class="car-img-wrap"><div class="car-fallback"><i class="fa-solid fa-spinner fa-spin"></i></div></div>' +
+          '<div class="car-brand">' + car.make + '</div>' +
+          '<span class="car-model">' + car.model + '</span>' +
+          '<span class="car-version" style="color:#94a3b8">A carregar…</span>';
+      } else {
+        th.innerHTML =
+          '<button class="btn-remove" onclick="removeCar(' + car.id + ')" title="Remover"><i class="fa-solid fa-circle-xmark"></i></button>' +
+          '<div class="car-img-wrap"><div class="car-fallback"><i class="fas fa-car-side"></i><br><small>' + car.make + '</small></div></div>' +
+          '<div class="car-brand">' + car.make + '</div>' +
+          '<span class="car-model">' + car.model + '</span>' +
+          '<span class="car-version">' + car.version + '</span>';
+      }
       hdr.appendChild(th);
     });
 
@@ -486,30 +570,6 @@
   }
 
   loadData();
-
-  /* ── TEMPORARY: debug ── */
-  async function debugData() {
-    const H = {'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID};
-    const q = (query) => fetch(CT_ENDPOINT,{method:'POST',headers:H,body:JSON.stringify({query})}).then(r=>r.json());
-
-    // 1. All available root queries
-    const schema = await q(`{ __schema { queryType { fields { name args { name type { name kind } } } } } }`);
-    const queries = (schema.data?.__schema?.queryType?.fields||[]).map(f=>f.name);
-    console.log('%cAvailable queries','font-weight:bold;color:#10b981', queries.join(', '));
-
-    // 2. Try carList (older API name used in Chargetrip examples)
-    const carList = await q(`{ carList(page:0,size:2){ id naming{make model} } }`);
-    console.log('%ccarList','font-weight:bold;color:#f59e0b', JSON.stringify(carList));
-
-    // 3. vehicleList with country filter
-    const withCountry = await q(`{ vehicleList(page:0,size:1,country:"PT"){ id naming{make model} } }`);
-    console.log('%cvehicleList+country','font-weight:bold;color:#f59e0b', JSON.stringify(withCountry));
-
-    // 4. vehicleList with filter object
-    const withFilter = await q(`{ vehicleList(page:0,size:1,filter:{drivetrains:[BEV]}){ id naming{make model} } }`);
-    console.log('%cvehicleList+filter','font-weight:bold;color:#f59e0b', JSON.stringify(withFilter));
-  }
-  debugData();
   </script>
 </body>
 </html>
