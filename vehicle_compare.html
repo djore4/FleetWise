@@ -221,72 +221,43 @@
       vehicleList(page: $page, size: $size) {
         id
         naming { make model version chargetrip_version }
-        drivetrain { type }
-        connectors { standard power }
         battery { usable_kwh }
         range { chargetrip_range { best worst } }
-        performance { acceleration top_speed }
-        body { segment }
       }
     }`;
 
   const DC_TYPES = new Set(['CCS1','CCS2','CHADEMO','TESLA','GB_T_DC','CHAOJI']);
 
   function ctTransform(v) {
-    const n  = v.naming       || {};
-    const dt = v.drivetrain   || {};
-    const p  = v.performance  || {};
-    const b  = v.battery      || {};
-    const r  = v.range        || {};
-    const bd = v.body         || {};
-    const cs = v.connectors   || [];
+    const n  = v.naming   || {};
+    const b  = v.battery  || {};
+    const r  = v.range    || {};
 
     const make  = (n.make  || '').trim();
     const model = (n.model || '').trim();
     if (!make || !model) return null;
 
-    const dtType = (dt.type || '').toUpperCase();
+    // battery type drives BEV/PHEV detection when drivetrain not available
+    const batType = (b.type || '').toUpperCase();
     let type = null;
-    if (dtType.includes('PHEV') || dtType.includes('PLUG')) type = 'PHEV';
-    else if (dtType.includes('BEV') || dtType === 'ELECTRIC' || dtType === 'EV') type = 'BEV';
+    if (batType.includes('PHEV') || batType.includes('PLUG')) type = 'PHEV';
+    else if (batType.includes('BEV') || batType === 'ELECTRIC') type = 'BEV';
+    // fallback: usable battery > 15 kWh → assume BEV/PHEV (skip micro-hybrids)
+    if (!type && b.usable_kwh >= 5) type = b.usable_kwh >= 30 ? 'BEV' : 'PHEV';
     if (!type) return null;
 
-    // charging
-    let acKw = null, dcKw = null;
-    cs.forEach(c => {
-      const std = (c.standard || '').toUpperCase().replace(/[^A-Z0-9]/g,'_');
-      const pw  = c.max_electric_power || c.power || 0;
-      if (!pw) return;
-      if (DC_TYPES.has(std) || std.includes('CCS') || std.includes('DC')) dcKw = Math.max(dcKw||0, pw);
-      else acKw = Math.max(acKw||0, pw);
-    });
-
-    // range
-    const ct  = r.chargetrip_range || {};
+    const ct = r.chargetrip_range || {};
     let rangeKm = null;
     if (ct.best && ct.worst) rangeKm = Math.round((ct.best + ct.worst) / 2);
     else if (ct.best)        rangeKm = Math.round(ct.best);
-    else if (r.wltp)         rangeKm = Math.round(r.wltp);
-
-    const SEG = {A:'city',B:'hatchback',C:'hatchback',D:'sedan',E:'sedan',
-                 F:'sedan',S:'coupe',M:'minivan',J:'suv'};
-    const seg = bd.segment ? (SEG[bd.segment] || bd.segment.toLowerCase()) : null;
 
     const version = (n.chargetrip_version || n.version || `${make} ${model}`).trim();
 
     return {
       make, model, version, type,
-      power:      null,
-      torque:     null,
-      battery:    b.usable_kwh ? Math.round(b.usable_kwh * 10) / 10 : null,
-      chargeAC:   acKw  ? Math.round(acKw  * 10) / 10 : null,
-      chargeDC:   dcKw  ? Math.round(dcKw  * 10) / 10 : null,
-      range:      rangeKm,
-      accel:      p.acceleration ? Math.round(p.acceleration * 10) / 10 : null,
-      topSpeed:   p.top_speed    ? Math.round(p.top_speed)            : null,
-      segment:    seg,
-      cargo:      null,
-      drivetrain: null,
+      power: null, torque: null, battery: b.usable_kwh ? Math.round(b.usable_kwh * 10) / 10 : null,
+      chargeAC: null, chargeDC: null, range: rangeKm,
+      accel: null, topSpeed: null, segment: null, cargo: null, drivetrain: null,
     };
   }
 
@@ -515,18 +486,16 @@
 
   /* ── TEMPORARY: schema introspection (remove after confirming fields) ── */
   async function debugSchema() {
-    const types = ['VehicleListRange','VehicleListPerformance','VehicleListBody','VehicleListConnector','VehicleListBattery','VehicleListDrivetrain'];
-    const results = {};
+    const types = ['VehicleList','Vehicle','VehicleRange','VehiclePerformance','VehicleConnector','VehicleBody','VehicleDrivetrain'];
     for (const t of types) {
       const r = await fetch(CT_ENDPOINT, {
         method:'POST',
         headers:{'Content-Type':'application/json','x-client-id':CT_CLIENT_ID,'x-app-id':CT_APP_ID},
-        body: JSON.stringify({query:`{ __type(name:"${t}") { fields { name type { name kind } } } }`})
+        body: JSON.stringify({query:`{ __type(name:"${t}") { fields { name type { name kind ofType { name } } } } }`})
       });
       const j = await r.json();
-      const fields = (j.data?.__type?.fields || []).map(f => f.name);
-      results[t] = fields;
-      console.log(`%c${t}`, 'font-weight:bold;color:#10b981', fields.join(', '));
+      const fields = (j.data?.__type?.fields || []).map(f => `${f.name}:${f.type?.ofType?.name||f.type?.name}`);
+      console.log(`%c${t}`, 'font-weight:bold;color:#10b981', fields.length ? fields.join(' | ') : '(empty/not found)');
     }
   }
   debugSchema();
