@@ -2,7 +2,7 @@
 <html lang="pt">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Quem Somos | FleetWise — Equipa de Especialistas em Frotas</title>
     <meta name="description" content="Conheça a equipa FleetWise: especialistas em gestão de frotas, fiscalidade automóvel, operações e mobilidade corporativa em Portugal. Independência, rigor e resultados.">
     <link rel="canonical" href="https://www.fleetwisesolutions.pt/quem_somos.html">
@@ -13,192 +13,446 @@
     <meta property="og:description" content="A equipa FleetWise reúne especialistas em gestão automóvel, fiscalidade corporativa e operações. Independência total, foco no cliente.">
     <meta property="og:image" content="https://www.fleetwisesolutions.pt/img/og-fleetwise.jpg">
     <meta property="og:locale" content="pt_PT">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Quem Somos | FleetWise">
-    <meta name="twitter:description" content="Especialistas em gestão de frotas e fiscalidade automóvel em Portugal.">
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "AboutPage",
-      "url": "https://www.fleetwisesolutions.pt/quem_somos.html",
-      "name": "Quem Somos | FleetWise",
-      "description": "Equipa multidisciplinar de especialistas em gestão de frotas, fiscalidade automóvel e mobilidade corporativa.",
-      "publisher": {
-        "@type": "Organization",
-        "name": "FleetWise",
-        "url": "https://www.fleetwisesolutions.pt"
-      }
-    }
-    </script>
 
     <link rel="icon" type="image/png" href="favicon.png">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    
+
     <style>
-        body { font-family: 'Poppins', sans-serif; background-color: #ffffff; padding-top: 72px; overflow-x: hidden; }
-        .bg-brand-navy { background-color: #0f172a; }
-        .text-brand-green { color: #10b981; }
-        
-        /* --- HEADER PADRONIZADO --- */
-        .sticky-header { 
-            position: fixed; top: 0; left: 0; width: 100%; z-index: 1000; 
-            background: #0f172a; height: 72px; display: flex; 
-            align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); 
+        :root {
+            --navy:  #0f172a;
+            --navy2: #1e293b;
+            --green: #10b981;
+            --green2:#059669;
+            --slate: #64748b;
         }
-        .brand-logo { color: white; font-weight: 700; font-size: 1.5rem; text-decoration: none; }
-        .back-btn { 
-            color: white; text-decoration: none; font-size: 0.85rem; font-weight: 500;
-            padding: 8px 20px; border: 1px solid rgba(255,255,255,0.2); 
-            border-radius: 50px; transition: 0.3s;
-            display: flex; align-items: center;
-        }
-        .back-btn:hover { background: rgba(255,255,255,0.1); border-color: #10b981; }
 
-        /* --- ESTILOS QUEM SOMOS --- */
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background:#fff; overflow-x:hidden; padding-top:72px; }
+
+        /* ── HEADER ── */
+        .sticky-header {
+            position:fixed; top:0; left:0; width:100%; z-index:1000;
+            height:72px; display:flex; align-items:center;
+            background:var(--navy);
+            box-shadow:0 2px 20px rgba(0,0,0,.3);
+        }
+        .brand-logo { display:inline-block; font-size:1.5rem; font-weight:800; color:#fff; text-decoration:none; letter-spacing:-.5px; transition:.3s; }
+        .brand-logo:hover { opacity:.85; }
+
+        .nav-link { color:rgba(255,255,255,.8); font-size:.85rem; font-weight:500; text-decoration:none; transition:.2s; }
+        .nav-link:hover { color:var(--green); }
+
+        .btn-primary {
+            background:var(--green); color:#fff; font-weight:700; font-size:.85rem;
+            padding:.6rem 1.4rem; border-radius:50px; text-decoration:none; display:inline-flex; align-items:center; gap:.4rem;
+            transition:.25s; border:none; cursor:pointer; white-space:nowrap;
+        }
+        .btn-primary:hover { background:var(--green2); transform:translateY(-1px); box-shadow:0 6px 20px rgba(16,185,129,.35); }
+
+        /* mobile */
+        #mobile-menu {
+            position:fixed; top:0; right:-100%; width:85%; max-width:360px; height:100%;
+            background:var(--navy); z-index:2001; transition:.4s cubic-bezier(.4,0,.2,1);
+            padding:2rem; display:flex; flex-direction:column; gap:.5rem;
+            box-shadow:-10px 0 40px rgba(0,0,0,.5);
+        }
+        #mobile-menu.open { right:0; }
+        .mob-link { color:#fff; font-size:1rem; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.08); text-decoration:none; display:block; }
+        .ham { display:none; cursor:pointer; color:#fff; }
+        @media(max-width:1023px) { .desktop-nav { display:none !important; } .ham { display:block; } }
+
+        /* ── SECTION ── */
+        .section-label { font-size:.72rem; font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--green); margin-bottom:.75rem; }
+        .section-title { font-size:clamp(1.8rem,3vw,2.6rem); font-weight:800; color:var(--navy); line-height:1.2; }
+        .section-title em { font-style:normal; color:var(--green); }
+
+        /* ── HERO ── */
+        .page-hero {
+            background: linear-gradient(135deg, var(--navy) 0%, #0d2137 60%, #0a2a1a 100%);
+            padding: 5rem 0 4rem;
+            position: relative; overflow: hidden;
+        }
+        .page-hero::before {
+            content:''; position:absolute; inset:0;
+            background:url('img/53615141658_44ec4a59e3_o.webp') center/cover no-repeat;
+            opacity:.06;
+        }
+        .hero-grid { position:absolute; inset:0; background-image: linear-gradient(rgba(16,185,129,.06) 1px,transparent 1px), linear-gradient(90deg,rgba(16,185,129,.06) 1px,transparent 1px); background-size:60px 60px; }
+
+        /* ── TEAM CARDS ── */
+        .team-card {
+            background:#fff; border:1.5px solid #e2e8f0; border-radius:20px;
+            padding:2rem 1.5rem; transition:.3s; cursor:pointer;
+            display:flex; flex-direction:column; align-items:center; text-align:center;
+        }
+        .team-card:hover, .team-card.active {
+            border-color:var(--green); box-shadow:0 12px 40px rgba(16,185,129,.12); transform:translateY(-4px);
+        }
         .profile-img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 4px solid #f1f5f9;
-            transition: all 0.3s ease;
-            cursor: pointer;
+            width:100px; height:100px; border-radius:50%; object-fit:cover;
+            border:3px solid #e2e8f0; margin-bottom:1rem; transition:.3s;
         }
-        
-        .team-card:hover .profile-img, .team-card.active .profile-img {
-            border-color: #10b981;
-            transform: scale(1.1);
+        .team-card:hover .profile-img, .team-card.active .profile-img { border-color:var(--green); }
+
+        /* ── BIO BOX ── */
+        #bio-box {
+            background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:20px;
+            padding:2rem 2.5rem; min-height:160px;
+            display:flex; align-items:center;
+            transition: opacity .25s;
         }
 
-        /* Zona de Texto Dinâmica */
-        #display-text-container {
-            min-height: 180px;
-            background: #f8fafc;
-            border-radius: 16px;
-            padding: 30px;
-            margin-top: 40px;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        /* ── VALUES ── */
+        .value-card { background:#fff; border:1.5px solid #e2e8f0; border-radius:16px; padding:1.75rem; }
+        .value-icon { width:48px; height:48px; background:rgba(16,185,129,.1); border-radius:12px; display:flex; align-items:center; justify-content:center; margin-bottom:1rem; }
 
-        .instruction-text { color: #94a3b8; font-style: italic; }
+        /* ── FORM ── */
+        .form-input {
+            width:100%; padding:.75rem 1rem; border:1.5px solid #e2e8f0; border-radius:10px;
+            font-family:inherit; font-size:.88rem; color:var(--navy); background:#fff;
+            transition:.2s; outline:none;
+        }
+        .form-input:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(16,185,129,.1); }
+        .form-label { font-size:.8rem; font-weight:600; color:#374151; margin-bottom:.35rem; display:block; }
+
+        /* ── MODAL ── */
+        #demo-modal { display:none; position:fixed; inset:0; z-index:3000; }
+        #demo-modal.open { display:flex; }
+        .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px); }
+        .modal-box { position:relative; z-index:1; background:#fff; border-radius:24px; padding:2.5rem; width:100%; max-width:560px; margin:auto; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,.25); }
+
+        /* ── TOAST ── */
+        #toast { position:fixed; bottom:2rem; right:2rem; background:var(--green); color:#fff; padding:.9rem 1.5rem; border-radius:12px; font-size:.85rem; font-weight:600; box-shadow:0 8px 24px rgba(16,185,129,.4); z-index:5000; opacity:0; transform:translateY(20px); transition:.4s; pointer-events:none; }
+        #toast.show { opacity:1; transform:translateY(0); }
+
+        /* ── FOOTER ── */
+        .footer { background:var(--navy); color:rgba(255,255,255,.6); }
+        .footer h4 { color:#fff; font-weight:700; font-size:.95rem; margin-bottom:1rem; }
+        .footer a { color:rgba(255,255,255,.6); text-decoration:none; font-size:.83rem; transition:.2s; display:block; margin-bottom:.5rem; }
+        .footer a:hover { color:var(--green); }
     </style>
 </head>
-<body class="text-slate-900">
+<body>
 
-    <header class="sticky-header">
-        <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
-            <a href="index.html" class="brand-logo">
-                <span class="text-brand-green">Fleet</span>Wise
-            </a>
-            <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left mr-2"></i> Voltar</a>
-        </div>
-    </header>
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="sticky-header">
+    <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
+        <a href="index.html" class="brand-logo"><span style="color:var(--green)">Fleet</span>Wise</a>
 
-    <section class="py-20 bg-slate-50">
-        <div class="max-w-4xl mx-auto px-4 text-center" data-aos="fade-up">
-            <h1 class="text-4xl font-bold text-brand-navy mb-6"><span class="text-brand-green">Quem</span> somos</h1>
-            <div class="space-y-6 text-lg text-slate-600 leading-relaxed text-justify">
-                <p>A <span class="font-bold text-brand-navy">FleetWise</span> nasceu com uma missão clara: transformar a gestão de frotas em Portugal, elevando-a de uma tarefa administrativa para um ativo estratégico. Num mercado marcado pela complexidade fiscal, volatilidade energética e burocracia, as empresas precisam de parceiros que defendam os seus interesses. Somos uma consultora independente, focada exclusivamente na otimização do TCO e na eficiência operacional.</p>
-                <p>Não vendemos carros. Desenhamos soluções de mobilidade que equilibram as necessidades dos seus Clientes com os objetivos financeiros da sua empresa.</p>
-            </div>
-        </div>
-    </section>
+        <nav class="desktop-nav flex items-center gap-8">
+            <a href="index.html#servicos" class="nav-link">Serviços</a>
+            <a href="vehicle_compare.html" class="nav-link">Comparador xEV</a>
+            <a href="quem_somos.html" class="nav-link" style="color:var(--green)">Quem Somos</a>
+            <button onclick="openModal()" class="btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Agendar Reunião
+            </button>
+        </nav>
 
-    <section class="py-12">
-        <div class="max-w-6xl mx-auto px-4">
-            
-            <div class="grid grid-cols-2 md:grid-cols-5 gap-8">
-                
-                <div class="team-card text-center group" onmouseover="showText('gerson')" onclick="showText('gerson')">
-                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200" class="profile-img mx-auto mb-4 shadow-lg">
-                    <h3 class="text-lg text-brand-green">Gerson Tavares</h3>
-                    <p class="text-xs text-brand-navy font-bold uppercase tracking-tight">Gestão & Account Manager</p>
-                </div>
-
-                <div class="team-card text-center group" onmouseover="showText('joao')" onclick="showText('joao')">
-                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=200" class="profile-img mx-auto mb-4 shadow-lg">
-                    <h3 class="text-lg text-brand-green">João Duarte</h3>
-                    <p class="text-xs text-brand-navy font-bold uppercase tracking-tight">Eng. Mecânica & Dir. Comercial</p>
-                </div>
-
-                <div class="team-card text-center group" onmouseover="showText('luis')" onclick="showText('luis')">
-                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200" class="profile-img mx-auto mb-4 shadow-lg">
-                    <h3 class="text-lg text-brand-green">Luís Vergueiro</h3>
-                    <p class="text-xs text-brand-navy font-bold uppercase tracking-tight">Eng. Alimentar & Gestão</p>
-                </div>
-
-                <div class="team-card text-center group" onmouseover="showText('nuno')" onclick="showText('nuno')">
-                    <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=200" class="profile-img mx-auto mb-4 shadow-lg">
-                    <h3 class="text-lg text-brand-green">Nuno Nápoles</h3>
-                    <p class="text-xs text-brand-navy font-bold uppercase tracking-tight">Marketing & Gestão Comercial</p>
-                </div>
-
-                <div class="team-card text-center group" onmouseover="showText('rui')" onclick="showText('rui')">
-                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200" class="profile-img mx-auto mb-4 shadow-lg">
-                    <h3 class="text-lg text-brand-green">Rui Coelho</h3>
-                    <p class="text-xs text-brand-navy font-bold uppercase tracking-tight">Psicologia & Pessoas</p>
-                </div>
-
-            </div>
-
-            <div id="display-text-container" data-aos="fade-up">
-                <p id="dynamic-text" class="text-slate-600 text-center leading-relaxed max-w-4xl instruction-text">
-                    Passe o rato ou clique na fotografia para saber mais sobre nós.
-                </p>
-            </div>
-
-        </div>
-    </section>
-
-    <div id="db-texts" style="display:none;">
-        <div id="txt-gerson">Profissional com formação em Gestão de Empresas e percurso internacional no setor industrial e automóvel (Yazaki EMEA). A experiência como Project e Account Manager em contextos B2B complexos permitiu-lhe desenvolver competências sólidas em gestão de projetos, Risk Management, controlo de P&L e desenvolvimento de negócio. Contribui para a FleetWise com uma perspetiva estratégica orientada para a implementação e execução de projetos de maior risco, assegurando a entrega de valor e a sustentabilidade operacional do plano de negócios.</div>
-        
-        <div id="txt-joao">Como Diretor Comercial na Caetano BMW, aporta uma combinação crítica de rigor técnico e de visão de negócio. A sua experiência profissional é marcada por uma vasta experiência no setor automóvel, onde desempenhou funções de liderança em marcas do segmento premium. O conhecimento profundo do ecossistema de retalho automóvel, gestão de vendas e estratégia de produto são ativos fundamentais para estruturar as funções “core” da Fleetwise, garantindo que o modelo de negócio está alinhado com as exigências técnicas e dinâmicas de rentabilidade do mercado automóvel.</div>
-        
-        <div id="txt-luis">O seu percurso como Diretor Geral do Lidl Portugal aporta uma visão sénior e crítica sobre a gestão de ativos. Com vasta experiência na liderança de operações de larga escala, o seu contributo é diferenciador na definição de modelos de eficiência operacional. A competência em otimização de processos, garante à FleetWise o rigor necessário para desenhar soluções de mobilidade que maximizem a rentabilidade e escalabilidade do negócio.</div>
-        
-        <div id="txt-nuno">Acrescenta à FleetWise uma combinação estratégica de rigor académico e experiência multissetorial em negociação e desenvolvimento de negócio. Com um percurso consolidado em marcas de referência como Sumol Compal, Glovo e Sogrape, o seu diferencial reside no conhecimento operacional direto do setor automóvel, adquirido na Peugeot Rent - Gamobar. Esta visão prática em gestão de frotas, aliada à competência em consultoria e inovação desenvolvida na B2Innovation, é fundamental para estruturar modelos de rentabilidade e soluções de mobilidade disruptivas para a consultora.</div>
-        
-        <div id="txt-rui">Profissional de Gestão de Pessoas com formação em Psicologia Organizacional e experiência nas áreas de talento, desempenho, liderança e cultura, tendo passado por empresas de retalho (Sonae), indústria (Efacec) e financeiro/seguros (Grupo Ageas Portugal). Trabalhou inclusive ao nível internacional, em Angola, numa empresa de retalho e investimento (Carrinho Empreendimentos), como responsável de Recursos Humanos. Contribui para o projeto com uma perspetiva humana e estruturada, garantindo que a FleetWise integra desde início práticas consistentes de competências, desenvolvimento e gestão da mudança alinhadas com o comportamento organizacional.</div>
+        <button class="ham" onclick="toggleMenu()" aria-label="Menu">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
     </div>
+</header>
 
-    <footer class="bg-brand-navy text-slate-500 py-12 text-center text-sm border-t border-slate-800">
-        <div class="max-w-7xl mx-auto px-4">
-            <p>Copyright © 2026 FleetWise.</p>
+<!-- Mobile Menu -->
+<div id="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+        <span style="font-size:1.3rem;font-weight:800;display:inline-block;"><span style="color:var(--green)">Fleet</span><span style="color:#fff;">Wise</span></span>
+        <button onclick="toggleMenu()" style="color:#fff;font-size:2rem;line-height:1;background:none;border:none;cursor:pointer;">&times;</button>
+    </div>
+    <a href="index.html#servicos" class="mob-link" onclick="toggleMenu()">Serviços</a>
+    <a href="vehicle_compare.html" class="mob-link">Comparador xEV</a>
+    <a href="quem_somos.html" class="mob-link" style="color:var(--green)">Quem Somos</a>
+    <button onclick="toggleMenu(); openModal();" style="margin-top:1.5rem;width:100%;background:var(--green);color:#fff;font-weight:700;padding:1rem;border-radius:12px;border:none;cursor:pointer;font-size:1rem;">Agendar Reunião / Demo</button>
+</div>
+<div id="menu-overlay" onclick="toggleMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;"></div>
+
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="page-hero">
+    <div class="hero-grid"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10 text-center" data-aos="fade-up">
+        <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(16,185,129,.15);border:1px solid rgba(16,185,129,.3);color:var(--green);font-size:.75rem;font-weight:600;padding:.35rem .9rem;border-radius:50px;margin-bottom:1.5rem;">
+            <span style="width:6px;height:6px;background:var(--green);border-radius:50%;"></span>
+            Consultora independente · Portugal
         </div>
-    </footer>
+        <h1 style="font-size:clamp(2.2rem,5vw,3.5rem);font-weight:800;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:1.5rem;">
+            A equipa por trás<br><em style="font-style:normal;color:var(--green);">da sua frota</em>
+        </h1>
+        <p style="color:rgba(255,255,255,.7);font-size:clamp(.95rem,1.5vw,1.1rem);line-height:1.75;max-width:600px;margin:0 auto;">
+            Nascemos com uma missão clara: transformar a gestão de frotas em Portugal de uma tarefa administrativa num ativo estratégico. Somos independentes, atuamos exclusivamente do lado do cliente.
+        </p>
+    </div>
+</section>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script>
-        AOS.init({ duration: 800, once: true });
 
-        function showText(personId) {
-            const textContent = document.getElementById('txt-' + personId).innerHTML;
-            const displayElement = document.getElementById('dynamic-text');
-            const container = document.getElementById('display-text-container');
-            
-            // Remove a classe de instrução se existir
-            displayElement.classList.remove('instruction-text');
-            
-            // Efeito visual de troca
-            displayElement.style.opacity = 0;
-            setTimeout(() => {
-                displayElement.innerHTML = textContent;
-                displayElement.style.opacity = 1;
-                displayElement.style.textAlign = "justify";
-            }, 200);
-            
-            // Destaca a foto ativa
-            document.querySelectorAll('.team-card').forEach(card => card.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-        }
-    </script>
+<!-- ══════════════ VALORES ══════════════ -->
+<section style="padding:5rem 0;background:#f8fafc;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <div class="section-label">O que nos define</div>
+            <h2 class="section-title">Independência.<br><em>Sem conflitos de interesse.</em></h2>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            <div class="value-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="value-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1rem;margin-bottom:.6rem;">100% Independentes</h3>
+                <p style="font-size:.84rem;color:var(--slate);line-height:1.7;">Não representamos nenhuma locadora, fabricante ou financeira. Os nossos incentivos estão alinhados com os do cliente — e só com os do cliente.</p>
+            </div>
+
+            <div class="value-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="value-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                </div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1rem;margin-bottom:.6rem;">Modelo Success Fee</h3>
+                <p style="font-size:.84rem;color:var(--slate);line-height:1.7;">Alinhamos os nossos resultados com os seus. Na Radiografia TCO, só pagam os clientes que poupam. Risco mínimo de entrada, máximo de comprometimento da nossa parte.</p>
+            </div>
+
+            <div class="value-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="value-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+                </div>
+                <h3 style="font-weight:700;color:var(--navy);font-size:1rem;margin-bottom:.6rem;">Domínio Fiscal & Operacional</h3>
+                <p style="font-size:.84rem;color:var(--slate);line-height:1.7;">Tributação Autónoma, benefícios BEV/PHEV, IVA, IRC — dominamos a fiscalidade automóvel que a maioria das PMEs desconhece. Essa é a nossa vantagem competitiva.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════ EQUIPA ══════════════ -->
+<section style="padding:5rem 0;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12" data-aos="fade-up">
+            <div class="section-label">As pessoas</div>
+            <h2 class="section-title">Cinco áreas de expertise,<br><em>um só objetivo</em></h2>
+        </div>
+
+        <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+
+            <div class="team-card" data-aos="fade-up" data-aos-delay="100" onmouseover="showBio('gerson', this)" onclick="showBio('gerson', this)">
+                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=200" class="profile-img" alt="Gerson Tavares">
+                <h3 style="font-weight:700;color:var(--navy);font-size:.9rem;margin-bottom:.25rem;">Gerson Tavares</h3>
+                <p style="font-size:.72rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.05em;">Gestão & Account</p>
+            </div>
+
+            <div class="team-card" data-aos="fade-up" data-aos-delay="150" onmouseover="showBio('joao', this)" onclick="showBio('joao', this)">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200" class="profile-img" alt="João Duarte">
+                <h3 style="font-weight:700;color:var(--navy);font-size:.9rem;margin-bottom:.25rem;">João Duarte</h3>
+                <p style="font-size:.72rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.05em;">Dir. Comercial</p>
+            </div>
+
+            <div class="team-card" data-aos="fade-up" data-aos-delay="200" onmouseover="showBio('luis', this)" onclick="showBio('luis', this)">
+                <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=200" class="profile-img" alt="Luís Vergueiro">
+                <h3 style="font-weight:700;color:var(--navy);font-size:.9rem;margin-bottom:.25rem;">Luís Vergueiro</h3>
+                <p style="font-size:.72rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.05em;">Operações Sénior</p>
+            </div>
+
+            <div class="team-card" data-aos="fade-up" data-aos-delay="250" onmouseover="showBio('nuno', this)" onclick="showBio('nuno', this)">
+                <img src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=200" class="profile-img" alt="Nuno Nápoles">
+                <h3 style="font-weight:700;color:var(--navy);font-size:.9rem;margin-bottom:.25rem;">Nuno Nápoles</h3>
+                <p style="font-size:.72rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.05em;">Marketing & Comercial</p>
+            </div>
+
+            <div class="team-card" data-aos="fade-up" data-aos-delay="300" onmouseover="showBio('rui', this)" onclick="showBio('rui', this)">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&q=80&w=200" class="profile-img" alt="Rui Coelho">
+                <h3 style="font-weight:700;color:var(--navy);font-size:.9rem;margin-bottom:.25rem;">Rui Coelho</h3>
+                <p style="font-size:.72rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.05em;">Pessoas & Cultura</p>
+            </div>
+
+        </div>
+
+        <div id="bio-box" data-aos="fade-up">
+            <p id="bio-text" style="font-size:.88rem;color:var(--slate);line-height:1.8;font-style:italic;text-align:center;width:100%;">
+                Passe o rato ou clique numa foto para conhecer cada membro da equipa.
+            </p>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ══════════════ CTA ══════════════ -->
+<section style="background:linear-gradient(135deg,var(--navy) 0%,#0d2137 100%);padding:5rem 0;text-align:center;">
+    <div class="max-w-2xl mx-auto px-4" data-aos="fade-up">
+        <div class="section-label" style="color:var(--green);">Próximo passo</div>
+        <h2 style="font-size:clamp(1.8rem,3vw,2.4rem);font-weight:800;color:#fff;margin-bottom:1rem;">
+            Vamos falar sobre<br><span style="color:var(--green)">a sua frota?</span>
+        </h2>
+        <p style="color:rgba(255,255,255,.65);font-size:.95rem;line-height:1.75;margin-bottom:2rem;">
+            Uma conversa de 30 minutos pode revelar oportunidades de poupança que a sua empresa desconhece. Sem compromisso, sem custo.
+        </p>
+        <button onclick="openModal()" class="btn-primary" style="font-size:1rem;padding:.8rem 2rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+            Agendar Reunião Gratuita
+        </button>
+    </div>
+</section>
+
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="footer" style="padding:4rem 0 2rem;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+
+            <div class="md:col-span-2">
+                <span style="font-size:1.5rem;font-weight:800;display:inline-block;margin-bottom:1rem;"><span style="color:var(--green)">Fleet</span><span style="color:#fff;">Wise</span></span>
+                <p style="font-size:.83rem;line-height:1.8;max-width:360px;margin-bottom:1.5rem;">A consultora independente que transforma a gestão de frotas em Portugal num ativo estratégico. Simplifique, Otimize, Rentabilize.</p>
+                <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+                    <a href="mailto:geral@fleetwise.pt" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        geral@fleetwise.pt
+                    </a>
+                    <a href="tel:+351914038167" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.1 1.18 2 2 0 012.07 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.55-.55a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+                        914 038 167
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h4>Serviços</h4>
+                <a href="index.html#svc-auditoria">Auditoria &amp; Diagnóstico TCO</a>
+                <a href="index.html#svc-procurement">Procurement &amp; Negociação</a>
+                <a href="index.html#svc-gestao">Gestão Operacional</a>
+                <a href="index.html#servicos">Fim de Ciclo</a>
+            </div>
+
+            <div>
+                <h4>Ferramentas</h4>
+                <a href="TCO_simulator.html">Simulador TCO</a>
+                <a href="vehicle_compare.html">Comparador xEV / BEV</a>
+                <a href="quem_somos.html">Quem Somos</a>
+                <div style="margin-top:1rem;">
+                    <button onclick="openModal()" style="background:var(--green);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:50px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;" onmouseover="this.style.background='var(--green2)'" onmouseout="this.style.background='var(--green)'">
+                        Agendar Reunião →
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:2rem;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;">
+            <p style="font-size:.75rem;color:rgba(255,255,255,.4);">Copyright © 2026 FleetWise, Unipessoal, Lda. · Portugal</p>
+            <p style="font-size:.75rem;color:rgba(255,255,255,.4);">Simplifique, Otimize, Rentabilize.</p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- ══════════════ MODAL ══════════════ -->
+<div id="demo-modal">
+    <div class="modal-bg" onclick="closeModal()"></div>
+    <div class="modal-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;">
+            <div>
+                <h3 style="font-weight:800;color:var(--navy);font-size:1.3rem;margin-bottom:.3rem;">Agendar Reunião</h3>
+                <p style="font-size:.82rem;color:var(--slate);">Diagnóstico gratuito de 45 min · Resposta em 24h</p>
+            </div>
+            <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;color:var(--slate);font-size:1.5rem;line-height:1;padding:.25rem;">&times;</button>
+        </div>
+        <form onsubmit="submitForm(event)" novalidate>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                    <label class="form-label">Nome *</label>
+                    <input type="text" class="form-input" placeholder="O seu nome" required>
+                </div>
+                <div>
+                    <label class="form-label">Empresa *</label>
+                    <input type="text" class="form-input" placeholder="Empresa" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Email *</label>
+                <input type="email" class="form-input" placeholder="email@empresa.pt" required>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Telefone</label>
+                <input type="tel" class="form-input" placeholder="+351 9xx xxx xxx">
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Número de viaturas</label>
+                <select class="form-input">
+                    <option>Selecione...</option>
+                    <option>3 – 10 viaturas</option>
+                    <option>10 – 30 viaturas</option>
+                    <option>30 – 100 viaturas</option>
+                    <option>+ 100 viaturas</option>
+                </select>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:.9rem;">
+                Enviar pedido →
+            </button>
+            <p style="font-size:.72rem;color:var(--slate);text-align:center;margin-top:.6rem;">Tratamos os seus dados com total confidencialidade (RGPD).</p>
+        </form>
+    </div>
+</div>
+
+<div id="toast">✓ Pedido enviado com sucesso! Contactamos em 24h.</div>
+
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 800, once: true, offset: 60 });
+
+    function toggleMenu() {
+        const m = document.getElementById('mobile-menu');
+        const o = document.getElementById('menu-overlay');
+        const isOpen = m.classList.toggle('open');
+        o.style.display = isOpen ? 'block' : 'none';
+    }
+
+    function openModal() {
+        document.getElementById('demo-modal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+        document.getElementById('demo-modal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+    function submitForm(e) {
+        e.preventDefault();
+        closeModal();
+        const t = document.getElementById('toast');
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 4000);
+    }
+
+    const bios = {
+        gerson: 'Profissional com formação em Gestão de Empresas e percurso internacional no setor industrial e automóvel (Yazaki EMEA). Desenvolve a FleetWise com uma perspetiva estratégica orientada para a execução de projetos complexos, gestão de P&L e sustentabilidade operacional.',
+        joao: 'Como Diretor Comercial na Caetano BMW, combina rigor técnico e visão de negócio. O conhecimento profundo do ecossistema automóvel premium e da gestão de frotas é fundamental para estruturar o core da FleetWise.',
+        luis: 'Ex-Diretor Geral do Lidl Portugal. A sua vasta experiência na liderança de operações de larga escala e otimização de processos garante à FleetWise o rigor necessário para maximizar a rentabilidade e escalabilidade das soluções.',
+        nuno: 'Percurso consolidado em marcas como Sumol Compal, Glovo e Peugeot Rent. Combina visão estratégica de marketing com conhecimento direto do setor automóvel, sendo fundamental para estruturar modelos de rentabilidade e crescimento.',
+        rui: 'Psicólogo Organizacional com experiência em Sonae, Efacec e Grupo Ageas. Garante que a FleetWise integra desde o início práticas sólidas de talento, liderança e cultura organizacional — incluindo experiência internacional em Angola.'
+    };
+
+    let activeCard = null;
+
+    function showBio(person, card) {
+        if (activeCard) activeCard.classList.remove('active');
+        card.classList.add('active');
+        activeCard = card;
+
+        const box = document.getElementById('bio-box');
+        const text = document.getElementById('bio-text');
+        box.style.opacity = 0;
+        setTimeout(() => {
+            text.style.fontStyle = 'normal';
+            text.style.textAlign = 'left';
+            text.innerHTML = bios[person];
+            box.style.opacity = 1;
+        }, 200);
+    }
+</script>
 </body>
 </html>
