@@ -234,6 +234,43 @@
       .fw-table th, .fw-table td { font-size:.72rem; padding:.4rem .4rem; }
       .page-hero { padding:2rem 0 1.5rem; }
     }
+
+    /* ── TOOLBAR ── */
+    .fw-toolbar {
+      padding:.6rem 1.25rem;
+      background:#f8fafc;
+      border-bottom:1px solid #e2e8f0;
+      display:flex; justify-content:flex-end; align-items:center; gap:.5rem;
+    }
+    .btn-sm {
+      padding:.35rem .9rem; border-radius:50px; font-size:.73rem; font-weight:600;
+      cursor:pointer; font-family:'Poppins',sans-serif; transition:.2s;
+    }
+    .btn-sm-outline {
+      border:1.5px solid #cbd5e1; color:#475569; background:#fff;
+    }
+    .btn-sm-outline:hover { border-color:var(--green); color:var(--green); }
+    .btn-sm-dark {
+      border:1.5px solid var(--navy); color:var(--navy); background:#fff;
+    }
+    .btn-sm-dark:hover { background:var(--navy); color:#fff; }
+
+    /* editable label cells */
+    td[contenteditable="true"] { cursor:text; }
+    td[contenteditable="true"]:focus { outline:2px solid var(--green); border-radius:4px; }
+
+    /* PHEV IVA note row */
+    .fw-phev-note-row td { background:#fefce8; border-bottom:1px solid #fef08a; color:#854d0e !important; font-size:.73rem; font-weight:500; font-style:italic; }
+    .fw-phev-note-row td:first-child { color:#854d0e !important; }
+
+    /* ── PRINT ── */
+    @media print {
+      .sticky-header, #mobile-menu, #menu-overlay, .cta-bar, .site-footer,
+      .page-hero, .fw-context-bar, .fw-global-inputs, .fw-toolbar, .fw-info-bar { display:none !important; }
+      body { padding-top:0 !important; background:#fff; }
+      .sim-card { box-shadow:none !important; border:none !important; }
+      main { padding:0 !important; }
+    }
   </style>
 </head>
 <body>
@@ -362,6 +399,12 @@
         Selecione o contexto acima para ver as implicações fiscais aplicáveis.
       </div>
 
+      <!-- ── TOOLBAR ── -->
+      <div class="fw-toolbar">
+        <button class="btn-sm btn-sm-outline" onclick="window.resetSimulator()">↺ Repor Valores</button>
+        <button class="btn-sm btn-sm-dark" onclick="window.print()">⎙ Imprimir / PDF</button>
+      </div>
+
       <!-- Global Inputs -->
       <div class="fw-global-inputs">
         <div class="fw-g-field">
@@ -436,6 +479,14 @@
               <td class="fw-col-data"><input type="text" id="renda_3" class="fw-cell-input" value="1.100" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
             </tr>
 
+            <!-- Valor Residual — shown only in acquisition mode -->
+            <tr id="row_vr">
+              <td>Valor residual estimado (€)</td>
+              <td class="fw-col-data"><input type="text" id="vr_1" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)" title="Valor de venda estimado no fim do contrato. Reduz o custo de capital."></td>
+              <td class="fw-col-data"><input type="text" id="vr_2" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)" title="Valor de venda estimado no fim do contrato. Reduz o custo de capital."></td>
+              <td class="fw-col-data"><input type="text" id="vr_3" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)" title="Valor de venda estimado no fim do contrato. Reduz o custo de capital."></td>
+            </tr>
+
             <tr class="row-fuel">
               <td>Consumo (L/100km)</td>
               <td class="fw-col-data"><input type="text" id="cons_fuel_1" class="fw-cell-input" value="6,2" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 1)"></td>
@@ -482,19 +533,19 @@
               <td class="fw-col-data"><input type="text" id="tolls_3" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
             </tr>
             <tr>
-              <td>Cartrack</td>
+              <td>Telemetria / GPS</td>
               <td class="fw-col-data"><input type="text" id="tele_1" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
               <td class="fw-col-data"><input type="text" id="tele_2" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
               <td class="fw-col-data"><input type="text" id="tele_3" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
             </tr>
             <tr>
-              <td>Serviço adicional 1</td>
+              <td contenteditable="true" title="Clique para personalizar (ex: gestão de frota, card combustível…)">Serviço adicional 1</td>
               <td class="fw-col-data"><input type="text" id="serv1_1" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
               <td class="fw-col-data"><input type="text" id="serv1_2" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
               <td class="fw-col-data"><input type="text" id="serv1_3" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
             </tr>
             <tr>
-              <td>Serviço adicional 2</td>
+              <td contenteditable="true" title="Clique para personalizar (ex: parqueamento, portagens anuais…)">Serviço adicional 2</td>
               <td class="fw-col-data"><input type="text" id="serv2_1" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
               <td class="fw-col-data"><input type="text" id="serv2_2" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
               <td class="fw-col-data"><input type="text" id="serv2_3" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
@@ -515,6 +566,14 @@
               <td class="fw-col-data" id="iva_status_2">-</td>
               <td class="fw-col-data" id="iva_status_3">-</td>
             </tr>
+
+            <!-- PHEV IVA note — shown when any column is PHEV -->
+            <tr id="row_phev_iva_note" class="fw-phev-note-row" style="display:none;">
+              <td colspan="4">
+                ⚠️ PHEV: dedução de IVA (50%) condicionada a autonomia elétrica ≥ 50 km (art.º 21.º n.º 1 al. a) CIVA). Verifique homologação WLTP antes de aplicar.
+              </td>
+            </tr>
+
             <!-- IVA recuperado -->
             <tr>
               <td>IVA recuperado (€)</td>
@@ -824,8 +883,9 @@
     var ctx = window.getCtx();
     var isRenting = (ctx.mod === 'rnt');
 
-    // Show/hide renting row
+    // Show/hide renting row and VR row (mutually exclusive)
     document.getElementById('row_renda').style.display = isRenting ? '' : 'none';
+    document.getElementById('row_vr').style.display    = isRenting ? 'none' : '';
 
     // Label for price row
     document.getElementById('lbl_price').innerText =
@@ -833,11 +893,19 @@
 
     // Label for capital cost in summary
     document.getElementById('lbl_capital').innerText =
-      isRenting ? 'Custo de capital (renda anual)' : 'Custo de capital (amort.)';
+      isRenting ? 'Custo de capital (renda anual)' : 'Custo de capital (amort. – VR)';
 
     // Show/hide fringe benefit note
     document.getElementById('row_fringe').style.display =
       (ctx.afetacao === 'mirs') ? '' : 'none';
+
+    // Show PHEV IVA note when any column is PHEV and IVA is not exempt
+    var hasPhev = false;
+    for (var j = 1; j <= 3; j++) {
+      if (document.getElementById('type_' + j).value === 'PHEV') { hasPhev = true; break; }
+    }
+    document.getElementById('row_phev_iva_note').style.display =
+      (hasPhev && ctx.iva !== 'ise') ? '' : 'none';
 
     // Enable/disable consumption inputs based on vehicle type
     for (var i = 1; i <= 3; i++) {
@@ -912,16 +980,19 @@
       if (ctx.mod === 'rnt') {
         mainCost = window.getVal('renda_' + i) * 12;
       } else {
-        mainCost = acq / years;
+        var vr = Math.max(0, window.getVal('vr_' + i));
+        mainCost = Math.max(0, acq - vr) / years;
       }
 
-      /* TA */
+      /* TA — art.º 88.º n.º 3 CIRC
+         Renting : encargos = renda + opex + energia
+         Aquisição: encargos = opex + energia (capital/amortização excluído da base TA) */
       var taRate = window.calcTaRate(type, acq, ctx);
       var taBase;
       if (ctx.mod === 'rnt') {
-        taBase = mainCost + energy;
-      } else {
         taBase = mainCost + opex + energy;
+      } else {
+        taBase = opex + energy;
       }
       var taVal = taBase * taRate;
 
@@ -976,6 +1047,62 @@
       window.setTxt('out_sav_mes_' + c, window.formatCustom(savM, 0, '€'), savA);
       window.setTxt('out_sav_km_'  + c, window.formatCustom(savK, 2, '€'), savA);
     }
+  };
+
+  /* ── RESET ── */
+  window.resetSimulator = function() {
+    var d = document;
+    // Context
+    d.getElementById('ctx_cat').value     = 'pass';
+    d.getElementById('ctx_afetacao').value= 'excl';
+    d.getElementById('ctx_mod').value     = 'acq';
+    d.getElementById('ctx_iva').value     = 'tot';
+    d.getElementById('ctx_prej').value    = 'nao';
+    d.getElementById('ctx_irc').value     = '21';
+    // Global inputs
+    d.getElementById('g_qty').value       = '1';
+    d.getElementById('g_kms').value       = '25.000';
+    d.getElementById('g_years').value     = '4';
+    d.getElementById('g_fuel').value      = '1,75';
+    d.getElementById('g_kwh').value       = '0,14';
+    // Column types
+    d.getElementById('type_1').value      = 'ICE';
+    d.getElementById('type_2').value      = 'PHEV';
+    d.getElementById('type_3').value      = 'BEV';
+    // Prices
+    d.getElementById('price_1').value     = '40.000';
+    d.getElementById('price_2').value     = '49.990';
+    d.getElementById('price_3').value     = '62.490';
+    // VR
+    d.getElementById('vr_1').value        = '0';
+    d.getElementById('vr_2').value        = '0';
+    d.getElementById('vr_3').value        = '0';
+    // Renda
+    d.getElementById('renda_1').value     = '800';
+    d.getElementById('renda_2').value     = '950';
+    d.getElementById('renda_3').value     = '1.100';
+    // Consumption
+    d.getElementById('cons_fuel_1').value = '6,2';
+    d.getElementById('cons_fuel_2').value = '4,0';
+    d.getElementById('cons_fuel_3').value = '0';
+    d.getElementById('cons_elec_1').value = '0';
+    d.getElementById('cons_elec_2').value = '14,0';
+    d.getElementById('cons_elec_3').value = '17,0';
+    // OpEx defaults
+    var opexDefs = {
+      maint: [450,400,150], tires: [250,250,350], iuc:  [260,140,0],
+      ins:   [650,650,750], tolls: [0,0,0],       tele: [0,0,0],
+      serv1: [0,0,0],       serv2: [0,0,0],       recon:[250,250,250]
+    };
+    for (var f in opexDefs) {
+      for (var j = 1; j <= 3; j++) {
+        var el = d.getElementById(f + '_' + j);
+        if (el) el.value = window.formatCustom(opexDefs[f][j-1], 0, '').trim();
+      }
+    }
+    window.updateUI();
+    window.updateInfoBar();
+    window.calcFleetWise();
   };
 
   document.addEventListener('DOMContentLoaded', function() {
