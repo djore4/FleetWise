@@ -559,6 +559,29 @@
               </td>
             </tr>
 
+            <!-- EV share — % of km driven in electric mode; controls ICE/EV km split for PHEV -->
+            <tr>
+              <td title="Percentagem dos km anuais percorridos em modo eléctrico (bateria). Os restantes km usam o motor de combustão. ICE = 0%, BEV = 100%, PHEV = ajustável.">% km modo EV</td>
+              <td class="fw-col-data">
+                <div class="cons-gauge" id="gauge_ev_1" data-disabled="1">
+                  <div class="cons-gauge-hd"><span class="cons-gauge-val"><span id="dsp_ev_share_1">0</span>%</span><span class="cons-gauge-unit">modo EV</span></div>
+                  <input type="range" id="ev_share_1" class="cons-slider" min="0" max="100" step="5" value="0" disabled oninput="window.syncConsDisplay(this); window.calcFleetWise();">
+                </div>
+              </td>
+              <td class="fw-col-data">
+                <div class="cons-gauge" id="gauge_ev_2">
+                  <div class="cons-gauge-hd"><span class="cons-gauge-val"><span id="dsp_ev_share_2">40</span>%</span><span class="cons-gauge-unit">modo EV</span></div>
+                  <input type="range" id="ev_share_2" class="cons-slider" min="0" max="100" step="5" value="40" oninput="window.syncConsDisplay(this); window.calcFleetWise();">
+                </div>
+              </td>
+              <td class="fw-col-data">
+                <div class="cons-gauge" id="gauge_ev_3" data-disabled="1">
+                  <div class="cons-gauge-hd"><span class="cons-gauge-val"><span id="dsp_ev_share_3">100</span>%</span><span class="cons-gauge-unit">modo EV</span></div>
+                  <input type="range" id="ev_share_3" class="cons-slider" min="0" max="100" step="5" value="100" disabled oninput="window.syncConsDisplay(this); window.calcFleetWise();">
+                </div>
+              </td>
+            </tr>
+
             <tr class="fw-section-title"><td colspan="4">Custos Operacionais (Anuais / Viatura)</td></tr>
 
             <tr class="fw-row-computed">
@@ -860,12 +883,12 @@
     var min = parseFloat(slider.min || 0);
     var max = parseFloat(slider.max || 1);
     var pct = ((val - min) / (max - min)) * 100;
-    // Filled track gradient
     slider.style.background =
       'linear-gradient(to right,var(--green) 0%,var(--green) ' + pct + '%,#e2e8f0 ' + pct + '%,#e2e8f0 100%)';
-    // Value label
+    // Integer step sliders (e.g. EV share %) show 0 decimals; sub-unit sliders show 1
+    var decimals = (parseFloat(slider.step || 0.1) >= 1) ? 0 : 1;
     var dspEl = document.getElementById('dsp_' + slider.id);
-    if (dspEl) dspEl.innerText = window.formatCustom(val, 1, '').trim();
+    if (dspEl) dspEl.innerText = window.formatCustom(val, decimals, '').trim();
   };
 
   window.fmtInput = function(el, decimals) {
@@ -1031,24 +1054,36 @@
       if (ftEl) ftEl.style.display = (type === 'BEV') ? 'none' : '';
     }
 
-    // Enable/disable consumption gauges based on vehicle type
+    // Enable/disable consumption gauges and EV share slider based on vehicle type
     for (var i = 1; i <= 3; i++) {
-      var type    = document.getElementById('type_' + i).value;
-      var fSlider = document.getElementById('cons_fuel_' + i);
-      var eSlider = document.getElementById('cons_elec_' + i);
-      var fGauge  = document.getElementById('gauge_fuel_' + i);
-      var eGauge  = document.getElementById('gauge_elec_' + i);
+      var type     = document.getElementById('type_' + i).value;
+      var fSlider  = document.getElementById('cons_fuel_' + i);
+      var eSlider  = document.getElementById('cons_elec_' + i);
+      var fGauge   = document.getElementById('gauge_fuel_' + i);
+      var eGauge   = document.getElementById('gauge_elec_' + i);
+      var evSlider = document.getElementById('ev_share_' + i);
+      var evGauge  = document.getElementById('gauge_ev_' + i);
+
       if (type === 'ICE') {
-        fSlider.disabled = false; fGauge.dataset.disabled = '';
-        eSlider.disabled = true;  eSlider.value = '0'; eGauge.dataset.disabled = '1';
+        // Fuel active; electric locked at 0; EV share locked at 0%
+        fSlider.disabled  = false; fGauge.dataset.disabled  = '';
+        eSlider.disabled  = true;  eSlider.value = '0'; eGauge.dataset.disabled = '1';
+        evSlider.disabled = true;  evSlider.value = '0'; evGauge.dataset.disabled = '1';
         window.syncConsDisplay(eSlider);
+        window.syncConsDisplay(evSlider);
       } else if (type === 'BEV') {
-        fSlider.disabled = true;  fSlider.value = '0'; fGauge.dataset.disabled = '1';
-        eSlider.disabled = false; eGauge.dataset.disabled = '';
+        // Electric active; fuel locked at 0; EV share locked at 100%
+        fSlider.disabled  = true;  fSlider.value = '0'; fGauge.dataset.disabled = '1';
+        eSlider.disabled  = false; eGauge.dataset.disabled = '';
+        evSlider.disabled = true;  evSlider.value = '100'; evGauge.dataset.disabled = '1';
         window.syncConsDisplay(fSlider);
-      } else { // PHEV — both active
-        fSlider.disabled = false; fGauge.dataset.disabled = '';
-        eSlider.disabled = false; eGauge.dataset.disabled = '';
+        window.syncConsDisplay(evSlider);
+      } else { // PHEV — all three active; reset EV share to 40% if coming from ICE/BEV
+        fSlider.disabled  = false; fGauge.dataset.disabled  = '';
+        eSlider.disabled  = false; eGauge.dataset.disabled  = '';
+        evSlider.disabled = false; evGauge.dataset.disabled = '';
+        if (evSlider.value === '0' || evSlider.value === '100') evSlider.value = '40';
+        window.syncConsDisplay(evSlider);
       }
       window.syncConsDisplay(fSlider);
       window.syncConsDisplay(eSlider);
@@ -1079,10 +1114,16 @@
                  window.getVal('serv1_' + i) + window.getVal('serv2_' + i) +
                  window.getVal('recon_' + i);
 
-      /* Fuel type and gross energy costs (pump/utility prices are VAT-inclusive) */
+      /* PHEV km split: EV share drives what fraction of km use battery vs engine.
+         ICE = 0% EV (all fuel), BEV = 100% EV (all electric), PHEV = user-defined. */
+      var evShare;
+      if (type === 'BEV') { evShare = 1.0; }
+      else if (type === 'ICE') { evShare = 0.0; }
+      else { evShare = window.getVal('ev_share_' + i) / 100; } // PHEV
+
       var fueltype   = (document.getElementById('fueltype_' + i) || {value:'diesel'}).value;
-      var fuelGross  = (kms / 100) * cf * fuelP;
-      var elecGross  = (kms / 100) * ce * kwhP;
+      var fuelGross  = (kms * (1 - evShare) / 100) * cf * fuelP;
+      var elecGross  = (kms * evShare       / 100) * ce * kwhP;
 
       /* IVA recovery on fuel and electricity */
       var fuelIvaFrac2 = window.calcFuelIvaFrac(type, fueltype, ctx);
@@ -1221,6 +1262,12 @@
       var ftEl = d.getElementById('fueltype_' + fj);
       if (ftEl) ftEl.value = 'diesel';
     }
+    // EV share sliders (ICE=0%, PHEV=40%, BEV=100%)
+    var evDef = [0, 40, 100];
+    for (var ej = 1; ej <= 3; ej++) {
+      var evSl = d.getElementById('ev_share_' + ej);
+      if (evSl) { evSl.value = evDef[ej-1]; window.syncConsDisplay(evSl); }
+    }
     // Prices
     d.getElementById('price_1').value     = '40.000';
     d.getElementById('price_2').value     = '49.990';
@@ -1259,8 +1306,10 @@
   };
 
   document.addEventListener('DOMContentLoaded', function() {
-    // Init slider gradient fills
-    ['cons_fuel_1','cons_fuel_2','cons_fuel_3','cons_elec_1','cons_elec_2','cons_elec_3'].forEach(function(id) {
+    // Init all slider gradient fills
+    ['cons_fuel_1','cons_fuel_2','cons_fuel_3',
+     'cons_elec_1','cons_elec_2','cons_elec_3',
+     'ev_share_1','ev_share_2','ev_share_3'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) window.syncConsDisplay(el);
     });
