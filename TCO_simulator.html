@@ -104,6 +104,38 @@
       overflow:hidden;
     }
 
+    /* ── CONTEXT BAR ── */
+    .fw-context-bar {
+      background:var(--navy2);
+      padding:1rem 1.25rem;
+      display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-end;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .fw-ctx-field { flex:1; min-width:140px; }
+    .fw-ctx-field label {
+      display:block; font-weight:700; margin-bottom:.3rem;
+      color:rgba(255,255,255,.75); font-size:.68rem; text-transform:uppercase; letter-spacing:.08em;
+    }
+    .fw-ctx-field select,
+    .fw-ctx-field input[type="text"] {
+      width:100%; padding:.5rem .75rem; border:1.5px solid rgba(255,255,255,.15);
+      border-radius:8px; color:#fff; font-weight:600; font-size:.82rem;
+      font-family:'Poppins',sans-serif; background:rgba(255,255,255,.08);
+      transition:.2s; cursor:pointer;
+    }
+    .fw-ctx-field select option { color:#333; background:#fff; }
+    .fw-ctx-field select:focus,
+    .fw-ctx-field input[type="text"]:focus { outline:none; border-color:var(--green); background:rgba(255,255,255,.12); }
+
+    /* ── INFO BAR ── */
+    .fw-info-bar {
+      background:rgba(16,185,129,.08);
+      border-left:3px solid var(--green);
+      padding:.6rem 1.25rem;
+      font-size:.78rem; color:rgba(16,185,129,.9); font-weight:500;
+      line-height:1.5;
+    }
+
     /* ── GLOBAL INPUTS BAR ── */
     .fw-global-inputs {
       background:var(--navy);
@@ -177,6 +209,11 @@
 
     .fw-text-warn { color:#ef4444 !important; font-weight:700; }
     .fw-text-ok   { color:var(--green) !important; font-weight:700; }
+    .fw-text-note { color:#64748b !important; font-weight:500; font-style:italic; font-size:.76rem; }
+
+    /* fringe benefit note row */
+    .fw-fringe-row td { background:#fefce8; border-bottom:1px solid #fef08a; color:#854d0e !important; font-size:.74rem; font-weight:500; font-style:italic; }
+    .fw-fringe-row td:first-child { color:#854d0e !important; font-weight:600; }
 
     /* ── CTA BAR ── */
     .cta-bar {
@@ -274,6 +311,57 @@
 
     <div class="sim-card">
 
+      <!-- ── CONTEXT BAR ── -->
+      <div class="fw-context-bar">
+        <div class="fw-ctx-field">
+          <label>Tipo de Viatura</label>
+          <select id="ctx_cat" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
+            <option value="pass" selected>Ligeiro de Passageiros</option>
+            <option value="coml">Ligeiro de Mercadorias</option>
+            <option value="mist">Misto</option>
+          </select>
+        </div>
+        <div class="fw-ctx-field">
+          <label>Afetação</label>
+          <select id="ctx_afetacao" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
+            <option value="excl" selected>Exclusivamente empresarial</option>
+            <option value="mirs">Uso misto — colaborador declara IRS</option>
+            <option value="msem">Uso misto — sem declaração IRS</option>
+          </select>
+        </div>
+        <div class="fw-ctx-field">
+          <label>Modalidade</label>
+          <select id="ctx_mod" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
+            <option value="acq" selected>Aquisição / Leasing financeiro</option>
+            <option value="rnt">Renting operacional</option>
+          </select>
+        </div>
+        <div class="fw-ctx-field">
+          <label>Regime IVA Empresa</label>
+          <select id="ctx_iva" onchange="window.calcFleetWise();">
+            <option value="tot" selected>Dedução total</option>
+            <option value="par">Dedução parcial 50%</option>
+            <option value="ise">Isento art. 9.º</option>
+          </select>
+        </div>
+        <div class="fw-ctx-field">
+          <label>Prejuízo Fiscal</label>
+          <select id="ctx_prej" onchange="window.calcFleetWise();">
+            <option value="nao" selected>Não</option>
+            <option value="sim">Sim (+10pp TA)</option>
+          </select>
+        </div>
+        <div class="fw-ctx-field" style="min-width:80px;max-width:110px;">
+          <label>Taxa IRC %</label>
+          <input type="text" id="ctx_irc" value="21" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)">
+        </div>
+      </div>
+
+      <!-- ── INFO BAR ── -->
+      <div class="fw-info-bar" id="fw_info_bar">
+        Selecione o contexto acima para ver as implicações fiscais aplicáveis.
+      </div>
+
       <!-- Global Inputs -->
       <div class="fw-global-inputs">
         <div class="fw-g-field">
@@ -332,11 +420,20 @@
           </thead>
           <tbody>
 
+            <!-- Preço base / custo aquisição -->
             <tr>
-              <td>Preço base (s/ IVA)</td>
+              <td id="lbl_price">Preço base (s/ IVA)</td>
               <td class="fw-col-data"><input type="text" id="price_1" class="fw-cell-input" value="40.000" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
               <td class="fw-col-data"><input type="text" id="price_2" class="fw-cell-input" value="49.990" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
               <td class="fw-col-data"><input type="text" id="price_3" class="fw-cell-input" value="62.490" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
+            </tr>
+
+            <!-- Renda mensal renting — shown only in renting mode -->
+            <tr id="row_renda" style="display:none;">
+              <td>Renda mensal renting (€)</td>
+              <td class="fw-col-data"><input type="text" id="renda_1" class="fw-cell-input" value="800" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
+              <td class="fw-col-data"><input type="text" id="renda_2" class="fw-cell-input" value="950" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
+              <td class="fw-col-data"><input type="text" id="renda_3" class="fw-cell-input" value="1.100" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
             </tr>
 
             <tr class="row-fuel">
@@ -350,13 +447,6 @@
               <td class="fw-col-data"><input type="text" id="cons_elec_1" class="fw-cell-input" value="0" disabled></td>
               <td class="fw-col-data"><input type="text" id="cons_elec_2" class="fw-cell-input" value="14,0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 1)"></td>
               <td class="fw-col-data"><input type="text" id="cons_elec_3" class="fw-cell-input" value="17,0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 1)"></td>
-            </tr>
-
-            <tr>
-              <td>Deduz IVA?</td>
-              <td class="fw-col-data" id="iva_status_1">-</td>
-              <td class="fw-col-data" id="iva_status_2">-</td>
-              <td class="fw-col-data" id="iva_status_3">-</td>
             </tr>
 
             <tr class="fw-section-title"><td colspan="4">Custos Operacionais (Anuais / Viatura)</td></tr>
@@ -417,6 +507,21 @@
             </tr>
 
             <tr class="fw-section-title"><td colspan="4">Impacto Fiscal (Anuais / Viatura)</td></tr>
+
+            <!-- IVA deduction % -->
+            <tr>
+              <td>Dedução IVA</td>
+              <td class="fw-col-data" id="iva_status_1">-</td>
+              <td class="fw-col-data" id="iva_status_2">-</td>
+              <td class="fw-col-data" id="iva_status_3">-</td>
+            </tr>
+            <!-- IVA recuperado -->
+            <tr>
+              <td>IVA recuperado (€)</td>
+              <td class="fw-col-data" id="out_iva_rec_1">-</td>
+              <td class="fw-col-data" id="out_iva_rec_2">-</td>
+              <td class="fw-col-data" id="out_iva_rec_3">-</td>
+            </tr>
             <tr>
               <td>Tributação Autónoma</td>
               <td class="fw-col-data" id="out_ta_1">-</td>
@@ -430,6 +535,43 @@
               <td class="fw-col-data" id="out_irc_3">-</td>
             </tr>
 
+            <!-- Fringe benefit note — shown only when ctx_afetacao = "mirs" -->
+            <tr id="row_fringe" class="fw-fringe-row" style="display:none;">
+              <td>Benefício em espécie (IRS)</td>
+              <td class="fw-col-data" colspan="3" style="text-align:left;">
+                O colaborador declara 0,75%/mês do valor tributável do veículo como rendimento de trabalho dependente. A empresa fica isenta de Tributação Autónoma sobre esse veículo.
+              </td>
+            </tr>
+
+            <!-- ── Resumo por Viatura (Anual) ── -->
+            <tr class="fw-section-title fw-section-total"><td colspan="4">Resumo por Viatura (Anual)</td></tr>
+
+            <tr class="fw-total-row">
+              <td id="lbl_capital">Custo de capital (amort.)</td>
+              <td class="fw-col-data fw-bold" id="out_capital_1">-</td>
+              <td class="fw-col-data fw-bold" id="out_capital_2">-</td>
+              <td class="fw-col-data fw-bold" id="out_capital_3">-</td>
+            </tr>
+            <tr class="fw-total-row">
+              <td>Custos operacionais</td>
+              <td class="fw-col-data fw-bold" id="out_opex_1">-</td>
+              <td class="fw-col-data fw-bold" id="out_opex_2">-</td>
+              <td class="fw-col-data fw-bold" id="out_opex_3">-</td>
+            </tr>
+            <tr class="fw-total-row">
+              <td>Energia</td>
+              <td class="fw-col-data fw-bold" id="out_energy_1">-</td>
+              <td class="fw-col-data fw-bold" id="out_energy_2">-</td>
+              <td class="fw-col-data fw-bold" id="out_energy_3">-</td>
+            </tr>
+            <tr class="fw-total-row">
+              <td>Encargos fiscais (TA + IRC)</td>
+              <td class="fw-col-data fw-bold" id="out_fiscal_1">-</td>
+              <td class="fw-col-data fw-bold" id="out_fiscal_2">-</td>
+              <td class="fw-col-data fw-bold" id="out_fiscal_3">-</td>
+            </tr>
+
+            <!-- ── Fleet Totals ── -->
             <tr class="fw-section-title fw-section-total"><td colspan="4">Custo Total de Propriedade — Frota Completa</td></tr>
 
             <tr class="fw-total-row">
@@ -536,23 +678,28 @@
 <script>
   /* ── Menu ── */
   function toggleMenu() {
-    const m = document.getElementById('mobile-menu');
-    const o = document.getElementById('menu-overlay');
-    const open = m.classList.toggle('open');
+    var m = document.getElementById('mobile-menu');
+    var o = document.getElementById('menu-overlay');
+    var open = m.classList.toggle('open');
     o.style.display = open ? 'block' : 'none';
   }
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { document.getElementById('mobile-menu').classList.remove('open'); document.getElementById('menu-overlay').style.display='none'; } });
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      document.getElementById('mobile-menu').classList.remove('open');
+      document.getElementById('menu-overlay').style.display = 'none';
+    }
+  });
 
   /* ══════════════════════════════════════
-     LÓGICA DE CÁLCULO — INALTERADA
+     UTILITY FUNCTIONS
   ══════════════════════════════════════ */
   window.formatCustom = function(num, decimals, suffix) {
-    if(num === undefined || num === null) return "-";
+    if (num === undefined || num === null) return "-";
     var n = num.toFixed(decimals);
     var parts = n.split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
     var str = parts.join(',');
-    if(suffix) str += " " + suffix;
+    if (suffix) str += " " + suffix;
     return str;
   };
 
@@ -569,104 +716,271 @@
     el.value = window.formatCustom(val, decimals, "").trim();
   };
 
-  window.setTxt = function(id, txt, val) {
+  /* setTxt: supports special string tokens for styling */
+  window.setTxt = function(id, txt, colorHint) {
     var el = document.getElementById(id);
-    if(el) {
-      el.innerText = txt;
-      el.classList.remove('fw-text-ok', 'fw-text-warn');
-      if (val > 0) el.classList.add('fw-text-ok');
-      else if (val < 0) el.classList.add('fw-text-warn');
-    }
+    if (!el) return;
+    el.innerText = txt;
+    el.classList.remove('fw-text-ok', 'fw-text-warn', 'fw-text-note');
+    if (colorHint === 'ok'   || colorHint > 0) el.classList.add('fw-text-ok');
+    else if (colorHint === 'warn' || colorHint < 0) el.classList.add('fw-text-warn');
+    else if (colorHint === 'note') el.classList.add('fw-text-note');
   };
 
+  /* ══════════════════════════════════════
+     CONTEXT HELPERS
+  ══════════════════════════════════════ */
+  window.getCtx = function() {
+    return {
+      cat:      document.getElementById('ctx_cat').value,
+      afetacao: document.getElementById('ctx_afetacao').value,
+      mod:      document.getElementById('ctx_mod').value,
+      iva:      document.getElementById('ctx_iva').value,
+      prej:     document.getElementById('ctx_prej').value,
+      irc:      window.getVal('ctx_irc') || 21
+    };
+  };
+
+  /* ── INFO BAR ── */
+  window.updateInfoBar = function() {
+    var ctx = window.getCtx();
+    var bar = document.getElementById('fw_info_bar');
+    var msgs = [];
+
+    if (ctx.cat === 'coml') {
+      msgs.push('Ligeiro de Mercadorias: isento de Tributação Autónoma · IVA 100% dedutível · amortização sem limite de IRC.');
+    }
+    if (ctx.cat === 'mist') {
+      msgs.push('Misto: segue o regime de passageiros para TA e IRC; IVA dedutível a 100% se uso profissional exclusivo documentado.');
+    }
+    if (ctx.afetacao === 'mirs') {
+      msgs.push('Uso misto c/ IRS: empresa isenta de TA · colaborador declara benefício em espécie (0,75%/mês do valor do veículo como rendimento de trabalho dependente).');
+    }
+    if (ctx.afetacao === 'msem') {
+      msgs.push('Uso misto sem declaração IRS: empresa sujeita a Tributação Autónoma às taxas normais.');
+    }
+    if (ctx.mod === 'rnt') {
+      msgs.push('Renting operacional: renda 100% dedutível como gasto operacional · sem limite de amortização IRC · TA incide sobre encargos suportados.');
+    }
+    if (ctx.iva === 'par') {
+      msgs.push('Regime IVA parcial (50%): dedução limitada a 50% do IVA suportado.');
+    }
+    if (ctx.iva === 'ise') {
+      msgs.push('Isento art. 9.º: sem direito à dedução de IVA.');
+    }
+    if (ctx.prej === 'sim') {
+      msgs.push('Prejuízo fiscal: agravamento de +10 pp nas taxas de Tributação Autónoma (art.º 88.º n.º 14 CIRC).');
+    }
+
+    if (msgs.length === 0) {
+      msgs.push('Aquisição / leasing financeiro · uso exclusivamente empresarial · regime IVA de dedução total.');
+    }
+
+    bar.innerText = msgs.join('  |  ');
+  };
+
+  /* ── IVA DEDUCTION FRACTION ── */
+  window.calcIvaFrac = function(type, price, ctx) {
+    // Commercial vehicles: always 100%
+    if (ctx.cat === 'coml') return 1.0;
+    // Exempt from IVA deduction
+    if (ctx.iva === 'ise') return 0;
+
+    if (type === 'BEV' && price <= 62500) {
+      return (ctx.iva === 'tot') ? 1.0 : (ctx.iva === 'par' ? 0.5 : 0);
+    }
+    if (type === 'PHEV' && price <= 50000) {
+      return (ctx.iva === 'tot') ? 0.5 : (ctx.iva === 'par' ? 0.25 : 0);
+    }
+    return 0;
+  };
+
+  /* ── TA RATE ── */
+  window.calcTaRate = function(type, acq, ctx) {
+    // Commercial or employee declares IRS benefit → exempt
+    if (ctx.cat === 'coml' || ctx.afetacao === 'mirs') return 0;
+
+    var rate = 0;
+    if (type === 'ICE') {
+      if (acq < 27500)      rate = 0.085;
+      else if (acq < 35000) rate = 0.255;
+      else                  rate = 0.325;
+    } else if (type === 'PHEV') {
+      if (acq < 27500)      rate = 0.025;
+      else if (acq < 35000) rate = 0.075;
+      else                  rate = 0.15;
+    } else if (type === 'BEV') {
+      rate = (acq > 62500) ? 0.10 : 0;
+    }
+
+    // Agravamento por prejuízo fiscal
+    if (ctx.prej === 'sim' && rate > 0) rate += 0.10;
+
+    return rate;
+  };
+
+  /* ── UPDATE UI (show/hide rows, labels) ── */
   window.updateUI = function() {
+    var ctx = window.getCtx();
+    var isRenting = (ctx.mod === 'rnt');
+
+    // Show/hide renting row
+    document.getElementById('row_renda').style.display = isRenting ? '' : 'none';
+
+    // Label for price row
+    document.getElementById('lbl_price').innerText =
+      isRenting ? 'Custo de aquisição (ref. TA/IRC)' : 'Preço base (s/ IVA)';
+
+    // Label for capital cost in summary
+    document.getElementById('lbl_capital').innerText =
+      isRenting ? 'Custo de capital (renda anual)' : 'Custo de capital (amort.)';
+
+    // Show/hide fringe benefit note
+    document.getElementById('row_fringe').style.display =
+      (ctx.afetacao === 'mirs') ? '' : 'none';
+
+    // Enable/disable consumption inputs based on vehicle type
     for (var i = 1; i <= 3; i++) {
-      var type = document.getElementById('type_'+i).value;
-      var fInput = document.getElementById('cons_fuel_'+i);
-      var eInput = document.getElementById('cons_elec_'+i);
+      var type   = document.getElementById('type_' + i).value;
+      var fInput = document.getElementById('cons_fuel_' + i);
+      var eInput = document.getElementById('cons_elec_' + i);
       if (type === 'ICE') {
-        fInput.disabled = false; fInput.style.opacity = 1;
-        eInput.disabled = true; eInput.value = 0; eInput.style.opacity = 0.3;
+        fInput.disabled = false; fInput.style.opacity = '1';
+        eInput.disabled = true;  eInput.value = '0'; eInput.style.opacity = '0.3';
       } else if (type === 'BEV') {
-        fInput.disabled = true; fInput.value = 0; fInput.style.opacity = 0.3;
-        eInput.disabled = false; eInput.style.opacity = 1;
+        fInput.disabled = true;  fInput.value = '0'; fInput.style.opacity = '0.3';
+        eInput.disabled = false; eInput.style.opacity = '1';
       } else {
-        fInput.disabled = false; fInput.style.opacity = 1;
-        eInput.disabled = false; eInput.style.opacity = 1;
+        // PHEV
+        fInput.disabled = false; fInput.style.opacity = '1';
+        eInput.disabled = false; eInput.style.opacity = '1';
       }
     }
   };
 
+  /* ══════════════════════════════════════
+     MAIN CALCULATION
+  ══════════════════════════════════════ */
   window.calcFleetWise = function() {
     var qty   = window.getVal('g_qty')   || 1;
     var kms   = window.getVal('g_kms')   || 1;
     var years = window.getVal('g_years') || 4;
     var fuelP = window.getVal('g_fuel');
     var kwhP  = window.getVal('g_kwh');
+    var ctx   = window.getCtx();
     var tcoRes = [];
 
     for (var i = 1; i <= 3; i++) {
-      var type  = document.getElementById('type_'+i).value;
-      var price = window.getVal('price_'+i);
-      var cf    = window.getVal('cons_fuel_'+i);
-      var ce    = window.getVal('cons_elec_'+i);
+      var type  = document.getElementById('type_' + i).value;
+      var price = window.getVal('price_' + i);
+      var cf    = window.getVal('cons_fuel_' + i);
+      var ce    = window.getVal('cons_elec_' + i);
 
-      var opex = window.getVal('maint_'+i) + window.getVal('tires_'+i) +
-                 window.getVal('iuc_'+i)   + window.getVal('ins_'+i)   +
-                 window.getVal('tolls_'+i) + window.getVal('tele_'+i)  +
-                 window.getVal('serv1_'+i) + window.getVal('serv2_'+i) +
-                 window.getVal('recon_'+i);
+      var opex = window.getVal('maint_' + i) + window.getVal('tires_' + i) +
+                 window.getVal('iuc_'   + i) + window.getVal('ins_'   + i) +
+                 window.getVal('tolls_' + i) + window.getVal('tele_'  + i) +
+                 window.getVal('serv1_' + i) + window.getVal('serv2_' + i) +
+                 window.getVal('recon_' + i);
 
-      var limitIva = (type === 'BEV') ? 62500 : (type === 'PHEV' ? 50000 : 0);
-      var deduzIva = (type !== 'ICE' && price <= limitIva);
+      var energy = ((kms / 100) * cf * fuelP) + ((kms / 100) * ce * kwhP);
 
-      var ivaEl = document.getElementById('iva_status_'+i);
-      if(ivaEl) {
-        ivaEl.innerText = deduzIva ? "SIM" : "NÃO";
-        ivaEl.style.color = deduzIva ? "#10b981" : "#ef4444";
-        ivaEl.style.fontWeight = "bold";
+      /* IVA */
+      var ivaFrac    = window.calcIvaFrac(type, price, ctx);
+      var ivaRec     = price * 0.23 * ivaFrac;
+      var acq        = price * (1 + 0.23 * (1 - ivaFrac));
+
+      /* IVA status display */
+      var ivaPct     = Math.round(ivaFrac * 100);
+      var ivaEl      = document.getElementById('iva_status_' + i);
+      if (ivaEl) {
+        if (ivaPct === 0) {
+          ivaEl.innerText    = 'Não deduz';
+          ivaEl.style.color  = '#ef4444';
+          ivaEl.style.fontWeight = 'bold';
+        } else {
+          ivaEl.innerText    = ivaPct + '%';
+          ivaEl.style.color  = '#10b981';
+          ivaEl.style.fontWeight = 'bold';
+        }
       }
 
-      var acq    = deduzIva ? price : (price * 1.23);
-      var energy = ((kms/100) * cf * fuelP) + ((kms/100) * ce * kwhP);
-      var amort  = acq / years;
+      /* IVA recuperado */
+      window.setTxt('out_iva_rec_' + i, window.formatCustom(ivaRec, 0, '€'), ivaRec > 0 ? 'ok' : 'note');
 
-      var baseTA = amort + opex + energy;
-      var taRate = 0;
-      if (type === 'ICE') {
-        if (acq < 27500) taRate = 0.085; else if (acq < 35000) taRate = 0.255; else taRate = 0.325;
-      } else if (type === 'PHEV') {
-        if (acq < 27500) taRate = 0.025; else if (acq < 35000) taRate = 0.075; else taRate = 0.15;
-      } else if (type === 'BEV' && acq > 62500) {
-        taRate = 0.10;
+      /* Capital cost (annual per vehicle) */
+      var mainCost;
+      if (ctx.mod === 'rnt') {
+        mainCost = window.getVal('renda_' + i) * 12;
+      } else {
+        mainCost = acq / years;
       }
 
-      var taVal  = baseTA * taRate;
-      var limitIRC = (type === 'ICE') ? 25000 : (type === 'PHEV' ? 50000 : 62500);
-      var ircVal = (Math.max(0, acq - limitIRC) / years) * 0.21;
+      /* TA */
+      var taRate = window.calcTaRate(type, acq, ctx);
+      var taBase;
+      if (ctx.mod === 'rnt') {
+        taBase = mainCost + energy;
+      } else {
+        taBase = mainCost + opex + energy;
+      }
+      var taVal = taBase * taRate;
 
-      var totalAnnualUnit = amort + opex + energy + taVal + ircVal;
+      /* IRC non-deductible excess */
+      var ircVal = 0;
+      if (ctx.cat !== 'coml' && ctx.mod !== 'rnt') {
+        var limitIRC = (type === 'ICE') ? 25000 : (type === 'PHEV' ? 50000 : 62500);
+        ircVal = (Math.max(0, acq - limitIRC) / years) * (ctx.irc / 100);
+      }
+
+      /* TA display */
+      var taEl = document.getElementById('out_ta_' + i);
+      if (taEl) {
+        if (taRate === 0 && (ctx.cat === 'coml' || ctx.afetacao === 'mirs')) {
+          window.setTxt('out_ta_' + i, 'Isento', 'ok');
+        } else {
+          window.setTxt('out_ta_' + i, window.formatCustom(taVal, 0, '€'), taVal > 0 ? -1 : 0);
+        }
+      }
+
+      /* IRC display */
+      var ircEl = document.getElementById('out_irc_' + i);
+      if (ircEl) {
+        if (ctx.cat === 'coml' || ctx.mod === 'rnt') {
+          window.setTxt('out_irc_' + i, 'N/A', 'note');
+        } else {
+          window.setTxt('out_irc_' + i, window.formatCustom(ircVal, 0, '€'), ircVal > 0 ? -1 : 0);
+        }
+      }
+
+      /* Summary rows */
+      window.setTxt('out_capital_' + i, window.formatCustom(mainCost, 0, '€'), 0);
+      window.setTxt('out_opex_'   + i, window.formatCustom(opex,     0, '€'), 0);
+      window.setTxt('out_energy_' + i, window.formatCustom(energy,   0, '€'), 0);
+      window.setTxt('out_fiscal_' + i, window.formatCustom(taVal + ircVal, 0, '€'), (taVal + ircVal) > 0 ? -1 : 0);
+
+      /* Total annual per vehicle */
+      var totalAnnualUnit = mainCost + opex + energy + taVal + ircVal;
       tcoRes[i] = totalAnnualUnit;
 
-      window.setTxt('out_ta_'+i,      window.formatCustom(taVal,  0, "€"), -taVal);
-      window.setTxt('out_irc_'+i,     window.formatCustom(ircVal, 0, "€"), -ircVal);
-      window.setTxt('out_tco_ano_'+i, window.formatCustom(totalAnnualUnit * qty, 0, "€"));
-      window.setTxt('out_tco_mes_'+i, window.formatCustom((totalAnnualUnit * qty) / 12, 0, "€"));
-      window.setTxt('out_tco_km_'+i,  window.formatCustom(totalAnnualUnit / kms, 2, "€"));
+      window.setTxt('out_tco_ano_' + i, window.formatCustom(totalAnnualUnit * qty,        0, '€'));
+      window.setTxt('out_tco_mes_' + i, window.formatCustom((totalAnnualUnit * qty) / 12, 0, '€'));
+      window.setTxt('out_tco_km_'  + i, window.formatCustom(totalAnnualUnit / kms,        2, '€'));
     }
 
-    for(var c = 2; c <= 3; c++) {
+    /* Savings vs scenario 1 */
+    for (var c = 2; c <= 3; c++) {
       var savA = (tcoRes[1] - tcoRes[c]) * qty;
       var savM = savA / 12;
       var savK = (tcoRes[1] - tcoRes[c]) / kms;
-      window.setTxt('out_sav_ano_'+c, window.formatCustom(savA, 0, "€"), savA);
-      window.setTxt('out_sav_mes_'+c, window.formatCustom(savM, 0, "€"), savA);
-      window.setTxt('out_sav_km_'+c,  window.formatCustom(savK, 2, "€"), savA);
+      window.setTxt('out_sav_ano_' + c, window.formatCustom(savA, 0, '€'), savA);
+      window.setTxt('out_sav_mes_' + c, window.formatCustom(savM, 0, '€'), savA);
+      window.setTxt('out_sav_km_'  + c, window.formatCustom(savK, 2, '€'), savA);
     }
   };
 
   document.addEventListener('DOMContentLoaded', function() {
     window.updateUI();
+    window.updateInfoBar();
     window.calcFleetWise();
   });
 </script>
