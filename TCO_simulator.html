@@ -251,6 +251,10 @@
     .fw-phev-note-row td { background:#fefce8; border-bottom:1px solid #fef08a; color:#854d0e !important; font-size:.73rem; font-weight:500; font-style:italic; }
     .fw-phev-note-row td:first-child { color:#854d0e !important; }
 
+    /* computed (read-only) energy cost rows */
+    .fw-row-computed td { background:#f8fafc; font-style:italic; }
+    .fw-row-computed td:first-child { color:#64748b !important; font-weight:500; }
+
     /* ── CONSUMPTION GAUGES ── */
     .cons-gauge { padding:.1rem 0; }
     .cons-gauge-hd {
@@ -455,6 +459,10 @@
                   <option value="PHEV">Híbrido Plug-in (PHEV)</option>
                   <option value="BEV">Elétrico (BEV)</option>
                 </select>
+                <select id="fueltype_1" class="fw-type-select" style="margin-top:.25rem;font-size:.7rem;" onchange="window.calcFleetWise();">
+                  <option value="gas">Gasolina</option>
+                  <option value="diesel" selected>Gasóleo / GPL / GNV</option>
+                </select>
               </th>
               <th class="fw-header-cell fw-header-2">
                 <span class="fw-header-title">Opção A</span>
@@ -463,6 +471,10 @@
                   <option value="PHEV" selected>Híbrido Plug-in (PHEV)</option>
                   <option value="BEV">Elétrico (BEV)</option>
                 </select>
+                <select id="fueltype_2" class="fw-type-select" style="margin-top:.25rem;font-size:.7rem;" onchange="window.calcFleetWise();">
+                  <option value="gas">Gasolina</option>
+                  <option value="diesel" selected>Gasóleo / GPL / GNV</option>
+                </select>
               </th>
               <th class="fw-header-cell fw-header-3">
                 <span class="fw-header-title">Opção B</span>
@@ -470,6 +482,10 @@
                   <option value="ICE">Combustão (ICE)</option>
                   <option value="PHEV">Híbrido Plug-in (PHEV)</option>
                   <option value="BEV" selected>Elétrico (BEV)</option>
+                </select>
+                <select id="fueltype_3" class="fw-type-select" style="margin-top:.25rem;font-size:.7rem;display:none;" onchange="window.calcFleetWise();">
+                  <option value="gas">Gasolina</option>
+                  <option value="diesel" selected>Gasóleo / GPL / GNV</option>
                 </select>
               </th>
             </tr>
@@ -545,6 +561,19 @@
 
             <tr class="fw-section-title"><td colspan="4">Custos Operacionais (Anuais / Viatura)</td></tr>
 
+            <tr class="fw-row-computed">
+              <td>↳ Combustível (€/ano)</td>
+              <td class="fw-col-data" id="out_fuel_cost_1">-</td>
+              <td class="fw-col-data" id="out_fuel_cost_2">-</td>
+              <td class="fw-col-data" id="out_fuel_cost_3">-</td>
+            </tr>
+            <tr class="fw-row-computed">
+              <td>↳ Energia eléctrica (€/ano)</td>
+              <td class="fw-col-data" id="out_elec_cost_1">-</td>
+              <td class="fw-col-data" id="out_elec_cost_2">-</td>
+              <td class="fw-col-data" id="out_elec_cost_3">-</td>
+            </tr>
+
             <tr>
               <td>Manutenção</td>
               <td class="fw-col-data"><input type="text" id="maint_1" class="fw-cell-input" value="450" oninput="window.calcFleetWise()" onblur="window.fmtInput(this,0)"></td>
@@ -617,12 +646,19 @@
               </td>
             </tr>
 
-            <!-- IVA recuperado -->
+            <!-- IVA recuperado aquisição -->
             <tr>
-              <td>IVA recuperado (€)</td>
+              <td>IVA s/ aquisição viatura (€)</td>
               <td class="fw-col-data" id="out_iva_rec_1">-</td>
               <td class="fw-col-data" id="out_iva_rec_2">-</td>
               <td class="fw-col-data" id="out_iva_rec_3">-</td>
+            </tr>
+            <!-- IVA recuperado combustível/energia -->
+            <tr>
+              <td>IVA s/ combustível / energia (€)</td>
+              <td class="fw-col-data" id="out_iva_fuel_1">-</td>
+              <td class="fw-col-data" id="out_iva_fuel_2">-</td>
+              <td class="fw-col-data" id="out_iva_fuel_3">-</td>
             </tr>
             <tr>
               <td>Tributação Autónoma</td>
@@ -900,7 +936,26 @@
     bar.innerText = msgs.join('  |  ');
   };
 
-  /* ── IVA DEDUCTION FRACTION ── */
+  /* ── IVA ON FUEL (CIVA art.º 21.º) ── */
+  window.calcFuelIvaFrac = function(type, fueltype, ctx) {
+    if (type === 'BEV') return 0; // no liquid fuel
+    if (ctx.cat === 'coml') return 1.0; // commercial: fully deductible
+    if (ctx.iva === 'ise') return 0;
+    if (fueltype === 'gas') return 0; // gasolina: excluded (art.º 21.º n.º 1 al. b) CIVA)
+    // Gasóleo, GPL, GNV: 50% dedutível (ligeiros de passageiros / mistos)
+    if (ctx.iva === 'par') return 0.25; // 50% × regime 50%
+    return 0.5;
+  };
+
+  /* ── IVA ON ELECTRICITY ── */
+  window.calcElecIvaFrac = function(ctx) {
+    if (ctx.cat === 'coml') return 1.0;
+    if (ctx.iva === 'ise') return 0;
+    if (ctx.iva === 'par') return 0.5;
+    return 1.0; // energia eléctrica: dedutível como gasto geral (não sujeita a art.º 21.º n.º 1 al. b))
+  };
+
+  /* ── IVA DEDUCTION FRACTION (vehicle purchase) ── */
   window.calcIvaFrac = function(type, price, ctx) {
     // Commercial vehicles: always 100%
     if (ctx.cat === 'coml') return 1.0;
@@ -969,6 +1024,13 @@
     document.getElementById('row_phev_iva_note').style.display =
       (hasPhev && ctx.iva !== 'ise') ? '' : 'none';
 
+    // Show/hide fuel type selector (hidden for BEV)
+    for (var i = 1; i <= 3; i++) {
+      var type = document.getElementById('type_' + i).value;
+      var ftEl = document.getElementById('fueltype_' + i);
+      if (ftEl) ftEl.style.display = (type === 'BEV') ? 'none' : '';
+    }
+
     // Enable/disable consumption gauges based on vehicle type
     for (var i = 1; i <= 3; i++) {
       var type    = document.getElementById('type_' + i).value;
@@ -1017,7 +1079,24 @@
                  window.getVal('serv1_' + i) + window.getVal('serv2_' + i) +
                  window.getVal('recon_' + i);
 
-      var energy = ((kms / 100) * cf * fuelP) + ((kms / 100) * ce * kwhP);
+      /* Fuel type and gross energy costs (pump/utility prices are VAT-inclusive) */
+      var fueltype   = (document.getElementById('fueltype_' + i) || {value:'diesel'}).value;
+      var fuelGross  = (kms / 100) * cf * fuelP;
+      var elecGross  = (kms / 100) * ce * kwhP;
+
+      /* IVA recovery on fuel and electricity */
+      var fuelIvaFrac2 = window.calcFuelIvaFrac(type, fueltype, ctx);
+      var elecIvaFrac2 = window.calcElecIvaFrac(ctx);
+      var fuelIvaRec   = fuelGross * (0.23 / 1.23) * fuelIvaFrac2;
+      var elecIvaRec   = elecGross * (0.23 / 1.23) * elecIvaFrac2;
+      var energyIvaRec = fuelIvaRec + elecIvaRec;
+
+      /* Net energy (TA base and TCO use costs net of recovered IVA) */
+      var energy = (fuelGross - fuelIvaRec) + (elecGross - elecIvaRec);
+
+      /* Display gross fuel/elec rows */
+      window.setTxt('out_fuel_cost_' + i, fuelGross > 0 ? window.formatCustom(fuelGross, 0, '€') : '—', fuelGross > 0 ? -1 : 'note');
+      window.setTxt('out_elec_cost_' + i, elecGross > 0 ? window.formatCustom(elecGross, 0, '€') : '—', elecGross > 0 ? -1 : 'note');
 
       /* IVA */
       var ivaFrac    = window.calcIvaFrac(type, price, ctx);
@@ -1039,8 +1118,9 @@
         }
       }
 
-      /* IVA recuperado */
+      /* IVA recuperado — aquisição + combustível/energia */
       window.setTxt('out_iva_rec_' + i, window.formatCustom(ivaRec, 0, '€'), ivaRec > 0 ? 'ok' : 'note');
+      window.setTxt('out_iva_fuel_' + i, window.formatCustom(energyIvaRec, 0, '€'), energyIvaRec > 0 ? 'ok' : 'note');
 
       /* Capital cost (annual per vehicle) */
       var mainCost;
@@ -1136,6 +1216,11 @@
     d.getElementById('type_1').value      = 'ICE';
     d.getElementById('type_2').value      = 'PHEV';
     d.getElementById('type_3').value      = 'BEV';
+    // Fuel types
+    for (var fj = 1; fj <= 3; fj++) {
+      var ftEl = d.getElementById('fueltype_' + fj);
+      if (ftEl) ftEl.value = 'diesel';
+    }
     // Prices
     d.getElementById('price_1').value     = '40.000';
     d.getElementById('price_2').value     = '49.990';
