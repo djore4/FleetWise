@@ -774,6 +774,12 @@
               <td class="fw-col-data fw-bold" id="out_sav_km_2">-</td>
               <td class="fw-col-data fw-bold" id="out_sav_km_3">-</td>
             </tr>
+            <tr class="fw-total-row" style="background:#ecfdf5;border-top:2px solid var(--green);">
+              <td id="lbl_sav_total" style="color:var(--green2)!important;font-size:.85rem;">Poupança total contrato (4 anos)</td>
+              <td class="fw-col-data fw-bold" style="color:#64748b;">Referência</td>
+              <td class="fw-col-data fw-bold" id="out_sav_tot_2" style="color:var(--green2);font-size:.88rem;">-</td>
+              <td class="fw-col-data fw-bold" id="out_sav_tot_3" style="color:var(--green2);font-size:.88rem;">-</td>
+            </tr>
 
           </tbody>
         </table>
@@ -1227,13 +1233,17 @@
     }
 
     /* Savings vs scenario 1 */
+    var lblTot = document.getElementById('lbl_sav_total');
+    if (lblTot) lblTot.innerText = 'Poupança total contrato (' + years + ' ano' + (years !== 1 ? 's' : '') + ')';
     for (var c = 2; c <= 3; c++) {
-      var savA = (tcoRes[1] - tcoRes[c]) * qty;
-      var savM = savA / 12;
-      var savK = (tcoRes[1] - tcoRes[c]) / kms;
-      window.setTxt('out_sav_ano_' + c, window.formatCustom(savA, 0, '€'), savA);
-      window.setTxt('out_sav_mes_' + c, window.formatCustom(savM, 0, '€'), savA);
-      window.setTxt('out_sav_km_'  + c, window.formatCustom(savK, 2, '€'), savA);
+      var savA   = (tcoRes[1] - tcoRes[c]) * qty;
+      var savM   = savA / 12;
+      var savK   = (tcoRes[1] - tcoRes[c]) / kms;
+      var savTot = savA * years;
+      window.setTxt('out_sav_ano_' + c, window.formatCustom(savA,   0, '€'), savA);
+      window.setTxt('out_sav_mes_' + c, window.formatCustom(savM,   0, '€'), savA);
+      window.setTxt('out_sav_km_'  + c, window.formatCustom(savK,   2, '€'), savA);
+      window.setTxt('out_sav_tot_' + c, window.formatCustom(savTot, 0, '€'), savA);
     }
   };
 
