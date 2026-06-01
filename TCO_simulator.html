@@ -34,8 +34,9 @@
   </script>
 
   <link rel="icon" type="image/png" href="favicon.png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root { --navy:#0f172a; --navy2:#1e293b; --green:#10b981; --green2:#059669; }
@@ -303,6 +304,9 @@
       .sim-card { box-shadow:none !important; border:none !important; }
       main { padding:0 !important; }
     }
+    /* ── Tailwind utility replacements ── */
+    .flex{display:flex}.flex-col{flex-direction:column}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-8{gap:2rem}.mx-auto{margin-left:auto;margin-right:auto}.px-4{padding-left:1rem;padding-right:1rem}.w-full{width:100%}.max-w-7xl{max-width:80rem}
+    @media(min-width:768px){.md\:flex-row{flex-direction:row}}
   </style>
 </head>
 <body>
@@ -1362,6 +1366,9 @@
     window.updateInfoBar();
     window.calcFleetWise();
   };
+
+  /* Wrap calcFleetWise with 120ms debounce — reduces redraws on fast typing */
+  (function(){var _t,_f=window.calcFleetWise;window.calcFleetWise=function(){clearTimeout(_t);_t=setTimeout(_f,120)};})();
 
   document.addEventListener('DOMContentLoaded', function() {
     // Init all slider gradient fills
