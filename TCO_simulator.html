@@ -168,7 +168,7 @@
     .fw-g-field input:focus { outline:none; border-color:var(--green); background:rgba(255,255,255,.12); }
 
     /* ── TABLE ── */
-    .fw-table-wrapper { width:100%; overflow-x:auto; border-top:4px solid var(--navy2); }
+    .fw-table-wrapper { width:100%; overflow-x:auto; padding-top:1.5rem; }
     .fw-table { width:100%; border-collapse:collapse; table-layout:fixed; min-width:700px; }
     .fw-table th, .fw-table td {
       padding:.55rem .85rem; text-align:right;
@@ -418,7 +418,7 @@
           </div>
           <div style="display:flex;gap:.4rem;align-items:flex-end;padding-bottom:1px;flex-shrink:0;margin-left:auto;">
             <button class="btn-ctx" onclick="window.resetSimulator()">↺ Repor</button>
-            <button class="btn-ctx" onclick="window.top!==window?window.open(location.href,'_blank'):window.print()">⎙ PDF</button>
+            <button class="btn-ctx" onclick="window.open(location.href.split('?')[0]+'?print=1','_blank')">⎙ PDF</button>
           </div>
         </div>
 
@@ -1374,6 +1374,9 @@
     window.updateUI();
     window.updateInfoBar();
     window.calcFleetWise();
+    if (location.search.indexOf('print=1') > -1) {
+      setTimeout(function() { window.print(); }, 400);
+    }
   });
 </script>
 
