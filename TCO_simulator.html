@@ -444,6 +444,13 @@
           <label>Electricidade (€/kWh)</label>
           <input type="text" id="g_kwh" value="0,14" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 2)">
         </div>
+        <div class="fw-g-field" title="Taxa de IVA aplicável ao carregamento. Industrial/postos públicos: 23%. Carregamento doméstico/escritório (OE 2023): 6%.">
+          <label>IVA electricidade</label>
+          <select id="ctx_iva_elec" onchange="window.calcFleetWise();" style="font-size:.78rem;">
+            <option value="23" selected>23% — industrial / postos</option>
+            <option value="6">6% — doméstico / escritório</option>
+          </select>
+        </div>
       </div>
 
       <!-- Table -->
@@ -938,7 +945,8 @@
       mod:      document.getElementById('ctx_mod').value,
       iva:      document.getElementById('ctx_iva').value,
       prej:     document.getElementById('ctx_prej').value,
-      irc:      window.getVal('ctx_irc') || 21
+      irc:      window.getVal('ctx_irc') || 21,
+      iva_elec: parseFloat((document.getElementById('ctx_iva_elec') || {value:'23'}).value) / 100
     };
   };
 
@@ -1153,10 +1161,11 @@
       var elecGross  = (kms * evShare       / 100) * ce * kwhP;
 
       /* IVA recovery on fuel and electricity */
-      var fuelIvaFrac2 = window.calcFuelIvaFrac(type, fueltype, ctx);
-      var elecIvaFrac2 = window.calcElecIvaFrac(ctx);
-      var fuelIvaRec   = fuelGross * (0.23 / 1.23) * fuelIvaFrac2;
-      var elecIvaRec   = elecGross * (0.23 / 1.23) * elecIvaFrac2;
+      var fuelIvaFrac2  = window.calcFuelIvaFrac(type, fueltype, ctx);
+      var elecIvaFrac2  = window.calcElecIvaFrac(ctx);
+      var elecIvaRate   = ctx.iva_elec; // 0.23 ou 0.06 consoante selector
+      var fuelIvaRec    = fuelGross * (0.23 / 1.23) * fuelIvaFrac2;
+      var elecIvaRec    = elecGross * (elecIvaRate / (1 + elecIvaRate)) * elecIvaFrac2;
       var energyIvaRec = fuelIvaRec + elecIvaRec;
 
       /* Net energy (TA base and TCO use costs net of recovered IVA) */
@@ -1277,6 +1286,8 @@
     d.getElementById('g_years').value     = '4';
     d.getElementById('g_fuel').value      = '1,75';
     d.getElementById('g_kwh').value       = '0,14';
+    var ivaElecEl = d.getElementById('ctx_iva_elec');
+    if (ivaElecEl) ivaElecEl.value = '23';
     // Column types
     d.getElementById('type_1').value      = 'ICE';
     d.getElementById('type_2').value      = 'PHEV';
