@@ -461,7 +461,12 @@
                 </select>
                 <select id="fueltype_1" class="fw-type-select" style="margin-top:.25rem;font-size:.7rem;" onchange="window.calcFleetWise();">
                   <option value="gas">Gasolina</option>
-                  <option value="diesel" selected>Gasóleo / GPL / GNV</option>
+                  <option value="diesel" selected>Gasóleo / GPL</option>
+                  <option value="gnv">Gás Natural (GNV)</option>
+                </select>
+                <select id="phev_auton_1" class="fw-type-select" style="margin-top:.25rem;font-size:.68rem;display:none;" onchange="window.calcFleetWise();">
+                  <option value="sim" selected>Autonomia ≥ 50 km ✓</option>
+                  <option value="nao">Autonomia &lt; 50 km ✗</option>
                 </select>
               </th>
               <th class="fw-header-cell fw-header-2">
@@ -473,7 +478,12 @@
                 </select>
                 <select id="fueltype_2" class="fw-type-select" style="margin-top:.25rem;font-size:.7rem;" onchange="window.calcFleetWise();">
                   <option value="gas">Gasolina</option>
-                  <option value="diesel" selected>Gasóleo / GPL / GNV</option>
+                  <option value="diesel" selected>Gasóleo / GPL</option>
+                  <option value="gnv">Gás Natural (GNV)</option>
+                </select>
+                <select id="phev_auton_2" class="fw-type-select" style="margin-top:.25rem;font-size:.68rem;" onchange="window.calcFleetWise();">
+                  <option value="sim" selected>Autonomia ≥ 50 km ✓</option>
+                  <option value="nao">Autonomia &lt; 50 km ✗</option>
                 </select>
               </th>
               <th class="fw-header-cell fw-header-3">
@@ -485,7 +495,12 @@
                 </select>
                 <select id="fueltype_3" class="fw-type-select" style="margin-top:.25rem;font-size:.7rem;display:none;" onchange="window.calcFleetWise();">
                   <option value="gas">Gasolina</option>
-                  <option value="diesel" selected>Gasóleo / GPL / GNV</option>
+                  <option value="diesel" selected>Gasóleo / GPL</option>
+                  <option value="gnv">Gás Natural (GNV)</option>
+                </select>
+                <select id="phev_auton_3" class="fw-type-select" style="margin-top:.25rem;font-size:.68rem;display:none;" onchange="window.calcFleetWise();">
+                  <option value="sim" selected>Autonomia ≥ 50 km ✓</option>
+                  <option value="nao">Autonomia &lt; 50 km ✗</option>
                 </select>
               </th>
             </tr>
@@ -502,7 +517,7 @@
 
             <!-- Renda mensal renting — shown only in renting mode -->
             <tr id="row_renda" style="display:none;">
-              <td>Renda mensal renting (€)</td>
+              <td title="Introduza o valor da renda excluindo IVA (s/ IVA). A base de TA incide sobre o encargo líquido.">Renda mensal renting (s/ IVA, €)</td>
               <td class="fw-col-data"><input type="text" id="renda_1" class="fw-cell-input" value="800" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
               <td class="fw-col-data"><input type="text" id="renda_2" class="fw-cell-input" value="950" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
               <td class="fw-col-data"><input type="text" id="renda_3" class="fw-cell-input" value="1.100" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)"></td>
@@ -510,7 +525,7 @@
 
             <!-- Valor Residual — shown only in acquisition mode -->
             <tr id="row_vr">
-              <td>Valor residual estimado (€)</td>
+              <td title="Valor de venda estimado no fim do contrato, sem IVA. Reduz o custo de capital.">Valor residual estimado (s/ IVA, €)</td>
               <td class="fw-col-data"><input type="text" id="vr_1" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)" title="Valor de venda estimado no fim do contrato. Reduz o custo de capital."></td>
               <td class="fw-col-data"><input type="text" id="vr_2" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)" title="Valor de venda estimado no fim do contrato. Reduz o custo de capital."></td>
               <td class="fw-col-data"><input type="text" id="vr_3" class="fw-cell-input" value="0" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)" title="Valor de venda estimado no fim do contrato. Reduz o custo de capital."></td>
@@ -985,7 +1000,7 @@
   };
 
   /* ── IVA DEDUCTION FRACTION (vehicle purchase) ── */
-  window.calcIvaFrac = function(type, price, ctx) {
+  window.calcIvaFrac = function(type, price, ctx, colIdx) {
     // Commercial vehicles: always 100%
     if (ctx.cat === 'coml') return 1.0;
     // Exempt from IVA deduction
@@ -995,30 +1010,34 @@
       return (ctx.iva === 'tot') ? 1.0 : (ctx.iva === 'par' ? 0.5 : 0);
     }
     if (type === 'PHEV' && price <= 50000) {
+      // CIVA art.º 21.º n.º 1 al. a): autonomia eléctrica ≥ 50 km (WLTP) obrigatória
+      var autonEl = colIdx ? document.getElementById('phev_auton_' + colIdx) : null;
+      if (autonEl && autonEl.value === 'nao') return 0; // autonomia insuficiente → sem dedução
       return (ctx.iva === 'tot') ? 0.5 : (ctx.iva === 'par' ? 0.25 : 0);
     }
     return 0;
   };
 
-  /* ── TA RATE ── */
-  window.calcTaRate = function(type, acq, ctx) {
+  /* ── TA RATE (art.º 88.º n.º 3 CIRC) ──
+     Limiares aplicados ao preço s/ IVA (factura), independentemente do IVA recuperado. */
+  window.calcTaRate = function(type, price, ctx) {
     // Commercial or employee declares IRS benefit → exempt
     if (ctx.cat === 'coml' || ctx.afetacao === 'mirs') return 0;
 
     var rate = 0;
     if (type === 'ICE') {
-      if (acq < 27500)      rate = 0.085;
-      else if (acq < 35000) rate = 0.255;
-      else                  rate = 0.325;
+      if (price < 27500)      rate = 0.085;
+      else if (price < 35000) rate = 0.255;
+      else                    rate = 0.325;
     } else if (type === 'PHEV') {
-      if (acq < 27500)      rate = 0.025;
-      else if (acq < 35000) rate = 0.075;
-      else                  rate = 0.15;
+      if (price < 27500)      rate = 0.025;
+      else if (price < 35000) rate = 0.075;
+      else                    rate = 0.15;
     } else if (type === 'BEV') {
-      rate = (acq > 62500) ? 0.10 : 0;
+      rate = (price > 62500) ? 0.10 : 0;
     }
 
-    // Agravamento por prejuízo fiscal
+    // Agravamento por prejuízo fiscal (art.º 88.º n.º 14 CIRC)
     if (ctx.prej === 'sim' && rate > 0) rate += 0.10;
 
     return rate;
@@ -1053,11 +1072,13 @@
     document.getElementById('row_phev_iva_note').style.display =
       (hasPhev && ctx.iva !== 'ise') ? '' : 'none';
 
-    // Show/hide fuel type selector (hidden for BEV)
+    // Show/hide fuel type selector (hidden for BEV) and PHEV autonomy select
     for (var i = 1; i <= 3; i++) {
       var type = document.getElementById('type_' + i).value;
       var ftEl = document.getElementById('fueltype_' + i);
       if (ftEl) ftEl.style.display = (type === 'BEV') ? 'none' : '';
+      var autonEl = document.getElementById('phev_auton_' + i);
+      if (autonEl) autonEl.style.display = (type === 'PHEV') ? '' : 'none';
     }
 
     // Enable/disable consumption gauges and EV share slider based on vehicle type
@@ -1146,7 +1167,7 @@
       window.setTxt('out_elec_cost_' + i, elecGross > 0 ? window.formatCustom(elecGross, 0, '€') : '—', elecGross > 0 ? -1 : 'note');
 
       /* IVA */
-      var ivaFrac    = window.calcIvaFrac(type, price, ctx);
+      var ivaFrac    = window.calcIvaFrac(type, price, ctx, i);
       var ivaRec     = price * 0.23 * ivaFrac;
       var acq        = price * (1 + 0.23 * (1 - ivaFrac));
 
@@ -1178,22 +1199,15 @@
         mainCost = Math.max(0, acq - vr) / years;
       }
 
-      /* TA — art.º 88.º n.º 3 CIRC
-         Renting : encargos = renda + opex + energia
-         Aquisição: encargos = opex + energia (capital/amortização excluído da base TA) */
-      var taRate = window.calcTaRate(type, acq, ctx);
-      var taBase;
-      if (ctx.mod === 'rnt') {
-        taBase = mainCost + opex + energy;
-      } else {
-        taBase = opex + energy;
-      }
+      /* TA — art.º 88.º n.º 3 CIRC: encargos = amortizações/rendas + opex + energia */
+      var taRate = window.calcTaRate(type, price, ctx);
+      var taBase = mainCost + opex + energy;
       var taVal = taBase * taRate;
 
       /* IRC non-deductible excess */
       var ircVal = 0;
       if (ctx.cat !== 'coml' && ctx.mod !== 'rnt') {
-        var limitIRC = (type === 'ICE') ? 25000 : (type === 'PHEV' ? 50000 : 62500);
+        var limitIRC = (type === 'PHEV') ? 50000 : (type === 'BEV') ? 62500 : (fueltype === 'gnv') ? 37500 : 25000;
         ircVal = (Math.max(0, acq - limitIRC) / years) * (ctx.irc / 100);
       }
 
@@ -1271,6 +1285,8 @@
     for (var fj = 1; fj <= 3; fj++) {
       var ftEl = d.getElementById('fueltype_' + fj);
       if (ftEl) ftEl.value = 'diesel';
+      var autonEl = d.getElementById('phev_auton_' + fj);
+      if (autonEl) autonEl.value = 'sim';
     }
     // EV share sliders (ICE=0%, PHEV=40%, BEV=100%)
     var evDef = [0, 40, 100];
