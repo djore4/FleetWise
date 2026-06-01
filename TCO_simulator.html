@@ -41,7 +41,7 @@
     :root { --navy:#0f172a; --navy2:#1e293b; --green:#10b981; --green2:#059669; }
 
     html { scroll-behavior:smooth; }
-    body { font-family:'Poppins',sans-serif; background:#f8fafc; padding-top:72px; overflow-x:hidden; margin:0; }
+    body { font-family:'Poppins',sans-serif; background:#f8fafc; padding-top:72px; overflow-x:hidden; margin:0; user-select:text; -webkit-user-select:text; }
 
     /* ── HEADER ── */
     .sticky-header {
@@ -1003,11 +1003,10 @@
       msgs.push('Prejuízo fiscal: agravamento de +10 pp nas taxas de Tributação Autónoma (art.º 88.º n.º 14 CIRC).');
     }
 
-    if (msgs.length === 0) {
-      msgs.push('Aquisição / leasing · uso exclusivamente empresarial · regime IVA de dedução total.');
-    }
+    // no default message — info bar only shows when a non-standard context is active
 
     bar.innerText = msgs.join('  |  ');
+    bar.style.display = msgs.length ? '' : 'none';
   };
 
   /* ── IVA ON FUEL (CIVA art.º 21.º) ── */
