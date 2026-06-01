@@ -150,7 +150,7 @@
 
     /* ── GLOBAL INPUTS BAR ── */
     .fw-global-inputs {
-      background:var(--navy);
+      background:var(--navy2);
       padding:1rem 1.25rem;
       display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-end;
     }
@@ -168,11 +168,12 @@
     .fw-g-field input:focus { outline:none; border-color:var(--green); background:rgba(255,255,255,.12); }
 
     /* ── TABLE ── */
-    .fw-table-wrapper { width:100%; overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .fw-table-wrapper { width:100%; overflow-x:auto; }
     .fw-table { width:100%; border-collapse:collapse; table-layout:fixed; min-width:700px; }
     .fw-table th, .fw-table td {
       padding:.55rem .85rem; text-align:right;
       border-bottom:1px solid #f1f5f9; font-size:.82rem; vertical-align:middle;
+      user-select:text;
     }
     .fw-table td:first-child {
       text-align:left; color:#475569; font-weight:600; width:28%;
@@ -403,7 +404,7 @@
           <div class="fw-ctx-field">
             <label>Modalidade</label>
             <select id="ctx_mod" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
-              <option value="acq" selected>Aquisição / Leasing financeiro</option>
+              <option value="acq" selected>Aquisição / Leasing</option>
               <option value="rnt">Renting operacional</option>
             </select>
           </div>
@@ -1003,7 +1004,7 @@
     }
 
     if (msgs.length === 0) {
-      msgs.push('Aquisição / leasing financeiro · uso exclusivamente empresarial · regime IVA de dedução total.');
+      msgs.push('Aquisição / leasing · uso exclusivamente empresarial · regime IVA de dedução total.');
     }
 
     bar.innerText = msgs.join('  |  ');
