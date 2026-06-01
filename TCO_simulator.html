@@ -107,9 +107,21 @@
     /* ── CONTEXT BAR ── */
     .fw-context-bar {
       background:var(--navy2);
-      padding:1rem 1.25rem;
-      display:flex; flex-wrap:wrap; gap:1rem; align-items:flex-end;
+      padding:.85rem 1.25rem;
+      display:flex; flex-direction:column; gap:0;
       border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .fw-ctx-row {
+      display:flex; flex-wrap:wrap; gap:.85rem; align-items:flex-end;
+    }
+    .fw-ctx-row + .fw-ctx-row {
+      border-top:1px solid rgba(255,255,255,.08);
+      margin-top:.75rem; padding-top:.75rem;
+    }
+    .fw-ctx-row-label {
+      font-size:.62rem; font-weight:700; text-transform:uppercase; letter-spacing:.1em;
+      color:rgba(255,255,255,.3); padding-bottom:.15rem; white-space:nowrap;
+      align-self:flex-end; padding-right:.25rem;
     }
     .fw-ctx-field { flex:1; min-width:140px; }
     .fw-ctx-field label {
@@ -369,52 +381,68 @@
 
       <!-- ── CONTEXT BAR ── -->
       <div class="fw-context-bar">
-        <div class="fw-ctx-field">
-          <label>Tipo de Viatura</label>
-          <select id="ctx_cat" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
-            <option value="pass" selected>Ligeiro de Passageiros</option>
-            <option value="coml">Ligeiro de Mercadorias</option>
-            <option value="mist">Misto</option>
-          </select>
+
+        <!-- Linha 1: Contexto geral -->
+        <div class="fw-ctx-row">
+          <div class="fw-ctx-field">
+            <label>Tipo de Viatura</label>
+            <select id="ctx_cat" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
+              <option value="pass" selected>Ligeiro de Passageiros</option>
+              <option value="coml">Ligeiro de Mercadorias</option>
+              <option value="mist">Misto</option>
+            </select>
+          </div>
+          <div class="fw-ctx-field">
+            <label>Afetação</label>
+            <select id="ctx_afetacao" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
+              <option value="excl" selected>Exclusivamente empresarial</option>
+              <option value="mirs">Uso misto — colaborador declara IRS</option>
+              <option value="msem">Uso misto — sem declaração IRS</option>
+            </select>
+          </div>
+          <div class="fw-ctx-field">
+            <label>Modalidade</label>
+            <select id="ctx_mod" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
+              <option value="acq" selected>Aquisição / Leasing financeiro</option>
+              <option value="rnt">Renting operacional</option>
+            </select>
+          </div>
+          <div class="fw-ctx-field">
+            <label>Regime IVA Empresa</label>
+            <select id="ctx_iva" onchange="window.calcFleetWise();">
+              <option value="tot" selected>Dedução total</option>
+              <option value="par">Dedução parcial 50%</option>
+              <option value="ise">Isento art. 9.º</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:.4rem;align-items:flex-end;padding-bottom:1px;flex-shrink:0;margin-left:auto;">
+            <button class="btn-ctx" onclick="window.resetSimulator()">↺ Repor</button>
+            <button class="btn-ctx" onclick="window.print()">⎙ PDF</button>
+          </div>
         </div>
-        <div class="fw-ctx-field">
-          <label>Afetação</label>
-          <select id="ctx_afetacao" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
-            <option value="excl" selected>Exclusivamente empresarial</option>
-            <option value="mirs">Uso misto — colaborador declara IRS</option>
-            <option value="msem">Uso misto — sem declaração IRS</option>
-          </select>
+
+        <!-- Linha 2: Parâmetros fiscais -->
+        <div class="fw-ctx-row">
+          <div class="fw-ctx-field">
+            <label>Prejuízo Fiscal</label>
+            <select id="ctx_prej" onchange="window.calcFleetWise();">
+              <option value="nao" selected>Não</option>
+              <option value="sim">Sim (+10pp TA)</option>
+            </select>
+          </div>
+          <div class="fw-ctx-field" style="min-width:80px;max-width:110px;">
+            <label>Taxa IRC %</label>
+            <input type="text" id="ctx_irc" value="21" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)">
+          </div>
+          <div class="fw-ctx-field" title="Taxa de IVA aplicável ao carregamento. Industrial/postos públicos: 23%. Carregamento doméstico/escritório (OE 2023): 6%.">
+            <label>IVA Electricidade</label>
+            <select id="ctx_iva_elec" onchange="window.calcFleetWise();">
+              <option value="23" selected>23% — industrial / postos públicos</option>
+              <option value="6">6% — doméstico / escritório (OE2023)</option>
+            </select>
+          </div>
         </div>
-        <div class="fw-ctx-field">
-          <label>Modalidade</label>
-          <select id="ctx_mod" onchange="window.updateUI(); window.updateInfoBar(); window.calcFleetWise();">
-            <option value="acq" selected>Aquisição / Leasing financeiro</option>
-            <option value="rnt">Renting operacional</option>
-          </select>
-        </div>
-        <div class="fw-ctx-field">
-          <label>Regime IVA Empresa</label>
-          <select id="ctx_iva" onchange="window.calcFleetWise();">
-            <option value="tot" selected>Dedução total</option>
-            <option value="par">Dedução parcial 50%</option>
-            <option value="ise">Isento art. 9.º</option>
-          </select>
-        </div>
-        <div class="fw-ctx-field">
-          <label>Prejuízo Fiscal</label>
-          <select id="ctx_prej" onchange="window.calcFleetWise();">
-            <option value="nao" selected>Não</option>
-            <option value="sim">Sim (+10pp TA)</option>
-          </select>
-        </div>
-        <div class="fw-ctx-field" style="min-width:80px;max-width:110px;">
-          <label>Taxa IRC %</label>
-          <input type="text" id="ctx_irc" value="21" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 0)">
-        </div>
-        <div style="display:flex;gap:.4rem;align-items:flex-end;padding-bottom:1px;flex-shrink:0;">
-          <button class="btn-ctx" onclick="window.resetSimulator()">↺ Repor</button>
-          <button class="btn-ctx" onclick="window.print()">⎙ PDF</button>
-        </div>
+
       </div>
 
       <!-- ── INFO BAR ── -->
@@ -443,13 +471,6 @@
         <div class="fw-g-field">
           <label>Electricidade (€/kWh)</label>
           <input type="text" id="g_kwh" value="0,14" oninput="window.calcFleetWise()" onblur="window.fmtInput(this, 2)">
-        </div>
-        <div class="fw-g-field" title="Taxa de IVA aplicável ao carregamento. Industrial/postos públicos: 23%. Carregamento doméstico/escritório (OE 2023): 6%.">
-          <label>IVA electricidade</label>
-          <select id="ctx_iva_elec" onchange="window.calcFleetWise();" style="font-size:.78rem;">
-            <option value="23" selected>23% — industrial / postos</option>
-            <option value="6">6% — doméstico / escritório</option>
-          </select>
         </div>
       </div>
 
