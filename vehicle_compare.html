@@ -55,10 +55,21 @@
     @keyframes spin { to { transform:rotate(360deg); } }
 
     /* ── FOOTER ── */
-    .fw-footer { background:var(--navy); color:rgba(255,255,255,.6); }
-    .fw-footer h4 { color:#fff; font-weight:700; font-size:.95rem; margin-bottom:1rem; }
-    .fw-footer a { color:rgba(255,255,255,.6); text-decoration:none; font-size:.83rem; transition:.2s; display:block; margin-bottom:.5rem; }
-    .fw-footer a:hover { color:var(--green); }
+    .footer { background:var(--navy); color:rgba(255,255,255,.6); }
+    .footer h4 { color:#fff; font-weight:700; font-size:.95rem; margin-bottom:1rem; }
+    .footer a { color:rgba(255,255,255,.6); text-decoration:none; font-size:.83rem; transition:.2s; display:block; margin-bottom:.5rem; }
+    .footer a:hover { color:var(--green); }
+
+    /* ── FORM / MODAL ── */
+    .form-input { width:100%; padding:.75rem 1rem; border:1.5px solid #e2e8f0; border-radius:10px; font-family:inherit; font-size:.88rem; color:var(--navy); background:#fff; transition:.2s; outline:none; }
+    .form-input:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(16,185,129,.1); }
+    .form-label { font-size:.8rem; font-weight:600; color:#374151; margin-bottom:.35rem; display:block; }
+    #demo-modal { display:none; position:fixed; inset:0; z-index:3000; }
+    #demo-modal.open { display:flex; }
+    .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px); }
+    .modal-box { position:relative; z-index:1; background:#fff; border-radius:24px; padding:2.5rem; width:100%; max-width:560px; margin:auto; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,.25); }
+    #toast { position:fixed; bottom:2rem; right:2rem; background:var(--green); color:#fff; padding:.9rem 1.5rem; border-radius:12px; font-size:.85rem; font-weight:600; box-shadow:0 8px 24px rgba(16,185,129,.4); z-index:5000; opacity:0; transform:translateY(20px); transition:.4s; pointer-events:none; }
+    #toast.show { opacity:1; transform:translateY(0); }
 
     /* ── HERO ── */
     .hero { background:linear-gradient(135deg,var(--navy) 0%,#0d2137 60%,#0a2a1a 100%); padding:4rem 1.5rem 3rem; text-align:center; }
@@ -146,11 +157,6 @@
     .callout-cta { background:var(--green); color:#fff; text-decoration:none; font-weight:700; font-size:.85rem; padding:.75rem 1.75rem; border-radius:50px; white-space:nowrap; transition:.2s; }
     .callout-cta:hover { background:var(--green2); }
 
-    /* Footer */
-    footer { background:var(--navy); color:rgba(255,255,255,.4); text-align:center; padding:2rem 1rem; font-size:.75rem; margin-top:0; }
-    footer a { color:rgba(255,255,255,.4); text-decoration:none; }
-    footer a:hover { color:var(--green); }
-
     @media(max-width:768px) {
       .cascade-row { flex-direction:column; align-items:stretch; }
       .btn-add { width:100%; }
@@ -167,10 +173,10 @@
         <a href="index.html#servicos" class="nav-link">Serviços</a>
         <a href="vehicle_compare.html" class="nav-link" style="color:var(--green)">Comparador xEV</a>
         <a href="quem_somos.html" class="nav-link">Quem Somos</a>
-        <a href="index.html#contacto" class="btn-primary">
+        <button onclick="openModal()" class="btn-primary">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
           Agendar Reunião
-        </a>
+        </button>
       </nav>
       <button class="ham" onclick="toggleMenu()" aria-label="Menu">
         <svg id="ham-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
@@ -186,7 +192,7 @@
     <a href="vehicle_compare.html" class="mob-link" style="color:var(--green)">Comparador xEV</a>
     <a href="quem_somos.html" class="mob-link">Quem Somos</a>
     <a href="loja.html" class="mob-link">Loja</a>
-    <a href="index.html#contacto" style="margin-top:1.5rem;width:100%;background:var(--green);color:#fff;font-weight:700;padding:1rem;border-radius:12px;border:none;cursor:pointer;font-size:1rem;text-align:center;text-decoration:none;display:block;">Agendar Reunião</a>
+    <button onclick="toggleMenu(); openModal();" style="margin-top:1.5rem;width:100%;background:var(--green);color:#fff;font-weight:700;padding:1rem;border-radius:12px;border:none;cursor:pointer;font-size:1rem;">Agendar Reunião / Demo</button>
   </div>
   <div id="menu-overlay" onclick="toggleMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;"></div>
 
@@ -243,7 +249,7 @@
 
   </div>
 
-  <footer class="fw-footer" style="padding:4rem 0 2rem;">
+  <footer class="footer" style="padding:4rem 0 2rem;">
     <div class="max-w-7xl mx-auto px-4">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
         <div class="md:col-span-2">
@@ -274,9 +280,9 @@
           <a href="quem_somos.html">Quem Somos</a>
           <a href="index.html#contacto">Contacto</a>
           <div style="margin-top:1rem;">
-            <a href="index.html#contacto" style="background:var(--green);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:50px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;text-decoration:none;display:inline-block;" onmouseover="this.style.background='var(--green2)'" onmouseout="this.style.background='var(--green)'">
+            <button onclick="openModal()" style="background:var(--green);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:50px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;" onmouseover="this.style.background='var(--green2)'" onmouseout="this.style.background='var(--green)'">
               Agendar Reunião →
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -286,6 +292,56 @@
       </div>
     </div>
   </footer>
+
+<!-- ══════════════ MODAL ══════════════ -->
+<div id="demo-modal">
+  <div class="modal-bg" onclick="closeModal()"></div>
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;">
+      <div>
+        <h3 style="font-weight:800;color:var(--navy);font-size:1.3rem;margin-bottom:.3rem;">Agendar Reunião</h3>
+        <p style="font-size:.82rem;color:var(--slate);">Diagnóstico gratuito de 45 min · Resposta em 24h</p>
+      </div>
+      <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;color:var(--slate);font-size:1.5rem;line-height:1;padding:.25rem;">&times;</button>
+    </div>
+    <form onsubmit="submitForm(event)" novalidate>
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div>
+          <label class="form-label">Nome *</label>
+          <input type="text" class="form-input" placeholder="O seu nome" required>
+        </div>
+        <div>
+          <label class="form-label">Empresa *</label>
+          <input type="text" class="form-input" placeholder="Empresa" required>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email *</label>
+        <input type="email" class="form-input" placeholder="email@empresa.pt" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Telefone</label>
+        <input type="tel" class="form-input" placeholder="+351 9xx xxx xxx">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Número de viaturas</label>
+        <select class="form-input">
+          <option>Selecione...</option>
+          <option>3 – 10 viaturas</option>
+          <option>10 – 30 viaturas</option>
+          <option>30 – 100 viaturas</option>
+          <option>+ 100 viaturas</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:.9rem;">
+        Enviar pedido →
+      </button>
+      <p style="font-size:.72rem;color:var(--slate);text-align:center;margin-top:.6rem;">Tratamos os seus dados com total confidencialidade (RGPD).</p>
+    </form>
+  </div>
+</div>
+
+<div id="toast">✓ Pedido enviado com sucesso! Contactamos em 24h.</div>
 
   <script>
   /* ── CHARGETRIP API ── */
@@ -654,7 +710,24 @@
     const o = document.getElementById('menu-overlay');
     const isOpen = m.classList.toggle('open');
     o.style.display = isOpen ? 'block' : 'none';
-    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function openModal() {
+    document.getElementById('demo-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('demo-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  function submitForm(e) {
+    e.preventDefault();
+    closeModal();
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
   }
 
   </script>
