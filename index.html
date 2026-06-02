@@ -260,7 +260,8 @@
 
         .hero-cards { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin-top:3rem; }
         .hero-card { background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:16px; padding:1.25rem; backdrop-filter:blur(10px); }
-        .hero-card-icon { font-size:1.5rem; margin-bottom:.5rem; }
+        .hero-card-icon { margin-bottom:.75rem; color:var(--green); }
+        .hero-card-icon svg { display:block; }
         .hero-card h4 { color:#fff; font-weight:700; font-size:.9rem; margin-bottom:.25rem; }
         .hero-card p { color:rgba(255,255,255,.55); font-size:.78rem; line-height:1.5; }
 
@@ -313,7 +314,8 @@
 
         /* ── JOBS ── */
         .job-card { background:var(--navy); border-radius:20px; padding:2rem; }
-        .job-icon { font-size:2.5rem; margin-bottom:1rem; }
+        .job-icon { margin-bottom:1rem; color:var(--green); }
+        .job-icon svg { display:block; }
         .job-card h3 { color:#fff; font-weight:700; font-size:1.05rem; margin-bottom:.75rem; }
         .job-card p { color:rgba(255,255,255,.6); font-size:.85rem; line-height:1.7; }
         .job-card .job-label { font-size:.7rem; font-weight:700; letter-spacing:.15em; text-transform:uppercase; color:var(--green); margin-bottom:.5rem; }
@@ -447,22 +449,22 @@
             <div class="lg:w-[45%] w-full" data-aos="fade-left" data-aos-duration="900" data-aos-delay="200">
                 <div class="hero-cards">
                     <div class="hero-card">
-                        <div class="hero-card-icon">📊</div>
+                        <div class="hero-card-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
                         <h4>Radiografia TCO</h4>
                         <p>Identifique onde está a perder dinheiro na sua frota — incluindo ineficiências fiscais invisíveis.</p>
                     </div>
                     <div class="hero-card">
-                        <div class="hero-card-icon">⚡</div>
+                        <div class="hero-card-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
                         <h4>Simulador BEV/PHEV</h4>
                         <p>Calcule o impacto fiscal real da transição elétrica da sua frota em minutos.</p>
                     </div>
                     <div class="hero-card">
-                        <div class="hero-card-icon">🛡️</div>
+                        <div class="hero-card-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
                         <h4>Independência Total</h4>
                         <p>Nunca do lado das locadoras. Sempre do lado do Cliente. Sem conflito de interesses.</p>
                     </div>
                     <div class="hero-card">
-                        <div class="hero-card-icon">🤝</div>
+                        <div class="hero-card-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
                         <h4>Success Fee</h4>
                         <p>Só pagamos se poupa. O nosso alinhamento de incentivos é a nossa garantia.</p>
                     </div>
@@ -618,28 +620,28 @@
             </div>
             <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
                 <div style="display:flex;align-items:flex-start;gap:.75rem;">
-                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">⚡</div>
+                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
                     <div>
                         <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Soluções de Carregamento</p>
                         <p style="font-size:.75rem;color:var(--slate);">Wallboxes e infraestrutura de carga para frotas elétricas</p>
                     </div>
                 </div>
                 <div style="display:flex;align-items:flex-start;gap:.75rem;">
-                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">🛡️</div>
+                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
                     <div>
                         <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Seguros Auto</p>
                         <p style="font-size:.75rem;color:var(--slate);">Intermediação independente — melhores condições</p>
                     </div>
                 </div>
                 <div style="display:flex;align-items:flex-start;gap:.75rem;">
-                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">✨</div>
+                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
                     <div>
                         <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Automotive Care</p>
                         <p style="font-size:.75rem;color:var(--slate);">Manutenção, detailing e gestão de viaturas de coleção</p>
                     </div>
                 </div>
                 <div style="display:flex;align-items:flex-start;gap:.75rem;">
-                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1rem;">🏎️</div>
+                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17H3a2 2 0 0 1-2-2V9l3-6h12l3 6v6a2 2 0 0 1-2 2h-2m0 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm-8 0a2 2 0 1 1-4 0 2 2 0 0 1 4 0z"/></svg></div>
                     <div>
                         <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Mobilidade de Luxo</p>
                         <p style="font-size:.75rem;color:var(--slate);">Transporte premium para executivos e ocasiões especiais</p>
@@ -799,21 +801,21 @@
 
                     <div class="job-card">
                         <div class="job-label">Job Funcional</div>
-                        <div class="job-icon">💰</div>
+                        <div class="job-icon"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v2m0 8v2m-3-5h5.5a2.5 2.5 0 0 1 0 5H9a2.5 2.5 0 0 0 0 5"/></svg></div>
                         <h3>Reduzir custos comprovados na frota</h3>
                         <p>Identificamos e eliminamos ineficiências específicas da sua frota, gerando poupanças mensuráveis. Otimização fiscal (TA, IRC, IVA) que a maioria dos gestores desconhece.</p>
                     </div>
 
                     <div class="job-card">
                         <div class="job-label">Job Social</div>
-                        <div class="job-icon">📊</div>
+                        <div class="job-icon"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></svg></div>
                         <h3>Decisões de mobilidade com dados rigorosos</h3>
                         <p>Apresentar ao CFO/CEO um plano TCO com benchmarks de mercado, análise BEV/PHEV e ROI definido. Legitimidade técnica e fiscal na escolha de viaturas.</p>
                     </div>
 
                     <div class="job-card">
                         <div class="job-label">Job Emocional</div>
-                        <div class="job-icon">😌</div>
+                        <div class="job-icon"><svg viewBox="0 0 24 24" width="44" height="44" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></div>
                         <h3>Gerir frotas sem stress, com rigor</h3>
                         <p>Externalizar a complexidade — renting, fiscalidade, negociação, operações. Trabalhar com consultores que defendem exclusivamente os seus interesses, sem conflito com locadoras.</p>
                     </div>
