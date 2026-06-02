@@ -32,7 +32,6 @@
   <link rel="icon" type="image/png" href="favicon.png">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
 
   <style>
     :root { --navy:#0f172a; --navy2:#1e293b; --green:#10b981; --green2:#059669; --slate:#64748b; }
@@ -42,8 +41,35 @@
     /* ── HEADER ── */
     .sticky-header { position:fixed; top:0; left:0; width:100%; z-index:1000; height:72px; display:flex; align-items:center; background:var(--navy); box-shadow:0 2px 20px rgba(0,0,0,.3); }
     .brand-logo { font-size:1.5rem; font-weight:800; color:#fff; text-decoration:none; }
-    .back-btn { color:rgba(255,255,255,.8); text-decoration:none; font-size:.85rem; font-weight:500; padding:.5rem 1.2rem; border:1.5px solid rgba(255,255,255,.25); border-radius:50px; transition:.2s; }
-    .back-btn:hover { border-color:var(--green); color:var(--green); }
+    /* ── NAV ── */
+    .nav-link { color:rgba(255,255,255,.8); font-size:.85rem; font-weight:500; text-decoration:none; transition:.2s; }
+    .nav-link:hover { color:var(--green); }
+    .btn-primary { background:var(--green); color:#fff; font-weight:700; font-size:.85rem; padding:.6rem 1.4rem; border-radius:50px; text-decoration:none; display:inline-flex; align-items:center; gap:.4rem; transition:.25s; border:none; cursor:pointer; white-space:nowrap; font-family:'Poppins',sans-serif; }
+    .btn-primary:hover { background:var(--green2); transform:translateY(-1px); box-shadow:0 6px 20px rgba(16,185,129,.35); }
+    #mobile-menu { position:fixed; top:0; right:-100%; width:85%; max-width:360px; height:100%; background:var(--navy); z-index:2001; transition:.4s cubic-bezier(.4,0,.2,1); padding:2rem; display:flex; flex-direction:column; gap:.5rem; box-shadow:-10px 0 40px rgba(0,0,0,.5); }
+    #mobile-menu.open { right:0; }
+    .mob-link { color:#fff; font-size:1rem; padding:12px 0; border-bottom:1px solid rgba(255,255,255,.08); text-decoration:none; display:block; }
+    .ham { display:none; cursor:pointer; color:#fff; background:none; border:none; padding:0; }
+    @media(max-width:1023px) { .desktop-nav { display:none !important; } .ham { display:block; } }
+    .fw-spinner { width:14px; height:14px; border:2px solid rgba(16,185,129,.25); border-top-color:var(--green); border-radius:50%; animation:spin .7s linear infinite; display:inline-block; vertical-align:middle; margin-right:.3rem; }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    /* ── FOOTER ── */
+    .footer { background:var(--navy); color:rgba(255,255,255,.6); }
+    .footer h4 { color:#fff; font-weight:700; font-size:.95rem; margin-bottom:1rem; }
+    .footer a { color:rgba(255,255,255,.6); text-decoration:none; font-size:.83rem; transition:.2s; display:block; margin-bottom:.5rem; }
+    .footer a:hover { color:var(--green); }
+
+    /* ── FORM / MODAL ── */
+    .form-input { width:100%; padding:.75rem 1rem; border:1.5px solid #e2e8f0; border-radius:10px; font-family:inherit; font-size:.88rem; color:var(--navy); background:#fff; transition:.2s; outline:none; }
+    .form-input:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(16,185,129,.1); }
+    .form-label { font-size:.8rem; font-weight:600; color:#374151; margin-bottom:.35rem; display:block; }
+    #demo-modal { display:none; position:fixed; inset:0; z-index:3000; }
+    #demo-modal.open { display:flex; }
+    .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px); }
+    .modal-box { position:relative; z-index:1; background:#fff; border-radius:24px; padding:2.5rem; width:100%; max-width:560px; margin:auto; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,.25); }
+    #toast { position:fixed; bottom:2rem; right:2rem; background:var(--green); color:#fff; padding:.9rem 1.5rem; border-radius:12px; font-size:.85rem; font-weight:600; box-shadow:0 8px 24px rgba(16,185,129,.4); z-index:5000; opacity:0; transform:translateY(20px); transition:.4s; pointer-events:none; }
+    #toast.show { opacity:1; transform:translateY(0); }
 
     /* ── HERO ── */
     .hero { background:linear-gradient(135deg,var(--navy) 0%,#0d2137 60%,#0a2a1a 100%); padding:4rem 1.5rem 3rem; text-align:center; }
@@ -131,11 +157,6 @@
     .callout-cta { background:var(--green); color:#fff; text-decoration:none; font-weight:700; font-size:.85rem; padding:.75rem 1.75rem; border-radius:50px; white-space:nowrap; transition:.2s; }
     .callout-cta:hover { background:var(--green2); }
 
-    /* Footer */
-    footer { background:var(--navy); color:rgba(255,255,255,.4); text-align:center; padding:2rem 1rem; font-size:.75rem; margin-top:0; }
-    footer a { color:rgba(255,255,255,.4); text-decoration:none; }
-    footer a:hover { color:var(--green); }
-
     @media(max-width:768px) {
       .cascade-row { flex-direction:column; align-items:stretch; }
       .btn-add { width:100%; }
@@ -148,17 +169,40 @@
   <header class="sticky-header">
     <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
       <a href="index.html" class="brand-logo"><span style="color:var(--green)">Fleet</span>Wise</a>
-      <a href="index.html" class="back-btn"><i class="fa-solid fa-arrow-left mr-2"></i> Voltar</a>
+      <nav class="desktop-nav flex items-center gap-8">
+        <a href="index.html#servicos" class="nav-link">Serviços</a>
+        <a href="vehicle_compare.html" class="nav-link" style="color:var(--green)">Comparador xEV</a>
+        <a href="quem_somos.html" class="nav-link">Quem Somos</a>
+        <button onclick="openModal()" class="btn-primary">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          Agendar Reunião
+        </button>
+      </nav>
+      <button class="ham" onclick="toggleMenu()" aria-label="Menu">
+        <svg id="ham-icon" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+      </button>
     </div>
   </header>
+  <div id="mobile-menu">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;">
+      <span style="font-size:1.3rem;font-weight:800;"><span style="color:var(--green)">Fleet</span><span style="color:#fff;">Wise</span></span>
+      <button onclick="toggleMenu()" style="color:#fff;font-size:2rem;line-height:1;background:none;border:none;cursor:pointer;">&times;</button>
+    </div>
+    <a href="index.html#servicos" class="mob-link">Serviços</a>
+    <a href="vehicle_compare.html" class="mob-link" style="color:var(--green)">Comparador xEV</a>
+    <a href="quem_somos.html" class="mob-link">Quem Somos</a>
+    <a href="loja.html" class="mob-link">Loja</a>
+    <button onclick="toggleMenu(); openModal();" style="margin-top:1.5rem;width:100%;background:var(--green);color:#fff;font-weight:700;padding:1rem;border-radius:12px;border:none;cursor:pointer;font-size:1rem;">Agendar Reunião / Demo</button>
+  </div>
+  <div id="menu-overlay" onclick="toggleMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;"></div>
 
   <section class="hero">
     <h1>Comparador <em>xEV</em> de Frotas</h1>
     <p>Compare até 4 viaturas lado a lado — autonomia WLTP, bateria, carregamento AC/DC, aceleração e dimensões. Base de dados atualizada com <strong style="color:#fff">700+ modelos</strong> disponíveis em Portugal.</p>
     <div class="hero-pills">
-      <span class="hero-pill-sm"><i class="fa-solid fa-bolt mr-1" style="color:var(--green)"></i> 700+ modelos BEV/PHEV</span>
-      <span class="hero-pill-sm"><i class="fa-solid fa-gauge-high mr-1" style="color:var(--green)"></i> Autonomia WLTP oficial</span>
-      <span class="hero-pill-sm"><i class="fa-solid fa-charging-station mr-1" style="color:var(--green)"></i> Carga AC e DC por modelo</span>
+      <span class="hero-pill-sm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="color:var(--green);display:inline-block;vertical-align:middle;margin-right:.3rem"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>700+ modelos BEV/PHEV</span>
+      <span class="hero-pill-sm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);display:inline-block;vertical-align:middle;margin-right:.3rem"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>Autonomia WLTP oficial</span>
+      <span class="hero-pill-sm"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color:var(--green);display:inline-block;vertical-align:middle;margin-right:.3rem"><rect x="3" y="11" width="13" height="10" rx="1"/><path d="M9 11V7a3 3 0 016 0v4M16 16h2a2 2 0 000-4h-2"/></svg>Carga AC e DC por modelo</span>
     </div>
     <style>@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}</style>
   </section>
@@ -167,22 +211,22 @@
 
     <div class="filter-bar" id="filterBar">
       <button class="filter-tab active" data-filter="all" onclick="setFilter('all')">Todos <span class="count" id="cnt-all"></span></button>
-      <button class="filter-tab" data-filter="BEV" onclick="setFilter('BEV')">⚡ Elétrico (BEV) <span class="count" id="cnt-BEV"></span></button>
-      <button class="filter-tab" data-filter="PHEV" onclick="setFilter('PHEV')">🔌 Híbrido Plug-in <span class="count" id="cnt-PHEV"></span></button>
+      <button class="filter-tab" data-filter="BEV" onclick="setFilter('BEV')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>Elétrico (BEV) <span class="count" id="cnt-BEV"></span></button>
+      <button class="filter-tab" data-filter="PHEV" onclick="setFilter('PHEV')"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="vertical-align:middle;margin-right:.3rem"><rect x="3" y="11" width="13" height="10" rx="1"/><path d="M9 11V7a3 3 0 016 0v4M16 16h2a2 2 0 000-4h-2"/></svg>Híbrido Plug-in <span class="count" id="cnt-PHEV"></span></button>
     </div>
 
     <div class="selector-card">
       <div class="cascade-row">
-        <div id="loadStatus" style="width:100%;font-size:.8rem;color:var(--slate);padding:.25rem 0"><i class="fa-solid fa-spinner fa-spin mr-1"></i> A carregar base de dados...</div>
+        <div id="loadStatus" style="width:100%;font-size:.8rem;color:var(--slate);padding:.25rem 0"><span class="fw-spinner"></span> A carregar base de dados...</div>
         <div class="select-group"><label>Marca</label><select id="sel_make" onchange="loadModels()"><option value="">-- Selecione --</option></select></div>
         <div class="select-group"><label>Modelo</label><select id="sel_model" onchange="loadVersions()" disabled><option value="">-- --</option></select></div>
         <div class="select-group"><label>Versão</label><select id="sel_version" onchange="checkButton()" disabled><option value="">-- --</option></select></div>
-        <button class="btn-add" onclick="addCar()" id="btnAdd" disabled><i class="fa-solid fa-plus mr-1"></i> Adicionar</button>
+        <button class="btn-add" onclick="addCar()" id="btnAdd" disabled>+ Adicionar</button>
       </div>
     </div>
 
     <div id="emptyState" class="empty-state">
-      <i class="fa-solid fa-car-side text-5xl mb-4" style="opacity:.12;font-size:3rem"></i>
+      <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" style="opacity:.15;margin:0 auto .75rem;display:block"><path d="M5 17H3a2 2 0 01-2-2V9a2 2 0 012-2h1l2.5-3.5A2 2 0 016.14 3h11.72a2 2 0 011.64.5L22 7h1a2 2 0 012 2v6a2 2 0 01-2 2h-2"/><path d="M5 17h14M7.5 17v2M16.5 17v2"/><circle cx="8" cy="13" r="1.5"/><circle cx="16" cy="13" r="1.5"/></svg>
       <p style="margin:.75rem 0 .25rem;font-weight:600;color:#475569">Selecione as viaturas acima para iniciar a comparação.</p>
       <p style="font-size:.8rem">Pode adicionar até 4 viaturas em simultâneo.</p>
     </div>
@@ -204,9 +248,99 @@
 
   </div>
 
-  <footer>
-    <p>© 2026 FleetWise, Unipessoal, Lda. · <a href="index.html">fleetwisesolutions.pt</a> · Dados indicativos, sujeitos a alteração pelos fabricantes.</p>
+  <footer class="footer" style="padding:4rem 0 2rem;">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        <div class="md:col-span-2">
+          <span style="font-size:1.5rem;font-weight:800;display:inline-block;margin-bottom:1rem;"><span style="color:var(--green)">Fleet</span><span style="color:#fff;">Wise</span></span>
+          <p style="font-size:.83rem;line-height:1.8;max-width:360px;margin-bottom:1.5rem;">A consultora independente que transforma a gestão de frotas em Portugal num ativo estratégico. Simplifique, Otimize, Rentabilize.</p>
+          <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+            <a href="mailto:geral@fleetwise.pt" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              geral@fleetwise.pt
+            </a>
+            <a href="tel:+351914038167" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.1 1.18 2 2 0 012.07 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.55-.55a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+              914 038 167
+            </a>
+          </div>
+        </div>
+        <div>
+          <h4>Serviços</h4>
+          <a href="index.html#servicos">Auditoria &amp; Diagnóstico TCO</a>
+          <a href="index.html#servicos">Procurement &amp; Negociação</a>
+          <a href="index.html#servicos">Gestão Operacional</a>
+          <a href="index.html#servicos">Fim de Ciclo</a>
+        </div>
+        <div>
+          <h4>Ferramentas</h4>
+          <a href="TCO_simulator.html">Simulador TCO</a>
+          <a href="vehicle_compare.html">Comparador xEV / BEV</a>
+          <a href="quem_somos.html">Quem Somos</a>
+          <a href="index.html#contacto">Contacto</a>
+          <div style="margin-top:1rem;">
+            <button onclick="openModal()" style="background:var(--green);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:50px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;" onmouseover="this.style.background='var(--green2)'" onmouseout="this.style.background='var(--green)'">
+              Agendar Reunião →
+            </button>
+          </div>
+        </div>
+      </div>
+      <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:2rem;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;">
+        <p style="font-size:.75rem;">Copyright © 2026 FleetWise, Unipessoal, Lda. · Portugal · Dados indicativos, sujeitos a alteração pelos fabricantes.</p>
+        <p style="font-size:.75rem;">Simplifique, Otimize, Rentabilize.</p>
+      </div>
+    </div>
   </footer>
+
+<!-- ══════════════ MODAL ══════════════ -->
+<div id="demo-modal">
+  <div class="modal-bg" onclick="closeModal()"></div>
+  <div class="modal-box">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;">
+      <div>
+        <h3 style="font-weight:800;color:var(--navy);font-size:1.3rem;margin-bottom:.3rem;">Agendar Reunião</h3>
+        <p style="font-size:.82rem;color:var(--slate);">Diagnóstico gratuito de 45 min · Resposta em 24h</p>
+      </div>
+      <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;color:var(--slate);font-size:1.5rem;line-height:1;padding:.25rem;">&times;</button>
+    </div>
+    <form onsubmit="submitForm(event)" novalidate>
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div>
+          <label class="form-label">Nome *</label>
+          <input type="text" class="form-input" placeholder="O seu nome" required>
+        </div>
+        <div>
+          <label class="form-label">Empresa *</label>
+          <input type="text" class="form-input" placeholder="Empresa" required>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Email *</label>
+        <input type="email" class="form-input" placeholder="email@empresa.pt" required>
+      </div>
+      <div class="mb-3">
+        <label class="form-label">Telefone</label>
+        <input type="tel" class="form-input" placeholder="+351 9xx xxx xxx">
+      </div>
+      <div class="mb-4">
+        <label class="form-label">Número de viaturas</label>
+        <select class="form-input">
+          <option>Selecione...</option>
+          <option>3 – 10 viaturas</option>
+          <option>10 – 30 viaturas</option>
+          <option>30 – 100 viaturas</option>
+          <option>+ 100 viaturas</option>
+        </select>
+      </div>
+      <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:.9rem;">
+        Enviar pedido →
+      </button>
+      <p style="font-size:.72rem;color:var(--slate);text-align:center;margin-top:.6rem;">Tratamos os seus dados com total confidencialidade (RGPD).</p>
+    </form>
+  </div>
+</div>
+
+<div id="toast">✓ Pedido enviado com sucesso! Contactamos em 24h.</div>
 
   <script>
   /* ── CHARGETRIP API ── */
@@ -345,7 +479,7 @@
   async function loadData() {
     const status = document.getElementById('loadStatus');
     try {
-      if (status) status.innerHTML = '<i class="fa-solid fa-spinner fa-spin mr-1"></i> A carregar lista de viaturas…';
+      if (status) status.innerHTML = '<span class="fw-spinner"></span> A carregar lista de viaturas…';
       const raw = [];
       let page  = 0;
       while (true) {
@@ -363,7 +497,7 @@
       if (status) status.style.display = 'none';
     } catch(e) {
       if (status) {
-        status.innerHTML = '<i class="fa-solid fa-triangle-exclamation mr-1" style="color:#ef4444"></i> Erro ao carregar dados. Recarregue a página.';
+        status.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Erro ao carregar dados. Recarregue a página.';
       }
       console.error('Chargetrip load error', e);
     }
@@ -506,7 +640,7 @@
   function cellValue(car, row) {
     if (row.key === 'typeBadge') {
       const cls = car.type === 'BEV' ? 'badge-bev' : 'badge-phev';
-      const lbl = car.type === 'BEV' ? '⚡ Elétrico (BEV)' : '🔌 Híbrido Plug-in (PHEV)';
+      const lbl = car.type === 'BEV' ? 'Elétrico (BEV)' : 'Híbrido Plug-in (PHEV)';
       return '<span class="type-badge ' + cls + '">' + lbl + '</span>';
     }
     if (row.key === 'segmentF') {
@@ -531,17 +665,19 @@
     selectedCars.forEach(car => {
       const th = document.createElement('th');
       th.className = 'col-car';
+      const XBTN = '<button class="btn-remove" onclick="removeCar(' + car.id + ')" title="Remover">&#x2715;</button>';
+      const CAR_SVG = '<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="opacity:.3"><path d="M5 17H3a2 2 0 01-2-2V9a2 2 0 012-2h1l2.5-3.5A2 2 0 016.14 3h11.72a2 2 0 011.64.5L22 7h1a2 2 0 012 2v6a2 2 0 01-2 2h-2"/><path d="M5 17h14M7.5 17v2M16.5 17v2"/><circle cx="8" cy="13" r="1.5"/><circle cx="16" cy="13" r="1.5"/></svg>';
       if (car._loading) {
         th.innerHTML =
-          '<button class="btn-remove" onclick="removeCar(' + car.id + ')" title="Remover"><i class="fa-solid fa-circle-xmark"></i></button>' +
-          '<div class="car-img-wrap"><div class="car-fallback"><i class="fa-solid fa-spinner fa-spin"></i></div></div>' +
+          XBTN +
+          '<div class="car-img-wrap"><div class="car-fallback"><span class="fw-spinner" style="width:24px;height:24px;border-width:3px"></span></div></div>' +
           '<div class="car-brand">' + car.make + '</div>' +
           '<span class="car-model">' + car.model + '</span>' +
           '<span class="car-version" style="color:#94a3b8">A carregar…</span>';
       } else {
         th.innerHTML =
-          '<button class="btn-remove" onclick="removeCar(' + car.id + ')" title="Remover"><i class="fa-solid fa-circle-xmark"></i></button>' +
-          '<div class="car-img-wrap"><div class="car-fallback"><i class="fas fa-car-side"></i><br><small>' + car.make + '</small></div></div>' +
+          XBTN +
+          '<div class="car-img-wrap"><div class="car-fallback">' + CAR_SVG + '<small>' + car.make + '</small></div></div>' +
           '<div class="car-brand">' + car.make + '</div>' +
           '<span class="car-model">' + car.model + '</span>' +
           '<span class="car-version">' + car.version + '</span>';
@@ -567,6 +703,31 @@
   }
 
   loadData();
+
+  function toggleMenu() {
+    const m = document.getElementById('mobile-menu');
+    const o = document.getElementById('menu-overlay');
+    const isOpen = m.classList.toggle('open');
+    o.style.display = isOpen ? 'block' : 'none';
+  }
+
+  function openModal() {
+    document.getElementById('demo-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeModal() {
+    document.getElementById('demo-modal').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+  function submitForm(e) {
+    e.preventDefault();
+    closeModal();
+    const t = document.getElementById('toast');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 4000);
+  }
 
   </script>
 </body>
