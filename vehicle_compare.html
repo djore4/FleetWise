@@ -343,126 +343,149 @@
 <div id="toast">✓ Pedido enviado com sucesso! Contactamos em 24h.</div>
 
   <script>
-  /* ── CHARGETRIP API ── */
-  const CT_ENDPOINT  = 'https://api.chargetrip.io/graphql';
-  const CT_CLIENT_ID = '6a0ac0f1c4b109828252455c';  // Project ID
-  const CT_APP_ID    = '6a0ac0f2c4b109828252455e';  // Application ID
-  const CT_PAGE_SIZE = 100;
+  /* ── LOCAL DATA SOURCE (CSV — substituir por API quando disponível) ── */
+  const CSV_RAW = `Region,Make,Model,Year,generation,trimLevel,baseMSRP_USD,baseMSRP_EUR,bodyType,numberOfDoors,seatingCapacity,engineType,engineDisplacement_CC,fuelType,horsepower_HP,torque_NM,transmissionType,numberOfForwardGears,driveWheelConfiguration,length_MM,width_MM,height_MM,wheelbase_MM,groundClearance_MM,curbWeight_KG,cargoVolume_LTR,standardTowingCapacity_KG,accelerationTime_0_100,fuelConsumption_L_100KM,emissionsCO2_G_KM,fuelCapacity_LTR,batteryCapacity_KWH,evRange_KM,frontTireSize,rearTireSize,numberOfAirbags,infotainmentScreenSize_IN,isDiscontinued
+Global,Skoda,Citigo,2015,,1.0 G-TEC CNG 68hp,14500,12500,Hatchback,5,4,Inline-3,999,Hybrid,68,90,Manual,5,FWD,3563,1641,1478,2420,135,1031,213,0,16.3,2.9,79,35,0,0,175/65 R14,175/65 R14,4,5,TRUE
+Global,Skoda,Citigo,2016,,1.0 G-TEC CNG 68hp,14500,13000,Hatchback,5,4,Inline-3,999,Hybrid,68,90,Manual,5,FWD,3563,1641,1478,2420,136,1030,213,0,16.3,2.9,79,35,0,0,175/65 R14,175/65 R14,4,5,TRUE
+Global,Skoda,Citigo,2017,,1.0 G-TEC CNG 68hp,14500,13000,Hatchback,5,4,Inline-3,999,Hybrid,68,90,Manual,5,FWD,3563,1641,1478,2420,136,1032,213,0,16.3,2.9,82,10,0,0,175/65 R14,175/65 R14,4,5,TRUE
+Global,Skoda,Citigo,2018,Mk1,1.0 G-TEC CNG,16000,14200,Hatchback,5,4,Inline-3,999,Hybrid,68,90,Manual,5,FWD,3563,1641,1478,2420,135,1030,213,0,16.3,2.9,82,35,0,0,175/65 R14,175/65 R14,4,5,TRUE
+Global,Skoda,Skoda Citigo,2019,Mk1,Citigo-e iV,23000,20500,Hatchback,5,4,Electric Motor,0,BEV,83,212,1-speed direct,0,FWD,3597,1645,1481,2422,133,1235,250,0,12.3,0,0,0,36.8,260,185/50 R16,185/50 R16,6,5,TRUE
+Global,Skoda,Citigo,2020,Mk1 (Facelift),Citigo-e iV,24000,21000,Hatchback,5,4,Permanent magnet synchronous motor,0,BEV,83,212,1-speed direct,0,FWD,3597,1645,1481,2420,133,1235,250,0,12.3,0,0,0,36.8,260,185/50 R16,185/50 R16,6,5,TRUE
+Global,Skoda,Octavia,2020,Mk4,iV PHEV,35000,33000,Hatchback,5,5,Inline-4,1395,PHEV,204,350,DCT,6,FWD,4689,1829,1470,2686,143,1620,450,1500,7.7,1.2,28,40,13,60,225/45 R18,225/45 R18,7,10,TRUE
+Global,Skoda,Superb,2020,B8 Facelift,1.4 TSI iV PHEV,43000,39500,Sedan,4,5,Inline-4,1395,PHEV,218,400,DCT,6,FWD,4869,1864,1469,2841,149,1752,485,1600,7.7,1.5,34,50,13,55,215/55 R17,215/55 R17,7,9.2,TRUE
+Global,Skoda,Skoda Enyaq iV,2021,Enyaq iV,iV 50,38000,35000,SUV,5,5,Permanent magnet synchronous motor,0,BEV,148,220,1-speed direct,0,RWD,4649,1879,1616,2765,186,1900,585,1000,11.3,0,0,0,55,362,235/55 R19,255/50 R19,7,13,TRUE
+Global,Skoda,Skoda Enyaq iV,2021,Enyaq iV,iV 60,42000,39000,SUV,5,5,Permanent magnet synchronous motor,0,BEV,179,310,1-speed direct,0,RWD,4649,1879,1616,2765,186,1950,585,1000,8.7,0,0,0,62,412,235/55 R19,255/50 R19,7,13,TRUE
+Global,Skoda,Skoda Enyaq iV,2021,Enyaq iV,iV 80,48000,44000,SUV,5,5,Permanent magnet synchronous motor,0,BEV,204,310,1-speed direct,0,RWD,4649,1879,1616,2765,186,2050,585,1200,8.5,0,0,0,82,537,235/55 R19,255/50 R19,7,13,TRUE
+Global,Skoda,Skoda Enyaq iV,2021,Enyaq iV,iV 80x,52000,48000,SUV,5,5,Dual Electric Motor,0,BEV,265,425,1-speed direct,0,AWD,4649,1879,1616,2765,186,2150,585,1400,6.9,0,0,0,82,496,235/55 R19,255/50 R19,7,13,TRUE
+Global,Skoda,Skoda Scala,2021,,1.0 G-TEC 90,25000,23500,Hatchback,5,5,Inline-3,999,Hybrid,90,160,Manual,6,FWD,4362,1793,1471,2649,149,1300,339,0,12.4,3.5,95,50,0,0,205/55 R16,205/55 R16,7,8,FALSE
+Global,Skoda,Skoda Kamiq,2021,NW4,1.0 G-TEC CNG,25000,23500,SUV,5,5,Inline-3,999,Hybrid,90,160,Manual,6,FWD,4241,1793,1531,2651,188,1300,278,0,12.5,3.5,95,9,0,0,205/60 R16,205/60 R16,7,8,FALSE
+Global,Skoda,Skoda Citigo,2021,Mk1 (Facelift),iV Ambition,24000,20950,Hatchback,5,4,Permanent Magnet Synchronous Motor,0,BEV,83,212,1-speed direct,0,FWD,3597,1645,1481,2422,133,1235,250,0,12.3,0,0,0,36.8,260,165/70 R14,165/70 R14,6,0,TRUE
+Global,Skoda,Skoda Citigo,2021,Mk1 (Facelift),iV Style,26000,22500,Hatchback,5,4,Permanent Magnet Synchronous Motor,0,BEV,83,212,1-speed direct,0,FWD,3597,1645,1481,2422,133,1235,250,0,12.3,0,0,0,36.8,260,185/50 R16,185/50 R16,6,0,TRUE
+Global,Skoda,Skoda Superb,2021,B8 Facelift,1.4 TSI iV PHEV,45000,42000,Sedan,4,5,Inline-4,1395,PHEV,218,400,DCT,6,FWD,4869,1864,1469,2841,149,1752,485,1600,7.7,1.5,34,50,13,55,215/55 R17,215/55 R17,7,9.2,TRUE
+Global,Skoda,Skoda Octavia,2021,Mk4,1.4 TSI iV PHEV,37000,35000,Hatchback,5,5,Inline-4,1395,PHEV,204,350,DCT,6,FWD,4689,1829,1470,2686,143,1630,450,1500,7.7,1.2,28,40,13,60,225/45 R17,225/45 R17,7,10,TRUE
+Global,Skoda,Superb,2022,B8 Facelift,1.4 TSI iV PHEV,45000,43000,Sedan,4,5,Inline-4,1395,PHEV,218,400,DCT,6,FWD,4869,1864,1469,2841,149,1752,485,1600,7.7,1.5,35,50,13,55,215/55 R17,215/55 R17,7,9.2,TRUE
+Global,Skoda,Enyaq iV,2022,Enyaq iV,iV 60,42000,39000,SUV,5,5,Permanent Magnet Synchronous Motor,0,BEV,179,310,1-speed direct,0,RWD,4649,1879,1616,2765,186,1900,585,1000,8.7,0,0,0,62,412,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq iV,2022,Enyaq iV,iV 80,48000,45000,SUV,5,5,Permanent Magnet Synchronous Motor,0,BEV,204,310,1-speed direct,0,RWD,4649,1879,1616,2765,186,2030,585,1200,8.5,0,0,0,82,534,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq iV,2022,Enyaq iV,iV 80x,52000,48000,SUV,5,5,Dual Electric Motor,0,BEV,265,425,1-speed direct,0,AWD,4649,1879,1616,2765,186,2160,585,1400,6.9,0,0,0,82,496,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Octavia,2022,Mk4,iV PHEV,40000,37000,Hatchback,5,5,Inline-4,1395,PHEV,204,350,DCT,6,FWD,4689,1829,1470,2686,143,1630,450,1500,7.7,1.2,28,40,13,60,225/45 R17,225/45 R17,7,10,FALSE
+Global,Skoda,Scala,2022,NW1,1.0 G-TEC 90,25000,23300,Hatchback,5,5,Inline-3,999,Hybrid,90,160,Manual,6,FWD,4362,1793,1471,2649,149,1300,339,0,12.4,3.5,95,50,0,0,205/55 R16,205/55 R16,7,8,FALSE
+Global,Skoda,Superb,2023,B8 Facelift,1.4 TSI iV PHEV,45000,42000,Sedan,4,5,Inline-4,1395,PHEV,218,400,DCT,6,FWD,4869,1864,1469,2841,149,1752,485,1600,7.7,1.5,35,50,13,55,215/55 R17,215/55 R17,7,9.2,TRUE
+Global,Skoda,Octavia,2023,Mk4,iV PHEV,40000,37000,Hatchback,5,5,Inline-4,1395,PHEV,204,350,DCT,6,FWD,4689,1829,1470,2686,143,1630,450,1500,7.7,1.2,27,40,13,60,225/45 R17,225/45 R17,7,10,FALSE
+Global,Skoda,Enyaq,2023,Enyaq iV,60,45000,41000,SUV,5,5,Permanent Magnet Synchronous Motor,0,BEV,179,310,1-speed direct,0,RWD,4649,1879,1616,2765,186,1900,585,1000,8.7,0,0,0,62,390,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq,2023,Enyaq iV,80,52000,48000,SUV,5,5,Permanent Magnet Synchronous Motor,0,BEV,204,310,1-speed direct,0,RWD,4649,1879,1616,2765,186,2050,585,1000,8.5,0,0,0,82,530,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq,2023,Enyaq iV,80x,56000,52000,SUV,5,5,Dual Electric Motor,0,BEV,265,425,1-speed direct,0,AWD,4649,1879,1616,2765,186,2150,585,1200,6.9,0,0,0,82,490,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq,2023,Enyaq iV,RS,62000,58000,SUV,5,5,Dual Electric Motor,0,BEV,299,460,1-speed direct,0,AWD,4649,1879,1607,2765,177,2190,585,1200,6.5,0,0,0,82,480,235/50 R20,255/45 R20,7,13,FALSE
+Global,Skoda,Enyaq Coupe,2023,Enyaq Coupe,iV 60,48000,44000,SUV,5,5,Permanent Magnet Synchronous Motor,0,BEV,179,310,1-speed direct,0,RWD,4653,1879,1622,2765,186,2040,570,1000,8.8,0,0,0,62,403,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq Coupe,2023,Enyaq Coupe,iV 80,54000,50000,SUV,5,5,Permanent Magnet Synchronous Motor,0,BEV,204,310,1-speed direct,0,RWD,4653,1879,1622,2765,186,2120,570,1200,8.7,0,0,0,82,544,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq Coupe,2023,Enyaq Coupe,iV 80x,58000,54000,SUV,5,5,Dual Electric Motor,0,BEV,265,425,1-speed direct,0,AWD,4653,1879,1622,2765,186,2220,570,1400,6.9,0,0,0,82,520,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq Coupe,2023,Enyaq Coupe,RS iV,65000,61000,SUV,5,5,Dual Electric Motor,0,BEV,299,460,1-speed direct,0,AWD,4653,1879,1607,2765,171,2250,570,1400,6.5,0,0,0,82,505,235/50 R20,255/45 R20,7,13,FALSE
+Global,Skoda,Kodiaq,2024,2nd Gen,1.5 TSI iV PHEV,48000,47500,SUV,5,5,Inline-4,1498,PHEV,204,350,DCT,6,FWD,4758,1864,1659,2791,193,1950,745,1800,8.4,0.5,11,45,25.7,100,235/55 R18,235/55 R18,9,13,FALSE
+Global,Skoda,Superb,2024,B9,1.5 TSI iV PHEV,52000,48000,Wagon,5,5,Inline-4,1498,PHEV,204,350,DCT,6,FWD,4902,1849,1482,2841,140,1850,510,1800,7.5,0.5,11,45,25.7,100,215/55 R17,215/55 R17,9,13,FALSE
+Global,Skoda,Enyaq,2024,Enyaq,60,45000,42000,SUV,5,5,Single Electric Motor,0,BEV,179,310,1-speed direct,0,RWD,4648,1877,1616,2765,186,1950,585,1000,8.8,0,0,0,62,400,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq,2024,Enyaq,85,52000,49000,SUV,5,5,Single Electric Motor,0,BEV,286,545,1-speed direct,0,RWD,4648,1877,1616,2765,186,2080,585,1200,6.7,0,0,0,82,560,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq,2024,Enyaq,85x,55000,52000,SUV,5,5,Dual Electric Motor,0,BEV,286,545,1-speed direct,0,AWD,4648,1877,1616,2765,186,2180,585,1400,6.6,0,0,0,82,530,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Enyaq,2024,Enyaq,RS,62000,59000,SUV,5,5,Dual Electric Motor,0,BEV,340,545,1-speed direct,0,AWD,4648,1877,1609,2765,179,2200,585,1400,5.5,0,0,0,82,520,235/50 R20,255/45 R20,7,13,FALSE
+Global,Skoda,Enyaq Coupe,2024,Enyaq Coupe,85,55000,52000,SUV,5,5,Single Electric Motor,0,BEV,286,545,1-speed direct,0,RWD,4653,1879,1622,2768,186,2177,570,1200,6.7,0,0,0,77,573,235/50 R20,255/45 R20,9,13,FALSE
+Global,Skoda,Enyaq Coupe,2024,Enyaq Coupe,85x,58000,55000,SUV,5,5,Dual Electric Motor,0,BEV,286,545,1-speed direct,0,AWD,4653,1879,1622,2768,186,2240,570,1400,6.6,0,0,0,77,548,235/50 R20,255/45 R20,9,13,FALSE
+Global,Skoda,Enyaq Coupe,2024,Enyaq Coupe,RS,63000,61000,SUV,5,5,Dual Electric Motor,0,BEV,340,545,1-speed direct,0,AWD,4653,1879,1607,2768,171,2258,570,1400,5.5,0,0,0,77,540,235/45 R21,255/40 R21,9,13,FALSE
+Global,Skoda,Skoda Enyaq,2025,Enyaq,60,45000,42000,SUV,5,5,Single Electric Motor,0,BEV,179,310,1-speed direct,0,RWD,4648,1877,1616,2765,186,1950,585,1000,8.8,0,0,0,62,400,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Skoda Enyaq,2025,Enyaq,85,52000,49000,SUV,5,5,Single Electric Motor,0,BEV,286,545,1-speed direct,0,RWD,4648,1877,1616,2765,186,2050,585,1200,6.7,0,0,0,82,560,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Skoda Enyaq,2025,Enyaq,85x,56000,53000,SUV,5,5,Dual Electric Motor,0,BEV,286,545,1-speed direct,0,AWD,4648,1877,1616,2765,186,2150,585,1400,6.6,0,0,0,82,540,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Skoda Enyaq,2025,Enyaq,RS,62000,59000,SUV,5,5,Dual Electric Motor,0,BEV,340,545,1-speed direct,0,AWD,4648,1877,1609,2765,176,2200,585,1400,5.5,0,0,0,82,530,235/50 R20,255/45 R20,7,13,FALSE
+Global,Skoda,Skoda Superb,2025,B9,1.5 TSI iV PHEV,48000,45000,Wagon,5,5,Inline-4,1498,PHEV,204,350,DCT,6,FWD,4902,1849,1482,2841,140,1850,510,1600,7.8,0.5,11,45,25.7,100,235/45 R18,235/45 R18,9,13,FALSE
+Global,Skoda,Skoda Kodiaq,2025,2nd Gen,1.5 TSI iV PHEV,50000,47000,SUV,5,5,Inline-4,1498,PHEV,204,350,DCT,6,FWD,4758,1864,1659,2791,193,1950,745,1800,8.4,0.5,12,45,25.7,100,235/55 R18,235/55 R18,9,13,FALSE
+Global,Skoda,Skoda Elroq,2025,,Elroq 50,36000,33000,SUV,5,5,Single Electric Motor,0,BEV,170,310,1-speed direct,0,RWD,4488,1884,1625,2765,170,1935,484,1000,9,0,0,0,55,375,215/60 R19,235/55 R19,7,13,FALSE
+Global,Skoda,Skoda Elroq,2025,,Elroq 60,40000,37000,SUV,5,5,Single Electric Motor,0,BEV,204,310,1-speed direct,0,RWD,4488,1884,1625,2765,170,1980,484,1000,8.5,0,0,0,63,440,215/60 R19,235/55 R19,7,13,FALSE
+Global,Skoda,Skoda Elroq,2025,,Elroq 85,45000,42000,SUV,5,5,Single Electric Motor,0,BEV,286,545,1-speed direct,0,RWD,4488,1884,1625,2765,170,2050,484,1200,6.6,0,0,0,82,580,215/60 R19,235/55 R19,7,13,FALSE
+Global,Skoda,Skoda Elroq,2025,,Elroq 85x,48000,45000,SUV,5,5,Dual Electric Motor,0,BEV,299,545,1-speed direct,0,AWD,4488,1884,1625,2765,170,2120,484,1200,6.3,0,0,0,82,560,215/60 R19,235/55 R19,7,13,FALSE
+Global,Skoda,Skoda Enyaq,2026,Enyaq,60,45000,42000,SUV,5,5,Single Electric Motor,0,BEV,179,310,1-speed direct,0,RWD,4648,1877,1616,2765,186,1950,585,1000,8.8,0,0,0,62,400,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Skoda Enyaq,2026,Enyaq,85,52000,49000,SUV,5,5,Single Electric Motor,0,BEV,286,545,1-speed direct,0,RWD,4648,1877,1616,2765,186,2050,585,1200,6.7,0,0,0,82,560,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Skoda Enyaq,2026,Enyaq,85x AWD,56000,53000,SUV,5,5,Dual Electric Motor,0,BEV,286,545,1-speed direct,0,AWD,4648,1877,1616,2765,186,2150,585,1400,6.6,0,0,0,82,540,235/55 R19,255/50 R19,7,13,FALSE
+Global,Skoda,Skoda Enyaq,2026,Enyaq,RS,62000,59000,SUV,5,5,Dual Electric Motor,0,BEV,340,545,1-speed direct,0,AWD,4648,1877,1609,2765,176,2200,585,1400,5.5,0,0,0,82,530,235/50 R20,255/45 R20,7,13,FALSE
+Global,Skoda,Skoda Superb,2026,B9,1.5 TSI iV PHEV,49000,46000,Wagon,5,5,Inline-4,1498,PHEV,204,350,DCT,6,FWD,4902,1849,1482,2841,140,1850,510,1600,7.5,0.5,11,45,25.7,100,235/45 R18,235/45 R18,9,13,FALSE
+Global,Skoda,Skoda Kodiaq,2026,Mk2,1.5 TSI iV PHEV,49000,48500,SUV,5,5,Inline-4,1498,PHEV,204,350,DCT,6,FWD,4758,1864,1659,2791,193,1950,745,1800,8.4,0.5,11,45,25.7,100,235/55 R18,235/55 R18,9,13,FALSE
+Global,Skoda,Skoda Elroq,2026,,Elroq 50,36000,33000,SUV,5,5,Single Electric Motor,0,BEV,170,310,1-speed direct,0,RWD,4488,1884,1625,2765,170,1900,484,1000,9,0,0,0,55,375,215/60 R17,215/60 R17,7,13,FALSE
+Global,Skoda,Skoda Elroq,2026,,Elroq 60,40000,37000,SUV,5,5,Single Electric Motor,0,BEV,204,310,1-speed direct,0,RWD,4488,1884,1625,2765,170,1950,484,1000,8.5,0,0,0,63,440,215/55 R18,215/55 R18,7,13,FALSE
+Global,Skoda,Skoda Elroq,2026,,Elroq 85,45000,42000,SUV,5,5,Single Electric Motor,0,BEV,286,545,1-speed direct,0,RWD,4488,1884,1625,2765,170,2050,484,1200,6.6,0,0,0,82,580,235/50 R19,235/50 R19,7,13,FALSE
+Global,Skoda,Skoda Elroq,2026,,Elroq 85x,48000,45000,SUV,5,5,Dual Electric Motor,0,BEV,299,545,1-speed direct,0,AWD,4488,1884,1625,2765,170,2150,484,1200,6.2,0,0,0,82,560,235/50 R19,235/50 R19,7,13,FALSE
+Global,Smart,Smart EQ Fortwo,2011,W451,Fortwo Electric Drive,25000,23000,Hatchback,3,2,Electric Motor,0,BEV,40,120,1-speed direct,0,RWD,2695,1559,1542,1867,132,900,220,0,26,0,0,0,16.5,135,155/60 R15,175/55 R15,4,6.5,TRUE
+Global,Smart,Smart EQ Fortwo,2012,W451,Fortwo Electric Drive,25000,23680,Hatchback,3,2,Permanent Magnet Synchronous Motor,0,BEV,74,130,1-speed direct,0,RWD,2695,1559,1542,1867,130,975,220,0,11.5,0,0,0,17.6,145,155/60 R15,175/55 R15,4,6.5,TRUE
+Global,Smart,Smart EQ Fortwo,2013,W451,Fortwo Electric Drive,25000,23000,Hatchback,2,2,Permanent Magnet Synchronous Motor,0,BEV,74,130,1-speed direct,0,RWD,2695,1559,1542,1867,132,900,220,0,11.5,0,0,0,17.6,145,155/60 R15,175/55 R15,4,6.5,TRUE
+Global,Smart,Smart EQ Fortwo,2014,W451,Fortwo Electric Drive,25000,23000,Hatchback,2,2,Permanent Magnet Synchronous Motor,0,BEV,74,130,1-speed direct,0,RWD,2695,1559,1542,1867,132,900,220,0,11.5,0,0,0,17.6,145,155/60 R15,175/55 R15,4,6.5,TRUE
+Global,Smart,Smart EQ Fortwo,2017,W453,Fortwo Electric Drive,23800,21940,Hatchback,2,2,Electric Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,132,1085,260,0,11.5,0,0,0,17.6,155,165/65 R15,185/60 R15,7,7,TRUE
+Global,Smart,Smart EQ Fortwo,2018,W453,Fortwo Electric Drive,23800,21940,Hatchback,3,2,Electric Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,132,1085,260,0,11.5,0,0,0,17.6,155,165/65 R15,185/60 R15,7,7,TRUE
+Global,Smart,Smart EQ Fortwo,2019,W453,EQ Fortwo Coupe,23900,21940,Hatchback,3,2,Electric Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1100,260,0,11.5,0,0,0,17.6,130,165/65 R15,185/60 R15,7,7,TRUE
+Global,Smart,Smart EQ Fortwo,2019,W453,EQ Fortwo Cabrio,28100,25200,Convertible,2,2,Electric Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1135,200,0,11.8,0,0,0,17.6,125,165/65 R15,185/60 R15,7,7,TRUE
+Global,Smart,Smart EQ Fortwo,2020,W453,EQ Fortwo Coupe,23800,21940,Hatchback,2,2,Permanent Magnet Synchronous Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1130,260,0,11.6,0,0,0,17.6,130,165/65 R15,185/60 R15,7,7,TRUE
+Global,Smart,Smart EQ Fortwo,2020,W453,EQ Fortwo Cabrio,27000,25200,Convertible,2,2,Permanent Magnet Synchronous Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1180,200,0,11.9,0,0,0,17.6,125,165/65 R15,185/60 R15,7,7,TRUE
+Global,Smart,Smart EQ Fortwo,2021,W453,EQ Fortwo Coupe,23800,21940,Hatchback,2,2,Permanent Magnet Synchronous Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1130,260,0,11.6,0,0,0,17.6,135,165/65 R15,185/60 R15,7,7,TRUE
+Global,Smart,Smart EQ Fortwo,2021,W453,EQ Fortwo Cabrio,27000,25200,Convertible,2,2,Permanent Magnet Synchronous Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1180,200,0,11.9,0,0,0,17.6,130,165/65 R15,185/60 R15,7,7,TRUE
+Global,Smart,Smart EQ Fortwo,2022,C453,EQ Fortwo Coupe,25000,23000,Hatchback,2,2,Permanent Magnet Synchronous Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1130,260,0,11.6,0,0,0,17.6,135,165/65 R15,185/60 R15,7,8,TRUE
+Global,Smart,Smart EQ Fortwo,2022,A453,EQ Fortwo Cabrio,28000,26000,Convertible,2,2,Permanent Magnet Synchronous Motor,0,BEV,80,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1180,200,0,11.9,0,0,0,17.6,130,165/65 R15,185/60 R15,7,8,TRUE
+Global,Smart,Smart EQ Fortwo,2023,C453,EQ Fortwo Pulse,25000,23000,Hatchback,2,2,Permanent Magnet Synchronous Motor,0,BEV,81,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1130,260,0,11.6,0,0,0,17.6,135,165/65 R15,185/60 R15,7,8,TRUE
+Global,Smart,Smart EQ Fortwo,2023,C453,EQ Fortwo Prime,27000,25000,Hatchback,2,2,Permanent Magnet Synchronous Motor,0,BEV,81,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1130,260,0,11.6,0,0,0,17.6,135,165/65 R15,185/60 R15,7,8,TRUE
+Global,Smart,Smart EQ Fortwo,2024,C453,EQ Fortwo Pulse,25000,23000,Hatchback,2,2,Permanent Magnet Synchronous Motor,0,BEV,81,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1130,260,0,11.6,0,0,0,17.6,135,165/65 R15,185/60 R15,7,8,TRUE
+Global,Smart,Smart EQ Fortwo,2024,C453,EQ Fortwo Prime,27000,25000,Hatchback,2,2,Permanent Magnet Synchronous Motor,0,BEV,81,160,1-speed direct,0,RWD,2695,1663,1555,1873,130,1130,260,0,11.6,0,0,0,17.6,135,165/65 R15,185/60 R15,7,8,TRUE
+Global,Smart,Smart #1,2025,C453,Smart #1 Pro,38000,37490,SUV,5,5,Permanent Magnet Synchronous Motor,0,BEV,272,343,1-speed direct,0,RWD,4270,1822,1636,2750,182,1780,323,1600,6.7,0,0,0,49,310,235/45 R19,235/45 R19,7,12.8,FALSE
+Global,Smart,Smart #1,2025,C453,Smart #1 BRABUS,49000,48990,SUV,5,5,Dual Permanent Magnet Synchronous Motors,0,BEV,428,543,1-speed direct,0,AWD,4300,1822,1636,2750,175,1900,313,1600,3.9,0,0,0,66,400,235/40 R19,235/40 R19,7,12.8,FALSE
+Global,Smart,Smart #1,2026,,Smart #1 Pro,38000,35000,SUV,5,5,Permanent Magnet Synchronous Motor,0,BEV,268,343,1-speed direct,0,RWD,4270,1822,1636,2750,182,1800,323,1600,6.7,0,0,0,49,310,235/45 R19,235/45 R19,7,12.8,FALSE
+Global,Smart,Smart #1,2026,,Smart #1 Brabus,48000,48990,SUV,5,5,Dual Permanent Magnet Synchronous Motors,0,BEV,422,543,1-speed direct,0,AWD,4300,1822,1636,2750,178,1900,323,1600,3.9,0,0,0,66,400,235/40 R19,235/40 R19,7,12.8,FALSE
+Global,Smart,Smart #3,2026,,Smart #3 Pro+,40000,37000,SUV,5,5,Permanent Magnet Synchronous Motor,0,BEV,268,343,1-speed direct,0,RWD,4400,1844,1556,2785,160,1810,370,1600,5.8,0,0,0,66,435,245/45 R19,245/45 R19,7,12.8,FALSE
+Global,Smart,Smart #3,2026,,Smart #3 Brabus,52000,48000,SUV,5,5,Dual Electric Motor,0,BEV,422,543,1-speed direct,0,AWD,4400,1844,1556,2785,160,1910,370,1600,3.7,0,0,0,66,415,245/40 R20,245/40 R20,7,12.8,FALSE`;
 
-  /* Step 1: minimal list query — just id + naming (as per Chargetrip examples) */
-  const CT_LIST_QUERY = `
-    query vehicleList($page: Int, $size: Int, $search: String) {
-      vehicleList(page: $page, size: $size, search: $search) {
-        id
-        naming { make model chargetrip_version }
-      }
-    }`;
-
-  /* Step 2: detail query — called per-vehicle when user adds to comparison */
-  const CT_DETAIL_QUERY = `
-    query vehicle($vehicleId: ID!) {
-      vehicle(id: $vehicleId) {
-        naming { make model chargetrip_version }
-        drivetrain { type }
-        battery { usable_kwh }
-        range {
-          best { combined }
-          worst { combined }
-          chargetrip_range { best worst }
-        }
-        connectors { standard }
-        performance { acceleration top_speed }
-      }
-    }`;
-
-  function ctGQL(query, variables = {}) {
-    return fetch(CT_ENDPOINT, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-client-id': CT_CLIENT_ID,
-        'x-app-id':    CT_APP_ID,
-      },
-      body: JSON.stringify({ query, variables }),
-    })
-    .then(r => r.json())
-    .then(j => {
-      if (j.errors) throw new Error(j.errors[0].message);
-      return j.data;
+  function parseCSV(csv) {
+    const lines = csv.trim().split('\n');
+    const keys = lines[0].split(',');
+    return lines.slice(1).filter(l => l.trim()).map(line => {
+      const vals = line.split(',');
+      const obj = {};
+      keys.forEach((k, i) => { obj[k] = (vals[i] || '').trim(); });
+      return obj;
     });
   }
 
-  /* vehicleList cache: id → { make, model, version, type } */
+  let _idSeq = 0;
   const vehicleCache = {};
 
-  function ctListTransform(v) {
-    const n = v.naming || {};
-    const make    = (n.make  || '').trim();
-    const model   = (n.model || '').trim();
-    const version = (n.chargetrip_version || `${make} ${model}`).trim();
-    if (!make || !model) return null;
-    return { id: v.id, make, model, version };
-  }
-
-  const DC_CONNECTORS = new Set([
-    'IEC_62196_T2_COMBO','IEC_62196_T1_COMBO','CHADEMO',
-    'TESLA_S','GB_T','CHAOJI','GBT_DC'
-  ]);
-
-  function ctDetailTransform(v, listEntry) {
-    const n  = v.naming      || {};
-    const dt = v.drivetrain  || {};
-    const b  = v.battery     || {};
-    const r  = v.range       || {};
-    const p  = v.performance || {};
-    const cs = v.connectors  || [];
-
-    const dtType = (dt.type || '').toUpperCase();
-    let type = null;
-    if (dtType === 'BEV' || dtType === 'EREV') type = 'BEV';
-    else if (dtType === 'PHEV') type = 'PHEV';
+  function rowToVehicle(row) {
+    const type = row.fuelType === 'BEV' ? 'BEV' : row.fuelType === 'PHEV' ? 'PHEV' : null;
     if (!type) return null;
 
-    const ct = r.chargetrip_range || {};
-    let rangeKm = null;
-    if (ct.best && ct.worst) rangeKm = Math.round((ct.best + ct.worst) / 2);
-    else if (ct.best)        rangeKm = Math.round(ct.best);
-    else if (r.best?.combined) rangeKm = Math.round(r.best.combined);
+    const make = row.Make;
+    let model = row.Model;
+    // Strip make prefix (e.g. "Skoda Enyaq" → "Enyaq")
+    const pfx = make.toLowerCase() + ' ';
+    if (model.toLowerCase().startsWith(pfx)) model = model.slice(make.length + 1);
 
-    const dcConn = cs.some(c => DC_CONNECTORS.has(c.standard));
-    const acConn = cs.some(c => !DC_CONNECTORS.has(c.standard) && c.standard);
+    const n   = v => { const x = parseFloat(v); return (!v || isNaN(x) || x === 0) ? null : x; };
+    const int = v => { const x = parseInt(v);   return (!v || isNaN(x) || x === 0) ? null : x; };
 
-    return {
-      id:        listEntry.id,
-      make:      listEntry.make,
-      model:     listEntry.model,
-      version:   listEntry.version,
+    const id = ++_idSeq;
+    const v = {
+      id,
+      make,
+      model,
+      version: row.trimLevel + ' (' + row.Year + ')',
       type,
-      power:     null,
-      torque:    null,
-      battery:   b.usable_kwh ? Math.round(b.usable_kwh * 10) / 10 : null,
-      chargeAC:  acConn ? true : null,
-      chargeDC:  dcConn ? true : null,
-      range:     rangeKm,
-      accel:     p.acceleration ? Math.round(p.acceleration * 10) / 10 : null,
-      topSpeed:  p.top_speed    ? Math.round(p.top_speed)             : null,
-      segment:   null,
-      cargo:     null,
-      drivetrain: null,
+      power:     int(row.horsepower_HP),
+      torque:    int(row.torque_NM),
+      battery:   n(row.batteryCapacity_KWH),
+      chargeAC:  true,
+      chargeDC:  type === 'BEV',
+      range:     int(row.evRange_KM),
+      accel:     n(row.accelerationTime_0_100),
+      topSpeed:  null,
+      segment:   (row.bodyType || '').toLowerCase(),
+      cargo:     int(row.cargoVolume_LTR),
+      drivetrain: row.driveWheelConfiguration || null,
+      msrp:      int(row.baseMSRP_EUR),
     };
+    vehicleCache[id] = v;
+    return v;
   }
 
-  async function ctFetchPage(page) {
-    const data = await ctGQL(CT_LIST_QUERY, { page, size: CT_PAGE_SIZE });
-    return data.vehicleList || [];
-  }
-
-  async function ctFetchDetail(id, listEntry) {
-    if (vehicleCache[id]) return vehicleCache[id];
-    const data = await ctGQL(CT_DETAIL_QUERY, { vehicleId: id });
-    const result = ctDetailTransform(data.vehicle, listEntry);
-    if (result) vehicleCache[id] = result;
-    return result;
+  async function ctFetchDetail(id) {
+    return vehicleCache[id] || null;
   }
 
   let allVehicles = [];
@@ -473,33 +496,23 @@
   const SEGMENT_MAP = {
     sedan:'Berlina', hatchback:'Hatchback', suv:'SUV', crossover:'Crossover',
     coupe:'Coupé', minivan:'Monovolume', pickup:'Pickup', van:'Carrinha',
+    wagon:'Carrinha', convertible:'Cabrio',
     city:'Citadino', passenger_car:'Automóvel', other:'Outro'
   };
 
   async function loadData() {
     const status = document.getElementById('loadStatus');
     try {
-      if (status) status.innerHTML = '<span class="fw-spinner"></span> A carregar lista de viaturas…';
-      const raw = [];
-      let page  = 0;
-      while (true) {
-        const batch = await ctFetchPage(page);
-        if (!batch.length) break;
-        raw.push(...batch);
-        if (batch.length < CT_PAGE_SIZE) break;
-        page++;
-      }
-      /* vehicleList only gives id + naming — store as stubs for the dropdowns */
-      allVehicles = raw.map(ctListTransform).filter(Boolean);
+      allVehicles = parseCSV(CSV_RAW).map(rowToVehicle).filter(Boolean);
       buildDB();
       updateCounts();
       init();
       if (status) status.style.display = 'none';
     } catch(e) {
       if (status) {
-        status.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Erro ao carregar dados. Recarregue a página.';
+        status.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5" style="vertical-align:middle;margin-right:.3rem"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg> Erro ao carregar dados.';
       }
-      console.error('Chargetrip load error', e);
+      console.error('CSV load error', e);
     }
   }
 
@@ -512,11 +525,12 @@
     });
   }
 
-  /* placeholder — replaced below */
-  /* ── COUNTS ── */
   function updateCounts() {
-    /* vehicleList stubs don't include type — only show total count */
-    const totals = { all: allVehicles.length, BEV: '?', PHEV: '?' };
+    const totals = {
+      all:  allVehicles.length,
+      BEV:  allVehicles.filter(v => v.type === 'BEV').length,
+      PHEV: allVehicles.filter(v => v.type === 'PHEV').length,
+    };
     Object.keys(totals).forEach(k => {
       const el = document.getElementById('cnt-' + k);
       if (el) el.textContent = totals[k];
@@ -598,7 +612,7 @@
       const pos = selectedCars.findIndex(c => c.id === uid);
       if (pos >= 0) {
         if (details) {
-          selectedCars[pos] = { id: uid, ...details };
+          selectedCars[pos] = { ...details, id: uid };
         } else {
           selectedCars.splice(pos, 1);
           alert('Viatura não disponível (ICE/HEV).');
@@ -620,18 +634,19 @@
 
   /* ── SPEC ROWS ── */
   const ROWS = [
+    { section: 'Preço' },
+    { label:'Preço base (EUR)',   key:'msrp',     unit:'€' },
     { section: 'Motorização & Desempenho' },
     { label:'Tipo de Propulsão',  key:'typeBadge' },
     { label:'Tração',             key:'drivetrain' },
     { label:'Potência',           key:'power',    unit:'cv' },
     { label:'Binário',            key:'torque',   unit:'Nm' },
     { label:'Aceleração 0-100',   key:'accel',    unit:'s' },
-    { label:'Vel. Máxima',        key:'topSpeed', unit:'km/h' },
     { section: 'Autonomia & Carregamento' },
-    { label:'Autonomia WLTP',     key:'range',    unit:'km', note:'Elétrica para PHEV' },
+    { label:'Autonomia elétrica WLTP', key:'range', unit:'km', note:'Elétrica para PHEV' },
     { label:'Bateria',            key:'battery',  unit:'kWh' },
-    { label:'Carga AC (máx.)',    key:'chargeAC', unit:'kW' },
-    { label:'Carga DC (máx.)',    key:'chargeDC', unit:'kW' },
+    { label:'Carga AC',           key:'chargeAC' },
+    { label:'Carga DC (rápida)',  key:'chargeDC' },
     { section: 'Espaço' },
     { label:'Tipo de Carroçaria', key:'segmentF' },
     { label:'Bagageira',          key:'cargo',    unit:'L' },
@@ -649,6 +664,7 @@
     }
     const v = car[row.key];
     if (v === undefined || v === null || v === 0 || v === '') return '<span style="color:#cbd5e1">—</span>';
+    if (typeof v === 'boolean') return v ? '<span class="iva-yes">Sim</span>' : '<span style="color:#cbd5e1">—</span>';
     if (row.unit) return (typeof v === 'number' ? v.toLocaleString('pt-PT') : v) + ' <small style="color:#94a3b8">' + row.unit + '</small>';
     return v;
   }
