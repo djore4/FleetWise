@@ -1244,7 +1244,7 @@
       /* TA display */
       var taEl = document.getElementById('out_ta_' + i);
       if (taEl) {
-        if (taRate === 0 && (ctx.cat === 'coml' || ctx.afetacao === 'mirs')) {
+        if (taRate === 0 && (ctx.cat === 'coml' || ctx.afetacao === 'mirs' || (type === 'BEV' && price <= 62500))) {
           window.setTxt('out_ta_' + i, 'Isento', 'ok');
         } else {
           window.setTxt('out_ta_' + i, window.formatCustom(taVal, 0, '€'), taVal > 0 ? -1 : 0);
