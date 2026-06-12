@@ -38,12 +38,12 @@ PMEs portuguesas com 3 a 100 viaturas que gerem a frota de forma descentralizada
 Segmentos:
 - Micro-frotas (3–10 viaturas): entrada por Radiografia TCO, success fee
 - Frotas médias (10–30 viaturas): plataforma + advisory periódico
-- Grandes frotas (30–100+ viaturas): outsourcing operacional, módulos ESG
+- Grandes frotas (31+ viaturas): outsourcing operacional, módulos ESG
 
 ## Diferenciais face à concorrência
 
-| Fator              | FleetWise | Locadoras (Ayvens, Arval) | Tech Players (Cartrack) |
-|--------------------|-----------|--------------------------|-------------------------|
+| Fator              | FleetWise | Grandes Locadoras | Tech Players (Geolocalização) |
+|--------------------|-----------|-------------------|-------------------------------|
 | Independência      | Total      | Conflito de interesses   | Agnósticos, sem advisory|
 | Domínio fiscal     | Core       | Ausente                  | Ausente                 |
 | Plataforma IA      | Sim        | Portais standardizados   | Foco operacional        |
