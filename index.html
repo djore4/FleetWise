@@ -152,7 +152,7 @@
               "name": "A FleetWise serve PMEs com frotas pequenas?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Sim. Servimos empresas com 3 a 100+ viaturas, com soluções escaláveis: Micro-frotas (3-10), por success fee — sem risco. Frotas Médias (11-30), com gestão + otimização fiscal. Grandes Frotas (31-100+), com outsourcing integral e módulos avançados."
+                "text": "Sim. Servimos empresas com 3 a 100+ viaturas, com soluções escaláveis: Micro-frotas (3-10), por success fee — sem risco. Frotas Médias (11-30), com gestão + otimização fiscal. Grandes Frotas (31+), com outsourcing integral e módulos avançados."
               }
             }
           ]
@@ -346,8 +346,17 @@
         /* ── MODAL ── */
         #demo-modal { display:none; position:fixed; inset:0; z-index:3000; }
         #demo-modal.open { display:flex; }
+        #procurement-modal { display:none; position:fixed; inset:0; z-index:3000; }
+        #procurement-modal.open { display:flex; }
         .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px); }
         .modal-box { position:relative; z-index:1; background:#fff; border-radius:24px; padding:2.5rem; width:100%; max-width:560px; margin:auto; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,.25); }
+
+        /* ── PROCUREMENT PILLS ── */
+        .proc-pill-group { display:flex; flex-wrap:wrap; gap:.4rem; }
+        .proc-pill { display:inline-flex; align-items:center; cursor:pointer; border:1.5px solid #e2e8f0; border-radius:50px; padding:.3rem .8rem; font-size:.78rem; color:var(--slate); transition:.15s; user-select:none; }
+        .proc-pill:hover { border-color:var(--green); color:var(--navy); }
+        .proc-pill input[type="radio"] { display:none; }
+        .proc-pill:has(input:checked) { background:var(--green); border-color:var(--green); color:#fff; font-weight:600; }
 
         /* ── TOAST ── */
         #toast { position:fixed; bottom:2rem; right:2rem; background:var(--green); color:#fff; padding:.9rem 1.5rem; border-radius:12px; font-size:.85rem; font-weight:600; box-shadow:0 8px 24px rgba(16,185,129,.4); z-index:5000; opacity:0; transform:translateY(20px); transition:.4s; pointer-events:none; }
@@ -411,7 +420,6 @@
     <a href="#como-funciona" class="mob-link" onclick="toggleMenu()">Como Funciona</a>
     <a href="vehicle_compare.html" class="mob-link">Comparador xEV</a>
     <a href="quem_somos.html" class="mob-link">Quem Somos</a>
-    <a href="loja.html" class="mob-link">Loja</a>
     <button onclick="toggleMenu(); openModal();" style="margin-top:1.5rem;width:100%;background:var(--green);color:#fff;font-weight:700;padding:1rem;border-radius:12px;border:none;cursor:pointer;font-size:1rem;">Agendar Reunião / Demo</button>
 </div>
 <div id="menu-overlay" onclick="toggleMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;"></div>
@@ -571,6 +579,7 @@
                         <li>✓ Otimização fiscal BEV/PHEV</li>
                     </ul>
                 </div>
+                <button onclick="openProcurementModal()" class="btn-primary" style="margin-top:1.25rem;">Pedir proposta de procurement →</button>
             </div>
 
             <div class="svc-card" id="svc-gestao" data-aos="fade-up" data-aos-delay="300">
@@ -618,7 +627,7 @@
                 <span style="font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--slate);">Serviços Complementares</span>
                 <span style="height:1px;flex:1;background:#e2e8f0;"></span>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div style="display:flex;align-items:flex-start;gap:.75rem;">
                     <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></div>
                     <div>
@@ -647,22 +656,6 @@
                         <p style="font-size:.75rem;color:var(--slate);">Transporte premium para executivos e ocasiões especiais</p>
                     </div>
                 </div>
-                <div style="display:flex;align-items:flex-start;gap:.75rem;">
-                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></svg>
-                    </div>
-                    <div>
-                        <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Recondicionamento</p>
-                        <p style="font-size:.75rem;color:var(--slate);">Preparação e recondicionamento de viaturas antes da devolução ou revenda</p>
-                    </div>
-                </div>
-                <div style="display:flex;align-items:flex-start;gap:.75rem;">
-                    <div style="width:36px;height:36px;background:rgba(16,185,129,.1);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.1rem;font-weight:700;color:var(--green);">€</div>
-                    <div>
-                        <p style="font-size:.83rem;font-weight:700;color:var(--navy);margin-bottom:.2rem;">Venda em Fim de Contrato</p>
-                        <p style="font-size:.75rem;color:var(--slate);">Gestão de remarketing e venda de viaturas no fim do ciclo de renting</p>
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -685,8 +678,8 @@
                     <tr>
                         <th style="width:22%;">Fator</th>
                         <th style="background:var(--green);width:26%;">⭐ FleetWise</th>
-                        <th>Grandes Locadoras<br><small style="opacity:.6;font-weight:400;">(Ayvens, Arval)</small></th>
-                        <th>Tech Players<br><small style="opacity:.6;font-weight:400;">(Cartrack, Frotcom)</small></th>
+                        <th>Grandes Locadoras</th>
+                        <th>Tech Players<br><small style="opacity:.6;font-weight:400;">(Geolocalização)</small></th>
                         <th>Consultoras<br><small style="opacity:.6;font-weight:400;">(tradicionais)</small></th>
                     </tr>
                 </thead>
@@ -897,7 +890,7 @@
 
             <div class="card-white" data-aos="fade-up" data-aos-delay="300">
                 <h3 style="font-weight:700;color:var(--navy);font-size:1.1rem;margin-bottom:.25rem;">Grandes Frotas</h3>
-                <p style="font-size:.78rem;color:var(--slate);margin-bottom:1rem;">31 – 100+ viaturas</p>
+                <p style="font-size:.78rem;color:var(--slate);margin-bottom:1rem;">31+ viaturas</p>
                 <p style="font-size:.83rem;color:var(--slate);line-height:1.7;">Outsourcing integral ou híbrido com gestor de conta dedicado. Módulos avançados: ESG, reporting de carbono, RFP automático, negociação independente com locadoras.</p>
             </div>
         </div>
@@ -1107,20 +1100,8 @@
             </div>
 
             <div>
-                <h4>Serviços</h4>
-                <a href="#servicos">Auditoria &amp; Diagnóstico TCO</a>
-                <a href="#servicos">Procurement &amp; Negociação</a>
-                <a href="#servicos">Gestão Operacional</a>
-                <a href="#servicos">Fim de Ciclo</a>
-                <a href="#servicos">Automotive Care</a>
-                <a href="#servicos">Mobilidade de Luxo</a>
-            </div>
-
-            <div>
-                <h4>Ferramentas</h4>
                 <a href="TCO_simulator.html">Simulador TCO</a>
                 <a href="vehicle_compare.html">Comparador xEV / BEV</a>
-                <a href="loja.html">Loja</a>
                 <a href="quem_somos.html">Quem Somos</a>
                 <a href="#contacto">Contacto</a>
                 <div style="margin-top:1rem;">
@@ -1193,6 +1174,130 @@
     </div>
 </div>
 
+<!-- Procurement Modal -->
+<div id="procurement-modal">
+    <div class="modal-bg" onclick="closeProcurementModal()"></div>
+    <div class="modal-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;">
+            <div>
+                <h3 style="font-weight:800;color:var(--navy);font-size:1.3rem;margin-bottom:.3rem;">Procurement &amp; Negociação</h3>
+                <p style="font-size:.82rem;color:var(--slate);">Conte-nos o contexto — respondemos em 24h com uma abordagem concreta.</p>
+            </div>
+            <button onclick="closeProcurementModal()" style="background:none;border:none;cursor:pointer;color:var(--slate);font-size:1.5rem;line-height:1;padding:.25rem;">&times;</button>
+        </div>
+
+        <form id="procurement-form" onsubmit="submitProcurementForm(event)" novalidate>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                    <label class="form-label">Nome *</label>
+                    <input type="text" class="form-input" placeholder="O seu nome" required>
+                </div>
+                <div>
+                    <label class="form-label">Empresa *</label>
+                    <input type="text" class="form-input" placeholder="Empresa" required>
+                </div>
+            </div>
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" placeholder="email@empresa.pt" required>
+                </div>
+                <div>
+                    <label class="form-label">Telefone</label>
+                    <input type="tel" class="form-input" placeholder="+351 9xx xxx xxx">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                    <label class="form-label">Nº de viaturas a adquirir/renovar</label>
+                    <select class="form-input">
+                        <option value="">Selecione...</option>
+                        <option>1 – 3 viaturas</option>
+                        <option>4 – 10 viaturas</option>
+                        <option>11 – 30 viaturas</option>
+                        <option>31+ viaturas</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Tipo de operação</label>
+                    <select class="form-input">
+                        <option value="">Selecione...</option>
+                        <option>Substituição pontual</option>
+                        <option>Renovação de frota</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div>
+                    <label class="form-label">Prazo de decisão</label>
+                    <select class="form-input">
+                        <option value="">Selecione...</option>
+                        <option>Urgente (menos de 1 mês)</option>
+                        <option>1 – 3 meses</option>
+                        <option>3 – 6 meses</option>
+                        <option>Mais de 6 meses</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="form-label">Contrato a terminar?</label>
+                    <select class="form-input">
+                        <option value="">Selecione...</option>
+                        <option>Não tenho contrato atual</option>
+                        <option>Sim, nos próximos 3 meses</option>
+                        <option>Sim, nos próximos 6 meses</option>
+                        <option>Sim, em mais de 6 meses</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de aquisição pretendida</label>
+                <div class="proc-pill-group">
+                    <label class="proc-pill"><input type="radio" name="proc_aquisicao" value="compra">Compra direta</label>
+                    <label class="proc-pill"><input type="radio" name="proc_aquisicao" value="renting">Renting</label>
+                    <label class="proc-pill"><input type="radio" name="proc_aquisicao" value="leasing">Leasing financeiro</label>
+                    <label class="proc-pill"><input type="radio" name="proc_aquisicao" value="indeciso">Ainda não decidi</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tipo de viatura(s)</label>
+                <div class="proc-pill-group">
+                    <label class="proc-pill"><input type="radio" name="proc_viatura" value="ice">ICE</label>
+                    <label class="proc-pill"><input type="radio" name="proc_viatura" value="phev">PHEV</label>
+                    <label class="proc-pill"><input type="radio" name="proc_viatura" value="bev">BEV</label>
+                    <label class="proc-pill"><input type="radio" name="proc_viatura" value="mix">Mistura</label>
+                    <label class="proc-pill"><input type="radio" name="proc_viatura" value="indf">Indiferente</label>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Já tens orçamentos/propostas em mãos?</label>
+                <div class="proc-pill-group">
+                    <label class="proc-pill"><input type="radio" name="proc_orcamentos" value="sim">Sim</label>
+                    <label class="proc-pill"><input type="radio" name="proc_orcamentos" value="nao">Não</label>
+                </div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label">Trabalhas atualmente com empresa de renting/leasing?</label>
+                <div class="proc-pill-group">
+                    <label class="proc-pill"><input type="radio" name="proc_locadora" value="sim">Sim</label>
+                    <label class="proc-pill"><input type="radio" name="proc_locadora" value="nao">Não</label>
+                    <label class="proc-pill"><input type="radio" name="proc_locadora" value="varias">Várias</label>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:.9rem;">
+                Enviar pedido →
+            </button>
+            <p style="font-size:.72rem;color:var(--slate);text-align:center;margin-top:.6rem;">Tratamos os seus dados com total confidencialidade (RGPD).</p>
+        </form>
+    </div>
+</div>
+
 <!-- Toast -->
 <div id="toast">✓ Pedido enviado com sucesso! Contactamos em 24h.</div>
 
@@ -1231,7 +1336,24 @@
         document.body.style.overflow = '';
     }
 
-    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+    function openProcurementModal() {
+        document.getElementById('procurement-modal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeProcurementModal() {
+        document.getElementById('procurement-modal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function submitProcurementForm(e) {
+        e.preventDefault();
+        showToast();
+        closeProcurementModal();
+        e.target.reset();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeProcurementModal(); } });
 
     /* ── Forms ── */
     function showToast() {
