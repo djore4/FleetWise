@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Gestão Operacional de Frotas | FleetWise — 3 Níveis de Serviço</title>
+    <meta name="description" content="Gestão operacional de frotas empresariais em 3 níveis: Essencial (self-service), Retainer (gestão ativa) e Outsourcing Integral. Escolha o modelo certo para a sua frota.">
+    <link rel="canonical" href="https://www.fleetwisesolutions.pt/gestao_operacional.html">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.fleetwisesolutions.pt/gestao_operacional.html">
+    <meta property="og:title" content="Gestão Operacional de Frotas | FleetWise">
+    <meta property="og:description" content="Três níveis de gestão operacional para frotas empresariais: do self-service ao outsourcing integral com gestor dedicado.">
+    <meta property="og:locale" content="pt_PT">
+
+    <link rel="icon" type="image/png" href="favicon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --navy:  #0f172a;
+            --navy2: #1e293b;
+            --green: #10b981;
+            --green2:#059669;
+            --slate: #64748b;
+        }
+
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background:#fff; overflow-x:hidden; padding-top:72px; }
+
+        /* ── HEADER ── */
+        .sticky-header {
+            position:fixed; top:0; left:0; width:100%; z-index:1000;
+            height:72px; display:flex; align-items:center;
+            background:var(--navy);
+            box-shadow:0 2px 20px rgba(0,0,0,.3);
+        }
+        .brand-logo { display:inline-block; font-size:1.5rem; font-weight:800; color:#fff; text-decoration:none; letter-spacing:-.5px; transition:.3s; }
+        .brand-logo:hover { opacity:.85; }
+        .nav-link { color:rgba(255,255,255,.8); font-size:.85rem; font-weight:500; text-decoration:none; transition:.2s; }
+        .nav-link:hover { color:var(--green); }
+        .btn-primary {
+            background:var(--green); color:#fff; font-weight:700; font-size:.85rem;
+            padding:.6rem 1.4rem; border-radius:50px; text-decoration:none; display:inline-flex; align-items:center; gap:.4rem;
+            transition:.25s; border:none; cursor:pointer; white-space:nowrap;
+        }
+        .btn-primary:hover { background:var(--green2); transform:translateY(-1px); box-shadow:0 6px 20px rgba(16,185,129,.35); }
+        .btn-outline {
+            background:transparent; color:var(--navy); font-weight:700; font-size:.85rem;
+            padding:.6rem 1.4rem; border-radius:50px; text-decoration:none; display:inline-flex; align-items:center; gap:.4rem;
+            transition:.25s; border:2px solid var(--navy); cursor:pointer; white-space:nowrap;
+        }
+        .btn-outline:hover { background:var(--navy); color:#fff; }
+
+        /* ── MOBILE MENU ── */
+        #mobile-menu {
+            position:fixed; top:0; right:-100%; width:85%; max-width:360px; height:100%;
+            background:var(--navy); z-index:2001; transition:.4s cubic-bezier(.4,0,.2,1);
+            padding:2rem; display:flex; flex-direction:column; gap:.5rem;
+            box-shadow:-10px 0 40px rgba(0,0,0,.5);
+        }
+        #mobile-menu.open { right:0; }
+        .mob-link { color:rgba(255,255,255,.8); font-size:1.05rem; font-weight:500; text-decoration:none; padding:.6rem 0; border-bottom:1px solid rgba(255,255,255,.07); }
+        .mob-link:hover { color:var(--green); }
+        .ham { background:none; border:none; cursor:pointer; color:#fff; display:none; }
+        @media(max-width:768px) { .ham { display:block; } .desktop-nav { display:none; } }
+
+        /* ── PAGE HERO ── */
+        .page-hero {
+            background:var(--navy);
+            padding:5rem 1rem 4rem;
+            position:relative; overflow:hidden;
+        }
+        .hero-grid {
+            position:absolute; inset:0;
+            background-image:linear-gradient(rgba(16,185,129,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(16,185,129,.06) 1px,transparent 1px);
+            background-size:60px 60px;
+        }
+
+        /* ── LEVEL CARDS ── */
+        .level-card {
+            background:#fff;
+            border:2px solid #e2e8f0;
+            border-radius:24px;
+            padding:2.5rem;
+            position:relative;
+            transition:.2s;
+            display:flex;
+            flex-direction:column;
+        }
+        .level-card:hover { border-color:var(--green); box-shadow:0 12px 40px rgba(16,185,129,.12); transform:translateY(-3px); }
+        .level-card.featured {
+            border-color:var(--green);
+            box-shadow:0 16px 50px rgba(16,185,129,.18);
+        }
+        .level-badge {
+            display:inline-flex; align-items:center; gap:.35rem;
+            font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+            padding:.3rem .8rem; border-radius:50px; margin-bottom:1.25rem;
+        }
+        .level-badge.green { background:rgba(16,185,129,.1); color:var(--green); }
+        .level-badge.navy  { background:rgba(15,23,42,.07); color:var(--navy); }
+        .level-price-label { font-size:.75rem; color:var(--slate); margin-bottom:.2rem; }
+        .level-title { font-size:1.4rem; font-weight:800; color:var(--navy); margin-bottom:.5rem; }
+        .level-sub { font-size:.83rem; color:var(--slate); line-height:1.7; margin-bottom:1.5rem; }
+        .level-divider { border:none; border-top:1px solid #f1f5f9; margin:1.5rem 0; }
+        .level-feature { display:flex; align-items:flex-start; gap:.6rem; margin-bottom:.75rem; }
+        .level-feature-icon { width:18px; height:18px; flex-shrink:0; margin-top:.1rem; }
+        .level-feature p { font-size:.82rem; color:#374151; line-height:1.5; margin:0; }
+        .level-feature p strong { color:var(--navy); font-weight:600; }
+        .level-cta { margin-top:auto; padding-top:1.5rem; }
+
+        /* ── COMPARISON TABLE ── */
+        .comp-table { width:100%; border-collapse:collapse; font-size:.82rem; }
+        .comp-table th { padding:.9rem 1rem; text-align:left; font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; color:var(--slate); border-bottom:2px solid #e2e8f0; }
+        .comp-table td { padding:.85rem 1rem; border-bottom:1px solid #f1f5f9; vertical-align:middle; }
+        .comp-table tr:last-child td { border-bottom:none; }
+        .comp-table td:first-child { font-weight:600; color:var(--navy); }
+        .comp-table .check { color:var(--green); font-weight:700; }
+        .comp-table .dash { color:#cbd5e1; }
+        .comp-table .partial { color:#f59e0b; }
+        .comp-table .highlight-col { background:rgba(16,185,129,.04); }
+
+        /* ── MODAL ── */
+        #contact-modal { display:none; position:fixed; inset:0; z-index:3000; }
+        #contact-modal.open { display:flex; }
+        .modal-bg { position:absolute; inset:0; background:rgba(0,0,0,.6); backdrop-filter:blur(4px); }
+        .modal-box { position:relative; z-index:1; background:#fff; border-radius:24px; padding:2.5rem; width:100%; max-width:520px; margin:auto; max-height:90vh; overflow-y:auto; box-shadow:0 30px 80px rgba(0,0,0,.25); }
+        .form-input { width:100%; border:1.5px solid #e2e8f0; border-radius:12px; padding:.65rem .9rem; font-family:inherit; font-size:.85rem; color:var(--navy); background:#fff; transition:.2s; outline:none; box-sizing:border-box; }
+        .form-input:focus { border-color:var(--green); box-shadow:0 0 0 3px rgba(16,185,129,.1); }
+        select.form-input { cursor:pointer; }
+        .form-label { font-size:.8rem; font-weight:600; color:#374151; margin-bottom:.35rem; display:block; }
+        .mb-3 { margin-bottom:.75rem; }
+        .mb-4 { margin-bottom:1rem; }
+
+        /* ── TOAST ── */
+        #toast { position:fixed; bottom:2rem; right:2rem; background:var(--green); color:#fff; padding:.9rem 1.5rem; border-radius:12px; font-size:.85rem; font-weight:600; box-shadow:0 8px 24px rgba(16,185,129,.4); z-index:5000; opacity:0; transform:translateY(20px); transition:.4s; pointer-events:none; }
+        #toast.show { opacity:1; transform:translateY(0); }
+
+        /* ── FOOTER ── */
+        .footer { background:var(--navy); color:rgba(255,255,255,.6); }
+        .footer h4 { color:#fff; font-weight:700; font-size:.95rem; margin-bottom:1rem; }
+        .footer a { color:rgba(255,255,255,.6); text-decoration:none; font-size:.83rem; transition:.2s; display:block; margin-bottom:.5rem; }
+        .footer a:hover { color:var(--green); }
+
+        @media(max-width:768px) {
+            .level-card { padding:1.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ══════════════ HEADER ══════════════ -->
+<header class="sticky-header">
+    <div class="max-w-7xl mx-auto px-4 w-full flex justify-between items-center">
+        <a href="index.html" class="brand-logo"><span style="color:var(--green)">Fleet</span>Wise</a>
+
+        <nav class="desktop-nav flex items-center gap-8">
+            <a href="index.html#servicos" class="nav-link">Serviços</a>
+            <a href="vehicle_compare.html" class="nav-link">Comparador xEV</a>
+            <a href="quem_somos.html" class="nav-link">Quem Somos</a>
+            <button onclick="openContactModal()" class="btn-primary">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                Agendar Reunião
+            </button>
+        </nav>
+
+        <button class="ham" onclick="toggleMenu()" aria-label="Menu">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+    </div>
+</header>
+
+<!-- Mobile Menu -->
+<div id="mobile-menu">
+    <div class="flex justify-between items-center mb-8">
+        <span style="font-size:1.3rem;font-weight:800;display:inline-block;"><span style="color:var(--green)">Fleet</span><span style="color:#fff;">Wise</span></span>
+        <button onclick="toggleMenu()" style="color:#fff;font-size:2rem;line-height:1;background:none;border:none;cursor:pointer;">&times;</button>
+    </div>
+    <a href="index.html#servicos" class="mob-link">Serviços</a>
+    <a href="vehicle_compare.html" class="mob-link">Comparador xEV</a>
+    <a href="quem_somos.html" class="mob-link">Quem Somos</a>
+    <button onclick="toggleMenu(); openContactModal();" style="margin-top:1.5rem;width:100%;background:var(--green);color:#fff;font-weight:700;padding:1rem;border-radius:12px;border:none;cursor:pointer;font-size:1rem;">Agendar Reunião / Demo</button>
+</div>
+<div id="menu-overlay" onclick="toggleMenu()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:2000;"></div>
+
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="page-hero">
+    <div class="hero-grid"></div>
+    <div class="max-w-4xl mx-auto px-4 relative z-10 text-center" data-aos="fade-up">
+        <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:50px;padding:.4rem 1rem;margin-bottom:1.5rem;">
+            <span style="font-size:.72rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--green);">Serviço 03</span>
+        </div>
+        <h1 style="font-size:clamp(2rem,5vw,3.2rem);font-weight:800;color:#fff;line-height:1.1;letter-spacing:-.5px;margin-bottom:1.25rem;">
+            Gestão Operacional<br><em style="font-style:normal;color:var(--green);">do self-service ao outsourcing integral</em>
+        </h1>
+        <p style="color:rgba(255,255,255,.7);font-size:clamp(.9rem,1.5vw,1.05rem);line-height:1.75;max-width:620px;margin:0 auto 2rem;">
+            O seu departamento de frota externo. Escolha o nível de envolvimento que faz sentido para a dimensão e complexidade da sua frota — sem compromissos desnecessários.
+        </p>
+        <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+            <a href="#niveis" class="btn-primary">Ver os 3 níveis →</a>
+            <button onclick="openContactModal()" class="btn-outline" style="color:#fff;border-color:rgba(255,255,255,.3);" onmouseover="this.style.background='rgba(255,255,255,.1)'" onmouseout="this.style.background='transparent'">Falar com um especialista</button>
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════ 3 NÍVEIS ══════════════ -->
+<section id="niveis" style="padding:6rem 0;background:#f8fafc;">
+    <div class="max-w-7xl mx-auto px-4">
+
+        <div class="text-center mb-12" data-aos="fade-up">
+            <div style="display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem;">Níveis de Serviço</div>
+            <h2 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:var(--navy);letter-spacing:-.5px;line-height:1.15;">Adapta-se à sua frota.<br><em style="font-style:italic;color:var(--green);">Cresce com o seu negócio.</em></h2>
+            <p style="color:var(--slate);max-width:560px;margin:1rem auto 0;font-size:.9rem;line-height:1.7;">Três modelos desenhados para realidades distintas. Pode começar no Essencial e evoluir sem fricção — a plataforma e os dados ficam sempre consigo.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
+
+            <!-- NÍVEL 1: ESSENCIAL -->
+            <div class="level-card" data-aos="fade-up" data-aos-delay="0">
+                <div>
+                    <div class="level-badge navy">Nível 1</div>
+                    <p class="level-price-label">Para frotas de 3 – 10 viaturas</p>
+                    <h3 class="level-title">Essencial</h3>
+                    <p class="level-sub">Acesso à plataforma FleetWise com alertas automáticos e visibilidade total do TCO. Ideal para empresas que querem controlo sem delegar operação.</p>
+                </div>
+                <hr class="level-divider">
+                <div style="flex-grow:1;">
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Dashboard TCO em tempo real</strong> — visibilidade completa de custos por viatura</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Alertas automáticos</strong> — IUC, IPO, revisões, seguros e multas</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Relatórios mensais automáticos</strong> — enviados por email sem necessidade de intervenção</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Simulador TCO e Comparador xEV</strong> — ferramentas de decisão integradas</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Suporte por email</strong> — resposta em 48h úteis</p>
+                    </div>
+                </div>
+                <div class="level-cta">
+                    <div style="background:#f8fafc;border-radius:12px;padding:.9rem 1rem;margin-bottom:1rem;text-align:center;">
+                        <span style="font-size:.72rem;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.08em;">Modelo de entrada</span>
+                        <p style="font-size:.85rem;font-weight:700;color:var(--navy);margin:.2rem 0 0;">Success fee inicial + acesso à plataforma</p>
+                    </div>
+                    <button onclick="openContactModal('Essencial')" class="btn-primary" style="width:100%;justify-content:center;">Começar no Essencial →</button>
+                </div>
+            </div>
+
+            <!-- NÍVEL 2: RETAINER (FEATURED) -->
+            <div class="level-card featured" data-aos="fade-up" data-aos-delay="100">
+                <div style="position:absolute;top:-14px;left:50%;transform:translateX(-50%);white-space:nowrap;">
+                    <span style="background:var(--green);color:#fff;font-size:.7rem;font-weight:700;padding:.3rem 1rem;border-radius:50px;letter-spacing:.08em;text-transform:uppercase;">Mais escolhido</span>
+                </div>
+                <div>
+                    <div class="level-badge green">Nível 2</div>
+                    <p class="level-price-label">Para frotas de 11 – 30 viaturas</p>
+                    <h3 class="level-title">Retainer</h3>
+                    <p class="level-sub">Gestão ativa das operações do dia-a-dia com advisory periódico. A sua equipa liberta-se da frota — nós gerimos, você decide.</p>
+                </div>
+                <hr class="level-divider">
+                <div style="flex-grow:1;">
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Tudo do Essencial</strong>, mais:</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Gestão ativa de IUC, IPO e multas</strong> — tratamos dos processos, não só dos alertas</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Coordenação de seguros e sinistros</strong> — intermediação independente em todas as ocorrências</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Advisory periódico</strong> — reunião trimestral de revisão de TCO e otimização fiscal</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Otimização fiscal contínua</strong> — Tributação Autónoma, BEV/PHEV, IVA</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Relatórios personalizados</strong> — adaptados aos KPIs da sua gestão</p>
+                    </div>
+                </div>
+                <div class="level-cta">
+                    <div style="background:rgba(16,185,129,.06);border-radius:12px;padding:.9rem 1rem;margin-bottom:1rem;text-align:center;">
+                        <span style="font-size:.72rem;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:.08em;">Modelo de faturação</span>
+                        <p style="font-size:.85rem;font-weight:700;color:var(--navy);margin:.2rem 0 0;">Retainer mensal — custo previsível</p>
+                    </div>
+                    <button onclick="openContactModal('Retainer')" class="btn-primary" style="width:100%;justify-content:center;">Quero o Retainer →</button>
+                </div>
+            </div>
+
+            <!-- NÍVEL 3: OUTSOURCING INTEGRAL -->
+            <div class="level-card" data-aos="fade-up" data-aos-delay="200">
+                <div>
+                    <div class="level-badge navy">Nível 3</div>
+                    <p class="level-price-label">Para frotas de 31+ viaturas</p>
+                    <h3 class="level-title">Outsourcing Integral</h3>
+                    <p class="level-sub">Departamento de frota externo completo. Gestor de conta dedicado, módulos avançados e negociação independente com locadoras ao seu lado.</p>
+                </div>
+                <hr class="level-divider">
+                <div style="flex-grow:1;">
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Tudo do Retainer</strong>, mais:</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Gestor de conta dedicado</strong> — ponto de contacto único com disponibilidade alargada</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Módulos ESG e reporting de carbono</strong> — conformidade e estratégia de descarbonização</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>RFP automático</strong> — processo de consulta a locadoras conduzido pela FleetWise</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Negociação independente</strong> — sem conflito de interesses, sempre do lado do cliente</p>
+                    </div>
+                    <div class="level-feature">
+                        <svg class="level-feature-icon" viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        <p><strong>Soluções à medida</strong> — módulos adicionais configurados para a sua realidade</p>
+                    </div>
+                </div>
+                <div class="level-cta">
+                    <div style="background:#f8fafc;border-radius:12px;padding:.9rem 1rem;margin-bottom:1rem;text-align:center;">
+                        <span style="font-size:.72rem;font-weight:600;color:var(--slate);text-transform:uppercase;letter-spacing:.08em;">Modelo de faturação</span>
+                        <p style="font-size:.85rem;font-weight:700;color:var(--navy);margin:.2rem 0 0;">Retainer + módulos adicionais</p>
+                    </div>
+                    <button onclick="openContactModal('Outsourcing Integral')" class="btn-primary" style="width:100%;justify-content:center;">Solicitar proposta →</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<!-- ══════════════ TABELA COMPARATIVA ══════════════ -->
+<section style="padding:5rem 0;">
+    <div class="max-w-7xl mx-auto px-4">
+
+        <div class="text-center mb-10" data-aos="fade-up">
+            <h2 style="font-size:clamp(1.5rem,3vw,2rem);font-weight:800;color:var(--navy);letter-spacing:-.3px;">O que está incluído em cada nível</h2>
+        </div>
+
+        <div class="overflow-x-auto" data-aos="fade-up" data-aos-delay="100">
+            <table class="comp-table">
+                <thead>
+                    <tr>
+                        <th style="width:35%;">Funcionalidade</th>
+                        <th style="text-align:center;width:21.6%;">Essencial</th>
+                        <th style="text-align:center;width:21.6%;color:var(--green);">Retainer ⭐</th>
+                        <th style="text-align:center;width:21.6%;">Outsourcing Integral</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dashboard TCO em tempo real</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                        <td class="check highlight-col" style="text-align:center;">✓</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Alertas automáticos (IUC, IPO, revisões)</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                        <td class="check highlight-col" style="text-align:center;">✓</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Relatórios mensais automáticos</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                        <td class="check highlight-col" style="text-align:center;">✓</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Simulador TCO e Comparador xEV</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                        <td class="check highlight-col" style="text-align:center;">✓</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Gestão ativa de IUC, IPO e multas</td>
+                        <td class="dash" style="text-align:center;">—</td>
+                        <td class="check highlight-col" style="text-align:center;">✓</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Coordenação de seguros e sinistros</td>
+                        <td class="dash" style="text-align:center;">—</td>
+                        <td class="check highlight-col" style="text-align:center;">✓</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Advisory periódico e otimização fiscal</td>
+                        <td class="dash" style="text-align:center;">—</td>
+                        <td class="check highlight-col" style="text-align:center;">✓</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Relatórios personalizados</td>
+                        <td class="dash" style="text-align:center;">—</td>
+                        <td class="check highlight-col" style="text-align:center;">✓</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Gestor de conta dedicado</td>
+                        <td class="dash" style="text-align:center;">—</td>
+                        <td class="dash highlight-col" style="text-align:center;">—</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Módulos ESG e reporting de carbono</td>
+                        <td class="dash" style="text-align:center;">—</td>
+                        <td class="dash highlight-col" style="text-align:center;">—</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                    <tr>
+                        <td>RFP automático e negociação independente</td>
+                        <td class="dash" style="text-align:center;">—</td>
+                        <td class="dash highlight-col" style="text-align:center;">—</td>
+                        <td class="check" style="text-align:center;">✓</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ══════════════ CTA FINAL ══════════════ -->
+<section style="padding:5rem 0;background:var(--navy);">
+    <div class="max-w-4xl mx-auto px-4 text-center" data-aos="fade-up">
+        <h2 style="font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:#fff;letter-spacing:-.5px;margin-bottom:1rem;">Não tem a certeza<br><em style="font-style:normal;color:var(--green);">de qual o nível certo?</em></h2>
+        <p style="color:rgba(255,255,255,.7);font-size:.95rem;line-height:1.75;max-width:520px;margin:0 auto 2rem;">Fazemos um diagnóstico gratuito de 45 minutos à sua frota e recomendamos o nível que faz sentido para o seu contexto — sem qualquer compromisso.</p>
+        <button onclick="openContactModal()" class="btn-primary" style="font-size:.95rem;padding:.8rem 2rem;">
+            Agendar diagnóstico gratuito →
+        </button>
+    </div>
+</section>
+
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer class="footer" style="padding:4rem 0 2rem;">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mb-12">
+
+            <div class="md:col-span-2">
+                <span style="font-size:1.5rem;font-weight:800;display:inline-block;margin-bottom:1rem;"><span style="color:var(--green)">Fleet</span><span style="color:#fff;">Wise</span></span>
+                <p style="font-size:.83rem;line-height:1.8;max-width:360px;margin-bottom:1.5rem;">A consultora independente que transforma a gestão de frotas em Portugal num ativo estratégico. Simplifique, Otimize, Rentabilize.</p>
+                <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
+                    <a href="mailto:geral@fleetwise.pt" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                        geral@fleetwise.pt
+                    </a>
+                    <a href="tel:+351914038167" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.1 1.18 2 2 0 012.07 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.55-.55a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
+                        914 038 167
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <a href="TCO_simulator.html">Simulador TCO</a>
+                <a href="vehicle_compare.html">Comparador xEV / BEV</a>
+                <a href="quem_somos.html">Quem Somos</a>
+                <a href="index.html#contacto">Contacto</a>
+                <div style="margin-top:1rem;">
+                    <button onclick="openContactModal()" style="background:var(--green);color:#fff;border:none;padding:.6rem 1.2rem;border-radius:50px;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit;transition:.2s;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='var(--green)'">
+                        Agendar Reunião →
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <div style="border-top:1px solid rgba(255,255,255,.08);padding-top:2rem;display:flex;flex-wrap:wrap;gap:1rem;justify-content:space-between;align-items:center;">
+            <p style="font-size:.75rem;color:rgba(255,255,255,.4);">Copyright © 2026 FleetWise, Unipessoal, Lda. · Portugal</p>
+            <p style="font-size:.75rem;color:rgba(255,255,255,.4);">Simplifique, Otimize, Rentabilize.</p>
+        </div>
+    </div>
+</footer>
+
+
+<!-- ══════════════ MODAL ══════════════ -->
+<div id="contact-modal">
+    <div class="modal-bg" onclick="closeContactModal()"></div>
+    <div class="modal-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.5rem;">
+            <div>
+                <h3 style="font-weight:800;color:var(--navy);font-size:1.3rem;margin-bottom:.3rem;">Agendar Reunião</h3>
+                <p style="font-size:.82rem;color:var(--slate);" id="modal-level-sub">Diagnóstico gratuito de 45 min · Resposta em 24h</p>
+            </div>
+            <button onclick="closeContactModal()" style="background:none;border:none;cursor:pointer;color:var(--slate);font-size:1.5rem;line-height:1;padding:.25rem;">&times;</button>
+        </div>
+        <form id="contact-form" onsubmit="submitContactForm(event)" novalidate>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;" class="mb-3">
+                <div>
+                    <label class="form-label">Nome *</label>
+                    <input type="text" class="form-input" placeholder="O seu nome" required>
+                </div>
+                <div>
+                    <label class="form-label">Empresa *</label>
+                    <input type="text" class="form-input" placeholder="Empresa" required>
+                </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:.75rem;" class="mb-3">
+                <div>
+                    <label class="form-label">Email *</label>
+                    <input type="email" class="form-input" placeholder="email@empresa.pt" required>
+                </div>
+                <div>
+                    <label class="form-label">Telefone</label>
+                    <input type="tel" class="form-input" placeholder="+351 9xx xxx xxx">
+                </div>
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Nível de interesse</label>
+                <select class="form-input" id="modal-level-select">
+                    <option>Essencial (3–10 viaturas)</option>
+                    <option>Retainer (11–30 viaturas)</option>
+                    <option>Outsourcing Integral (31+ viaturas)</option>
+                    <option>Ainda não sei — quero aconselhamento</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="form-label">Mensagem (opcional)</label>
+                <textarea class="form-input" rows="3" placeholder="Contexto adicional sobre a sua frota..."></textarea>
+            </div>
+            <button type="submit" class="btn-primary" style="width:100%;justify-content:center;padding:.9rem;">
+                Enviar pedido →
+            </button>
+            <p style="font-size:.72rem;color:var(--slate);text-align:center;margin-top:.6rem;">Tratamos os seus dados com total confidencialidade (RGPD).</p>
+        </form>
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast">✓ Pedido enviado com sucesso! Contactamos em 24h.</div>
+
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({ duration: 800, once: true, offset: 60 });
+
+    function toggleMenu() {
+        const m = document.getElementById('mobile-menu');
+        const o = document.getElementById('menu-overlay');
+        const isOpen = m.classList.toggle('open');
+        o.style.display = isOpen ? 'block' : 'none';
+    }
+
+    function openContactModal(level) {
+        const sel = document.getElementById('modal-level-select');
+        const sub = document.getElementById('modal-level-sub');
+        if (level === 'Essencial') {
+            sel.value = 'Essencial (3–10 viaturas)';
+            sub.textContent = 'Nível Essencial · Resposta em 24h';
+        } else if (level === 'Retainer') {
+            sel.value = 'Retainer (11–30 viaturas)';
+            sub.textContent = 'Nível Retainer · Resposta em 24h';
+        } else if (level === 'Outsourcing Integral') {
+            sel.value = 'Outsourcing Integral (31+ viaturas)';
+            sub.textContent = 'Outsourcing Integral · Resposta em 24h';
+        } else {
+            sel.value = 'Ainda não sei — quero aconselhamento';
+            sub.textContent = 'Diagnóstico gratuito de 45 min · Resposta em 24h';
+        }
+        document.getElementById('contact-modal').classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeContactModal() {
+        document.getElementById('contact-modal').classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    function submitContactForm(e) {
+        e.preventDefault();
+        const t = document.getElementById('toast');
+        t.classList.add('show');
+        setTimeout(() => t.classList.remove('show'), 4000);
+        closeContactModal();
+        e.target.reset();
+    }
+
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeContactModal(); });
+</script>
+</body>
+</html>
