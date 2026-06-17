@@ -497,6 +497,10 @@
                   <option value="sim" selected>Autonomia ≥ 50 km ✓</option>
                   <option value="nao">Autonomia &lt; 50 km ✗</option>
                 </select>
+                <select id="phev_co2_1" class="fw-type-select" style="margin-top:.25rem;font-size:.68rem;display:none;" onchange="window.calcFleetWise();">
+                  <option value="sim" selected>CO₂ ≤ 50 g/km ✓</option>
+                  <option value="nao">CO₂ &gt; 50 g/km ✗</option>
+                </select>
               </th>
               <th class="fw-header-cell fw-header-2">
                 <span class="fw-header-title">Opção A</span>
@@ -514,6 +518,10 @@
                   <option value="sim" selected>Autonomia ≥ 50 km ✓</option>
                   <option value="nao">Autonomia &lt; 50 km ✗</option>
                 </select>
+                <select id="phev_co2_2" class="fw-type-select" style="margin-top:.25rem;font-size:.68rem;" onchange="window.calcFleetWise();">
+                  <option value="sim" selected>CO₂ ≤ 50 g/km ✓</option>
+                  <option value="nao">CO₂ &gt; 50 g/km ✗</option>
+                </select>
               </th>
               <th class="fw-header-cell fw-header-3">
                 <span class="fw-header-title">Opção B</span>
@@ -530,6 +538,10 @@
                 <select id="phev_auton_3" class="fw-type-select" style="margin-top:.25rem;font-size:.68rem;display:none;" onchange="window.calcFleetWise();">
                   <option value="sim" selected>Autonomia ≥ 50 km ✓</option>
                   <option value="nao">Autonomia &lt; 50 km ✗</option>
+                </select>
+                <select id="phev_co2_3" class="fw-type-select" style="margin-top:.25rem;font-size:.68rem;display:none;" onchange="window.calcFleetWise();">
+                  <option value="sim" selected>CO₂ ≤ 50 g/km ✓</option>
+                  <option value="nao">CO₂ &gt; 50 g/km ✗</option>
                 </select>
               </th>
             </tr>
@@ -709,7 +721,7 @@
             <!-- PHEV IVA note — shown when any column is PHEV -->
             <tr id="row_phev_iva_note" class="fw-phev-note-row" style="display:none;">
               <td colspan="4">
-                ⚠️ PHEV: dedução de IVA (50%) condicionada a autonomia elétrica ≥ 50 km (art.º 21.º n.º 1 al. a) CIVA). Verifique homologação WLTP antes de aplicar.
+                ⚠️ PHEV: dedução de IVA total (100%) exige autonomia elétrica ≥ 50 km <strong>e</strong> emissões ≤ 50 g CO₂/km (WLTP). Se apenas a autonomia for cumprida, a dedução é de 50%. Verifique homologação WLTP antes de aplicar (art.º 21.º n.º 1 al. a) CIVA).
               </td>
             </tr>
 
@@ -1033,10 +1045,19 @@
       return (ctx.iva === 'tot') ? 1.0 : (ctx.iva === 'par' ? 0.5 : 0);
     }
     if (type === 'PHEV' && price <= 50000) {
-      // CIVA art.º 21.º n.º 1 al. a): autonomia eléctrica ≥ 50 km (WLTP) obrigatória
+      // CIVA art.º 21.º n.º 1 al. a): dedução total exige autonomia ≥ 50 km E CO₂ ≤ 50 g/km (WLTP)
       var autonEl = colIdx ? document.getElementById('phev_auton_' + colIdx) : null;
-      if (autonEl && autonEl.value === 'nao') return 0; // autonomia insuficiente → sem dedução
-      return (ctx.iva === 'tot') ? 0.5 : (ctx.iva === 'par' ? 0.25 : 0);
+      var co2El   = colIdx ? document.getElementById('phev_co2_'   + colIdx) : null;
+      var autonOk = !autonEl || autonEl.value === 'sim';
+      var co2Ok   = !co2El   || co2El.value   === 'sim';
+      if (!autonOk) return 0; // autonomia insuficiente → sem dedução
+      if (co2Ok) {
+        // Ambas condições cumpridas → dedução total (como BEV)
+        return (ctx.iva === 'tot') ? 1.0 : (ctx.iva === 'par' ? 0.5 : 0);
+      } else {
+        // Só autonomia ≥ 50 km mas CO₂ > 50 g/km → 50%
+        return (ctx.iva === 'tot') ? 0.5 : (ctx.iva === 'par' ? 0.25 : 0);
+      }
     }
     return 0;
   };
@@ -1102,6 +1123,8 @@
       if (ftEl) ftEl.style.display = (type === 'BEV') ? 'none' : '';
       var autonEl = document.getElementById('phev_auton_' + i);
       if (autonEl) autonEl.style.display = (type === 'PHEV') ? '' : 'none';
+      var co2El = document.getElementById('phev_co2_' + i);
+      if (co2El) co2El.style.display = (type === 'PHEV') ? '' : 'none';
     }
 
     // Enable/disable consumption gauges and EV share slider based on vehicle type
@@ -1313,6 +1336,8 @@
       if (ftEl) ftEl.value = 'diesel';
       var autonEl = d.getElementById('phev_auton_' + fj);
       if (autonEl) autonEl.value = 'sim';
+      var co2El = d.getElementById('phev_co2_' + fj);
+      if (co2El) co2El.value = 'sim';
     }
     // EV share sliders (ICE=0%, PHEV=40%, BEV=100%)
     var evDef = [0, 40, 100];
