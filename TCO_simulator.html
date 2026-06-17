@@ -297,11 +297,20 @@
 
     /* ── PRINT ── */
     @media print {
+      @page { size: A4 landscape; margin: 10mm; }
       .sticky-header, #mobile-menu, #menu-overlay, .cta-bar, .site-footer,
       .page-hero, .fw-context-bar, .fw-global-inputs, .fw-info-bar { display:none !important; }
       body { padding-top:0 !important; background:#fff; }
       .sim-card { box-shadow:none !important; border:none !important; }
       main { padding:0 !important; }
+      .fw-table-wrapper { overflow:visible !important; }
+      .fw-table {
+        width:100% !important;
+        min-width:0 !important;
+        table-layout:fixed !important;
+        font-size:.62rem !important;
+      }
+      .fw-table th, .fw-table td { font-size:.62rem !important; padding:.3rem .35rem !important; }
     }
   </style>
 </head>
