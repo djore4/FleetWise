@@ -42,7 +42,7 @@
           "description": "Consultora independente de gestão de frotas empresariais em Portugal. Especialistas em otimização de TCO, fiscalidade automóvel (Tributação Autónoma, benefícios BEV/PHEV) e gestão operacional de frotas para PMEs.",
           "slogan": "Simplifique, Otimize, Rentabilize!",
           "telephone": "+351914038167",
-          "email": "geral@fleetwise.pt",
+          "email": "geral@fleetwisesolutions.pt",
           "address": {
             "@type": "PostalAddress",
             "addressCountry": "PT",
@@ -1089,9 +1089,9 @@
                 <span style="font-size:1.5rem;font-weight:800;display:inline-block;margin-bottom:1rem;"><span style="color:var(--green)">Fleet</span><span style="color:#fff;">Wise</span></span>
                 <p style="font-size:.83rem;line-height:1.8;max-width:360px;margin-bottom:1.5rem;">A consultora independente que transforma a gestão de frotas em Portugal num ativo estratégico. Simplifique, Otimize, Rentabilize.</p>
                 <div style="display:flex;gap:.75rem;flex-wrap:wrap;">
-                    <a href="mailto:geral@fleetwise.pt" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
+                    <a href="mailto:geral@fleetwisesolutions.pt" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-                        geral@fleetwise.pt
+                        geral@fleetwisesolutions.pt
                     </a>
                     <a href="tel:+351914038167" style="display:flex;align-items:center;gap:.4rem;color:rgba(255,255,255,.7);font-size:.82rem;text-decoration:none;transition:.2s;" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='rgba(255,255,255,.7)'">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.1 1.18 2 2 0 012.07 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.09a16 16 0 006 6l.55-.55a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
@@ -1349,31 +1349,84 @@
 
     function submitProcurementForm(e) {
         e.preventDefault();
-        showToast();
-        closeProcurementModal();
-        e.target.reset();
+        sendLead(e.target, 'Procurement & Negociação', closeProcurementModal);
     }
 
     document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeProcurementModal(); } });
 
     /* ── Forms ── */
+    const WEB3FORMS_ACCESS_KEY = "COLOCAR_ACCESS_KEY_AQUI"; // TODO: gerar em web3forms.com com geral@fleetwisesolutions.pt
+
     function showToast() {
         const t = document.getElementById('toast');
         t.classList.add('show');
         setTimeout(() => t.classList.remove('show'), 4000);
     }
 
+    function collectForm(form) {
+        const data = {};
+        form.querySelectorAll('.form-label').forEach(label => {
+            const key = label.textContent.trim().replace(/\s*\*\s*$/, '').trim();
+            const parent = label.parentElement;
+            const pillGroup = parent.querySelector('.proc-pill-group');
+            if (pillGroup) {
+                const checked = pillGroup.querySelector('input[type="radio"]:checked');
+                if (checked) {
+                    const pillLabel = checked.closest('.proc-pill');
+                    data[key] = pillLabel ? pillLabel.textContent.trim() : checked.value;
+                }
+            } else {
+                const field = parent.querySelector('.form-input');
+                if (field) {
+                    const val = field.value.trim();
+                    if (val) data[key] = val;
+                }
+            }
+        });
+        return data;
+    }
+
+    async function sendLead(form, origem, onSuccess) {
+        const btn = form.querySelector('[type="submit"]');
+        const originalText = btn ? btn.textContent : '';
+        if (btn) { btn.disabled = true; btn.textContent = 'A enviar…'; }
+        try {
+            const payload = {
+                access_key: WEB3FORMS_ACCESS_KEY,
+                subject: 'Nova lead FleetWise — ' + origem,
+                from_name: 'Site FleetWise',
+                origem,
+                botcheck: '',
+                ...collectForm(form)
+            };
+            const res = await fetch('https://api.web3forms.com/submit', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+            const json = await res.json();
+            if (json.success) {
+                showToast();
+                form.reset();
+                if (onSuccess) onSuccess();
+            } else {
+                alert('Erro ao enviar: ' + (json.message || 'Resposta inválida do servidor. Tente novamente.'));
+            }
+        } catch (err) {
+            alert('Erro de rede ao enviar o formulário. Verifique a sua ligação e tente novamente.');
+        } finally {
+            if (btn) { btn.disabled = false; btn.textContent = originalText; }
+        }
+    }
+
     function submitForm(e) {
         e.preventDefault();
-        showToast();
-        e.target.reset();
+        sendLead(e.target, 'Formulário principal');
     }
 
     function submitModalForm(e) {
         e.preventDefault();
-        showToast();
-        closeModal();
-        e.target.reset();
+        sendLead(e.target, 'Modal — Demonstração', closeModal);
     }
 
     /* ── Counter animation ── */
